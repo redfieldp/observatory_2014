@@ -43,4 +43,8 @@ public class RecentData
         
         return recentAverageOfAllShakes;
     }
+    
+    public void saveData(){
+        
+    }
 }
