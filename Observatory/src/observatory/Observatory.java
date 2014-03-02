@@ -109,8 +109,7 @@ public class Observatory extends PApplet {
 
     private void toggleLiveData()
     {
-        // TODO Auto-generated method stub
-
+        useStoredData = !useStoredData;
     }
 
     private void togglePause()
