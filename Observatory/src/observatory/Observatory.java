@@ -157,8 +157,9 @@ public class Observatory extends PApplet {
     
     private void processDataPoint(DataPoint p) {
         if (p.magnitude > thresholdLarge) {
-            // TODO: Create a new line
-            
+            if (lines.size() < maxNumberOfLines) {
+                // TODO: Create a new line
+            }
         }
         else if (p.magnitude > thresholdMedium) {
             // TODO: Modify an existing line
