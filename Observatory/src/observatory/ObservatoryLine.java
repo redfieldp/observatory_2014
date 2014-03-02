@@ -6,20 +6,22 @@ public class ObservatoryLine
 {
     int thickness;
     float angle;
-    int hPos;
+    float hPos;
     int vPos;
     int length;
     int lifeSpan;
     Date birthDate;
 
-    public ObservatoryLine(int thickness, float angle, int hPos, int vPos, int length, int lifeSpan, Date birthDate) { 
-        this.thickness = thickness;
-        this.angle = angle;
-        this.hPos = hPos; 
-        this.vPos = vPos;
-        this.length = length;
-        this.lifeSpan = lifeSpan;
-        this.birthDate = birthDate;
+    public ObservatoryLine(DataPoint p, Template currentTemplate) { 
+        this.thickness = p.magnitude;
+        this.lifeSpan = p.peakEnvelope.deltaMagnitude;
+        this.birthDate = new Date();
+        
+        // TODO: Clarify these variables
+        this.angle = p.peakEnvelope.angle;
+        this.hPos = currentTemplate.horizontalPlacement(); 
+        this.vPos = 0;
+        this.length = 0;
     }
 
     public void draw() {
