@@ -166,7 +166,11 @@ public class Observatory extends PApplet {
     class GrabDataTask extends TimerTask {
         public void run() {
             if (!useStoredData) {
-
+                ArrayList<DataPoint> newData = currentDataFeed.getFreshData();
+                
+                for (DataPoint d : newData) {
+                    incomingData.add(d);
+                }
             }
         }
     }

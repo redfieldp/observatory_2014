@@ -1,23 +1,23 @@
 package observatory;
 
+import java.util.ArrayList;
+
 public class DataFeed
 {
     String URL;
 
-    int delayBeforeProcessing = 30; 
-
-    int dataUpdateFrequency = 10;
-
     float dataTimeInterval= 0.1f;
-
-    int thresholdBig = 100;
-
-    int thresholdMedium = 40;
-
-    int thresholdSmall = 0;
     
     public DataFeed(String feedURL) {
         URL = feedURL;
     }
 
+    public ArrayList<DataPoint> getFreshData() {
+        ArrayList<DataPoint> newData = new ArrayList<DataPoint>();
+        
+        // TODO: Grab new data and populate list
+        
+        return newData;
+    }
+    
 }
