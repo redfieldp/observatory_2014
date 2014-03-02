@@ -10,7 +10,7 @@ public class ClusteredRightTemplate extends Template
         verticalPlacementOffset = -50;
     }
     
-    public void horizontalPlacement() {
-        
+    public float horizontalPlacement() {
+        return (float) (100 - (Math.sin(Math.random() * Math.PI/2) * 100));
     }
 }

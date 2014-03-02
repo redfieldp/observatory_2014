@@ -9,7 +9,7 @@ public class RainTemplate extends Template
 
         verticalPlacementOffset = 20;
     }
-    public void horizontalPlacement() {
-        
+    public float horizontalPlacement() {
+        return (float)(Math.random() * 100) + 1;
     }
 }

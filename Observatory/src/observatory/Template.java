@@ -8,5 +8,5 @@ public abstract class Template
 
     int verticalPlacementOffset;
     
-    abstract void horizontalPlacement();
+    abstract float horizontalPlacement();
 }
