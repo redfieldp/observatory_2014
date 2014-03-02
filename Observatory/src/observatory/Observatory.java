@@ -32,11 +32,16 @@ public class Observatory extends PApplet {
     int canvasWidth = 640;
     int dataUpdateFrequency = 10;
     int templateRotationCount = 0;
+    int thresholdLarge = 400;
+    int thresholdMedium = 200;
 
     float thicknessUnit = 0.0001f;
 
     public void setup() {
         size(canvasWidth, canvasHeight);
+        
+        // Initialize Stored Data Points
+        loadStoredData();
 
         // Schedule the timers
         dataTimerSetup();
@@ -117,34 +122,40 @@ public class Observatory extends PApplet {
         performancePaused = !performancePaused;
     }
 
-    private void increaseMediumThreshold()
-    {
-        // TODO Auto-generated method stub
-
-    }
-
     private void switchToNextTemplate()
     {
         templateRotationCount = (templateRotationCount + 1) % templates.length;
         currentTemplate = templates[templateRotationCount];
     }
 
+    private void increaseMediumThreshold()
+    {
+        if (thresholdMedium < thresholdLarge - thresholdIncrement) {
+            thresholdMedium += thresholdIncrement;
+        }
+    }
+
     private void decreaseMediumThreshold()
     {
-        // TODO Auto-generated method stub
-
+        if (thresholdMedium > 0 + thresholdIncrement) {
+            thresholdMedium -= thresholdIncrement;
+        }
     }
 
     private void decreaseLargeThreshold()
     {
-        // TODO Auto-generated method stub
-
+        if (thresholdLarge > thresholdMedium + thresholdIncrement) {
+            thresholdLarge -= thresholdIncrement;
+        }
     }
 
     private void increaseLargeThreshold()
     {
-        // TODO Auto-generated method stub
-
+        thresholdLarge += thresholdIncrement;
+    }
+    
+    private void loadStoredData() {
+        
     }
 
     public void dataTimerSetup() {
