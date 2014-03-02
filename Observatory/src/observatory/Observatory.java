@@ -1,6 +1,7 @@
 package observatory;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -22,7 +23,8 @@ public class Observatory extends PApplet {
     boolean useStoredData = false;
     boolean fullScreenMode = false;
     boolean saveDataToFile = false;
-    
+    boolean pdfTrigger = false;
+
     int maxNumberOfLines = 100;
     int rotateTemplateDuration = 20;
     int thresholdIncrement = 10;
@@ -30,7 +32,7 @@ public class Observatory extends PApplet {
     int canvasWidth = 640;
     int dataUpdateFrequency = 10;
     int templateRotationCount = 0;
-    
+
     float thicknessUnit = 0.0001f;
 
     public void setup() {
@@ -42,6 +44,11 @@ public class Observatory extends PApplet {
     }
 
     public void draw() {
+        if (pdfTrigger) {
+            // #### will be replaced with the frame number
+            beginRecord(PDF, "LineDrawing_"+ new Date() + ".pdf"); 
+        }
+
         if (!performancePaused) {
             if (useStoredData) {
 
@@ -49,6 +56,11 @@ public class Observatory extends PApplet {
             else {
 
             }
+        }
+
+        if (pdfTrigger) {
+            endRecord();
+            pdfTrigger = false;
         }
     }
 
@@ -87,8 +99,7 @@ public class Observatory extends PApplet {
 
     private void savePDF()
     {
-        // TODO Auto-generated method stub
-
+        pdfTrigger = true;
     }
 
     private void toggleFullScreen()
@@ -142,15 +153,15 @@ public class Observatory extends PApplet {
         dataGrabber = new Timer();
         dataGrabber.schedule(new GrabDataTask(), 0, dataUpdateFrequency * 1000);
     }
-    
+
     class GrabDataTask extends TimerTask {
         public void run() {
             if (!useStoredData) {
-                
+
             }
         }
     }
-    
+
     public void templateTimerSetup() {
         templateSwitcher = new Timer();
         templateSwitcher.schedule(new TemplateRotationTask(), 0, rotateTemplateDuration * 1000);
@@ -162,7 +173,7 @@ public class Observatory extends PApplet {
             currentTemplate = templates[templateRotationCount];
         }
     }
-    
+
     public boolean sketchFullScreen() {
         return fullScreenMode;
     }
