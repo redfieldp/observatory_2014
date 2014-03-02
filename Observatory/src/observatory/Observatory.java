@@ -154,15 +154,35 @@ public class Observatory extends PApplet {
         thresholdLarge += thresholdIncrement;
     }
     
+    private void processDataPoint(DataPoint p) {
+        if (p.magnitude > thresholdLarge) {
+            // TODO: Create a new line
+            
+        }
+        else if (p.magnitude > thresholdMedium) {
+            // TODO: Modify an existing line
+            
+        }
+    }
+    
     private void loadStoredData() {
-        
+        // TODO: Load to incoming data from a stored data file
     }
 
-    public void dataTimerSetup() {
+    private void dataTimerSetup() {
         dataGrabber = new Timer();
         dataGrabber.schedule(new GrabDataTask(), 0, dataUpdateFrequency * 1000);
     }
 
+    private void templateTimerSetup() {
+        templateSwitcher = new Timer();
+        templateSwitcher.schedule(new TemplateRotationTask(), 0, rotateTemplateDuration * 1000);
+    }
+
+    public boolean sketchFullScreen() {
+        return fullScreenMode;
+    }
+    
     class GrabDataTask extends TimerTask {
         public void run() {
             if (!useStoredData) {
@@ -175,19 +195,10 @@ public class Observatory extends PApplet {
         }
     }
 
-    public void templateTimerSetup() {
-        templateSwitcher = new Timer();
-        templateSwitcher.schedule(new TemplateRotationTask(), 0, rotateTemplateDuration * 1000);
-    }
-
     class TemplateRotationTask extends TimerTask {
         public void run() {
             templateRotationCount = (templateRotationCount + 1) % templates.length;
             currentTemplate = templates[templateRotationCount];
         }
-    }
-
-    public boolean sketchFullScreen() {
-        return fullScreenMode;
     }
 }
