@@ -115,8 +115,7 @@ public class Observatory extends PApplet {
 
     private void togglePause()
     {
-        // TODO Auto-generated method stub
-
+        performancePaused = !performancePaused;
     }
 
     private void increaseMediumThreshold()
