@@ -126,8 +126,8 @@ public class Observatory extends PApplet {
 
     private void switchToNextTemplate()
     {
-        // TODO Auto-generated method stub
-
+        templateRotationCount = (templateRotationCount + 1) % templates.length;
+        currentTemplate = templates[templateRotationCount];
     }
 
     private void decreaseMediumThreshold()
