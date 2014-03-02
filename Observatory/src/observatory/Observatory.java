@@ -18,6 +18,7 @@ public class Observatory extends PApplet {
     Template[] templates = {new RainTemplate(), new ToothpicksTemplate(), new ClusteredRightTemplate(), new ClusteredLeftTemplate()};
     Timer dataGrabber;
     Timer templateSwitcher;
+    RecentData recentData = new RecentData();
 
     boolean performancePaused = false;
     boolean useStoredData = false;
@@ -163,6 +164,9 @@ public class Observatory extends PApplet {
             // TODO: Modify an existing line
             
         }
+        
+        incomingData.remove(p);
+        recentData.addDataPoint(p);
     }
     
     private void loadStoredData() {

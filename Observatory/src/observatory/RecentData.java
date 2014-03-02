@@ -6,7 +6,7 @@ public class RecentData
 {
     int recentDataDuration = 100;
 
-    ArrayList<DataPoint> ListOfDataPoints = new ArrayList<DataPoint>();
+    ArrayList<DataPoint> listOfDataPoints = new ArrayList<DataPoint>();
 
     int maximumDataPoints = 1000;
 
@@ -42,6 +42,14 @@ public class RecentData
         // Calculate average before returning
         
         return recentAverageOfAllShakes;
+    }
+    
+    public void addDataPoint(DataPoint p) {
+        if (listOfDataPoints.size() ==  maximumDataPoints) {
+            // Remove the oldest point if we have too many
+            listOfDataPoints.remove(0);
+        }
+        listOfDataPoints.add(p);
     }
     
     public void saveData(){
