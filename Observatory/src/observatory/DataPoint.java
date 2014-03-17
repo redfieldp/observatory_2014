@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class DataPoint
 {
-    Date time = new Date();
+    long time = System.currentTimeMillis();
 
     double originalMagnitude = 0.0;
 
