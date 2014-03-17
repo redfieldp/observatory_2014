@@ -62,11 +62,11 @@ public class ObservatoryLine
 	
 	private void modifyAngle(float angle) {
 		
-		}
+	}
 		
 	private void modifyHPos(long time) {
 		
-		}
+	}
 		
 	private void modifyVPos(float angle, long duration, int verticalOffset) {
 		
