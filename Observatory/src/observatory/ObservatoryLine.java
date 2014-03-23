@@ -12,7 +12,7 @@ public class ObservatoryLine
     long birthDate;
 
     public ObservatoryLine(DataPoint p, Template currentTemplate) { 
-        this.thickness = p.magnitude;
+        this.thickness = (int)p.magnitude;
         this.lifeSpan = p.peakEnvelope.deltaMagnitude;
         this.birthDate = System.currentTimeMillis();
         
@@ -39,7 +39,7 @@ public class ObservatoryLine
     	
     	switch (modifcationVariable) {
     		case 0:
-    			modifyThickness(p.magnitude, data.getMediumShakesAverage());
+    			modifyThickness((int)p.magnitude, data.getMediumShakesAverage());
     			break;
     		case 1:
     			modifyAngle(p.smoothedEnvelope.angle);

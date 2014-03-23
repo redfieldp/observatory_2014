@@ -10,7 +10,7 @@ public class DataFeed
     PApplet processingInstance;
     float dataTimeInterval= 0.1f;
     
-    DataPoint lastBigPoint, lastMediumPoint;
+    DataPoint lastBigPoint = new DataPoint(), lastMediumPoint = new DataPoint();
 
     public DataFeed(PApplet parentApp) {
         processingInstance = parentApp;
@@ -58,8 +58,8 @@ public class DataFeed
             PApplet.println(dataInfo[0]);
             PApplet.println(dataInfo[2]);
             // Create a new DataPoint object and add to the array
-            //DataPoint currentReading = new DataPoint(Double.parseDouble(dataInfo[2]), dataInfo[0]);
-            //newData.add(currentReading);
+            DataPoint currentReading = new DataPoint(Double.parseDouble(dataInfo[2]), lastBigPoint, lastMediumPoint);
+            newData.add(currentReading);
         }
 
         PApplet.println("Acquired " + (feedData.length - 1) + " new data points.");

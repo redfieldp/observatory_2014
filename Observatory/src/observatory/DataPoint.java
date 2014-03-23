@@ -1,14 +1,12 @@
 package observatory;
 
-import java.util.Date;
-
 public class DataPoint
 {
     long time = System.currentTimeMillis();
 
     double originalMagnitude = 0.0;
 
-    int magnitude;
+    double magnitude;
     
     DataPoint lastBigPoint;
 
@@ -18,8 +16,9 @@ public class DataPoint
 
     DataEnvelope smoothedEnvelope;
     
-    public DataPoint(String dataPoint, DataPoint lastBig, DataPoint lastMedium) {
+    public DataPoint(double magnitude, DataPoint lastBig, DataPoint lastMedium) {
         // Parse Data point
+        this.magnitude = magnitude;
         
         // Grab other data point arguments
         lastBigPoint = lastBig;
@@ -28,5 +27,10 @@ public class DataPoint
         // Create envelopes using points
         peakEnvelope = new DataEnvelope(this, lastBigPoint);
         smoothedEnvelope = new DataEnvelope(this, lastMediumPoint);
+    }
+    
+    // This is the null constructor
+    public DataPoint() {
+        magnitude = 0;
     }
 }
