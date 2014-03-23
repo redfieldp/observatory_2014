@@ -9,8 +9,7 @@ import processing.core.PApplet;
 
 
 public class Observatory extends PApplet {
-	String dataUrl = "";
-	DataFeed currentDataFeed = new DataFeed(dataUrl);
+	DataFeed currentDataFeed = new DataFeed(this);
 	Template currentTemplate;
 	ArrayList<DataPoint> incomingData = new ArrayList<DataPoint>();
 	ArrayList<DataPoint> storedDataPoints = new ArrayList<DataPoint>();
