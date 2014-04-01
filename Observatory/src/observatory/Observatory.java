@@ -198,20 +198,24 @@ public class Observatory extends PApplet {
 	}
 
 	private void processDataPoint(ArrayList<DataPoint> currentData) {
+	    println("Processing data point from data repo of size " + currentData.size());
 		// Grab the last point in the list
 		DataPoint p = currentData.get(0);
 		
 		if (p.magnitude > thresholdLarge) {
 			if (lines.size() < maxNumberOfLines) {
+			    println("Creating new line from data point");
 				lines.add(new ObservatoryLine(p, currentTemplate));
 			}
 		}
 		else if (p.magnitude > thresholdMedium) {
+		    println("Modifying existing line from data point");
 			modifyExistingLine(p);
 		}
 
 		currentData.remove(p);
 		recentData.addDataPoint(p);
+		println("Processing complete. Recent data size is " + recentData.size() + " and data repo has size of " + currentData.size());
 	}
 
 	private void loadStoredData() {
