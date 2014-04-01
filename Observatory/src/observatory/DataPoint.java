@@ -2,6 +2,7 @@ package observatory;
 
 public class DataPoint
 {
+    // TODO: What to use for time?
     long time = System.currentTimeMillis();
 
     double originalMagnitude = 0.0;

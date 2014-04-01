@@ -10,7 +10,7 @@ public class ToothpicksTemplate extends Template
         verticalPlacementOffset = 0;
     }
     
-    public float horizontalPlacement() {
-        return (float)(Math.random() * 100) + 1;
+    public float horizontalPlacement(DataPoint p) {
+        return (float) (p.time % 1000)/1000;
     }
 }

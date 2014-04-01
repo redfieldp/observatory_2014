@@ -72,6 +72,7 @@ public class Observatory extends PApplet {
 			destroyOldLines();
 
 			// Only try to process data if there is some
+			// TODO: Should this be in its own Timer thread?
 			if (currentData.size() > 0) {
 				processDataPoint(currentData);
 			}
@@ -198,7 +199,7 @@ public class Observatory extends PApplet {
 
 	private void processDataPoint(ArrayList<DataPoint> currentData) {
 		// Grab the last point in the list
-		DataPoint p = currentData.get(currentData.size() - 1);
+		DataPoint p = currentData.get(0);
 		
 		if (p.magnitude > thresholdLarge) {
 			if (lines.size() < maxNumberOfLines) {
@@ -231,7 +232,7 @@ public class Observatory extends PApplet {
 		return fullScreenMode;
 	}
 
-	class GrabDataTask extends TimerTask {
+    class GrabDataTask extends TimerTask {
 		public void run() {
 			if (!useStoredData) {
 				ArrayList<DataPoint> newData = currentDataFeed.getFreshData();
@@ -245,6 +246,7 @@ public class Observatory extends PApplet {
 
 	class TemplateRotationTask extends TimerTask {
 		public void run() {
+		    // TODO: Decide random/in order for template rotation
 			templateRotationCount = (templateRotationCount + 1) % templates.length;
 			currentTemplate = templates[templateRotationCount];
 		}

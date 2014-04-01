@@ -19,7 +19,7 @@ public class RecentData
     private int recentAverageOfAllShakes  = 0;
 
     int recentPeak = 0;
-    
+    //TODO: Thread averages calculation
     public int getBigShakesAverage() {
         // Calculate average before returning
         

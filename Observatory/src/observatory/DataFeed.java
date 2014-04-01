@@ -8,7 +8,7 @@ import processing.core.PApplet;
 public class DataFeed
 {
     PApplet processingInstance;
-    float dataTimeInterval= 0.1f;
+    float dataTimeInterval= 10.0f;
     
     DataPoint lastBigPoint = new DataPoint(), lastMediumPoint = new DataPoint();
 

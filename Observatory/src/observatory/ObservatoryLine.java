@@ -15,16 +15,15 @@ public class ObservatoryLine
         this.thickness = (int)p.magnitude;
         this.lifeSpan = p.peakEnvelope.deltaMagnitude;
         this.birthDate = System.currentTimeMillis();
-        
-        // TODO: Clarify these variables
-        this.angle = p.peakEnvelope.angle;
-        this.hPos = currentTemplate.horizontalPlacement(); 
+        float anglePercentage = (float) (p.peakEnvelope.angle/Math.PI);
+        this.angle = p.peakEnvelope.angle + (anglePercentage * currentTemplate.angleDeviance);
+        this.hPos = currentTemplate.horizontalPlacement(p); 
         this.vPos = 0;
-        this.length = 0;
+        this.length = (int)(p.time % 500);
     }
 
-    public void draw() {
-
+    public void draw(int currentWidth, int currentHeight) {
+        // TODO: Decide if templates are a constructor of method argument
     }
 
     public boolean isExpired() {
@@ -65,7 +64,8 @@ public class ObservatoryLine
 	}
 		
 	private void modifyHPos(long time) {
-		
+		int change = ((int)(time % 10)) - 5;
+		hPos = hPos + change;
 	}
 		
 	private void modifyVPos(float angle, long duration, int verticalOffset) {
