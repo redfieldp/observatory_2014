@@ -4,7 +4,7 @@ package observatory;
 public class ObservatoryLine
 {
     int thickness;
-    float angle;
+    double angle;
     float hPos;
     int vPos;
     int length;
@@ -59,7 +59,7 @@ public class ObservatoryLine
 	
 	}
 	
-	private void modifyAngle(float angle) {
+	private void modifyAngle(double angle) {
 		
 	}
 		
@@ -68,7 +68,7 @@ public class ObservatoryLine
 		hPos = hPos + change;
 	}
 		
-	private void modifyVPos(float angle, long duration, int verticalOffset) {
+	private void modifyVPos(double angle, long duration, int verticalOffset) {
 		
 	}
 		
