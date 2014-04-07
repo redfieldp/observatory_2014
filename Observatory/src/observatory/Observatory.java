@@ -17,7 +17,6 @@ public class Observatory extends PApplet {
 	Template[] templates = {new RainTemplate(), new ToothpicksTemplate(), new ClusteredRightTemplate(), new ClusteredLeftTemplate()};
 	Timer dataGrabber;
 	Timer templateSwitcher;
-	RecentData recentData = new RecentData();
 
 	boolean performancePaused = false;
 	boolean useStoredData = false;
@@ -35,6 +34,7 @@ public class Observatory extends PApplet {
 	int templateRotationCount = 0;
 	int thresholdLarge = 400;
 	int thresholdMedium = 200;
+	RecentData recentData = new RecentData(thresholdLarge, thresholdMedium);
 
 	float thicknessUnit = 0.0001f;
 
@@ -157,6 +157,7 @@ public class Observatory extends PApplet {
 		if (thresholdMedium < thresholdLarge - thresholdIncrement) {
 			thresholdMedium += thresholdIncrement;
 		}
+		recentData.setMediumThreshold(thresholdMedium);
 	}
 
 	private void decreaseMediumThreshold()
@@ -164,6 +165,7 @@ public class Observatory extends PApplet {
 		if (thresholdMedium > 0 + thresholdIncrement) {
 			thresholdMedium -= thresholdIncrement;
 		}
+		recentData.setMediumThreshold(thresholdMedium);
 	}
 
 	private void decreaseLargeThreshold()
@@ -171,11 +173,13 @@ public class Observatory extends PApplet {
 		if (thresholdLarge > thresholdMedium + thresholdIncrement) {
 			thresholdLarge -= thresholdIncrement;
 		}
+		recentData.setLargeThreshold(thresholdLarge);
 	}
 
 	private void increaseLargeThreshold()
 	{
 		thresholdLarge += thresholdIncrement;
+		recentData.setLargeThreshold(thresholdLarge);
 	}
 
 	private void destroyOldLines() {
