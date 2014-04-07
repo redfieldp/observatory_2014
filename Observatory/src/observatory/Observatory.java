@@ -219,7 +219,7 @@ public class Observatory extends PApplet {
 		if (p.magnitude > thresholdLarge) {
 			if (lines.size() < maxNumberOfLines) {
 				println("Creating new line from data point");
-				lines.add(new ObservatoryLine(p, currentTemplate));
+				lines.add(new ObservatoryLine(p, currentTemplate, this));
 			}
 		}
 		else if (p.magnitude > thresholdMedium) {
