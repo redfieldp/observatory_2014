@@ -79,7 +79,7 @@ public class Observatory extends PApplet {
 
 			// Draw the current lines
 			for (ObservatoryLine l : lines) {
-				l.draw();
+				l.draw(width, height);
 			}
 
 			if (saveDataToFile) {
@@ -215,7 +215,7 @@ public class Observatory extends PApplet {
 
 		currentData.remove(p);
 		recentData.addDataPoint(p);
-		println("Processing complete. Recent data size is " + recentData.size() + " and data repo has size of " + currentData.size());
+		println("Processing complete. Recent data size is " + recentData.listOfDataPoints.size() + " and data repo has size of " + currentData.size());
 	}
 
 	private void loadStoredData() {
