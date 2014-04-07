@@ -1,5 +1,7 @@
 package observatory;
 
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Timer;
@@ -39,6 +41,14 @@ public class Observatory extends PApplet {
 	float thicknessUnit = 0.0001f;
 
 	public void setup() {
+		//***** figure out the display environment ****/
+		GraphicsEnvironment environment = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		GraphicsDevice devices[] = environment.getScreenDevices();
+
+		canvasWidth = devices[0].getDisplayMode().getWidth();
+		canvasHeight = devices[0].getDisplayMode().getHeight();
+		println("Adjusting animation size to "+canvasWidth+"x"+canvasHeight+" to fit primary display");
+		
 		size(canvasWidth, canvasHeight);
 
 		// Initialize Stored Data Points
@@ -195,25 +205,25 @@ public class Observatory extends PApplet {
 			lines.remove(l);
 		}
 	}
-	
+
 	private void modifyExistingLine(DataPoint p) {
 		ObservatoryLine lineToModify = lines.get((int)(p.time % lines.size()));
 		lineToModify.modify(p, recentData, currentTemplate);
 	}
 
 	private void processDataPoint(ArrayList<DataPoint> currentData) {
-	    println("Processing data point from data repo of size " + currentData.size());
+		println("Processing data point from data repo of size " + currentData.size());
 		// Grab the last point in the list
 		DataPoint p = currentData.get(0);
-		
+
 		if (p.magnitude > thresholdLarge) {
 			if (lines.size() < maxNumberOfLines) {
-			    println("Creating new line from data point");
+				println("Creating new line from data point");
 				lines.add(new ObservatoryLine(p, currentTemplate));
 			}
 		}
 		else if (p.magnitude > thresholdMedium) {
-		    println("Modifying existing line from data point");
+			println("Modifying existing line from data point");
 			modifyExistingLine(p);
 		}
 
@@ -240,7 +250,7 @@ public class Observatory extends PApplet {
 		return fullScreenMode;
 	}
 
-    class GrabDataTask extends TimerTask {
+	class GrabDataTask extends TimerTask {
 		public void run() {
 			if (!useStoredData) {
 				ArrayList<DataPoint> newData = currentDataFeed.getFreshData();
@@ -254,9 +264,13 @@ public class Observatory extends PApplet {
 
 	class TemplateRotationTask extends TimerTask {
 		public void run() {
-		    // TODO: Decide random/in order for template rotation
+			// TODO: Decide random/in order for template rotation
 			templateRotationCount = (templateRotationCount + 1) % templates.length;
 			currentTemplate = templates[templateRotationCount];
 		}
+	}
+
+	public static void main(String args[]) {
+		PApplet.main(new String[] { "--present", "observatory.Observatory" });
 	}
 }
