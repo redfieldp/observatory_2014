@@ -13,12 +13,13 @@ public class ObservatoryLine
 	int lifeSpan;
 	long birthDate;
 	PApplet parent;
+	int magnitudeFactor = 10000000;
 
 	public ObservatoryLine(DataPoint p, Template currentTemplate, PApplet pRef) { 
 		this.lifeSpan = p.peakEnvelope.deltaMagnitude;
 		this.birthDate = System.currentTimeMillis();
 		float anglePercentage = (float) (p.peakEnvelope.angle/Math.PI);
-		this.thickness = (int)p.magnitude;
+		this.thickness = (int)(p.magnitude * magnitudeFactor);
 		this.angle = p.peakEnvelope.angle + (anglePercentage * currentTemplate.angleDeviance);
 		this.hPos = currentTemplate.horizontalPlacement(p); 
 		this.vPos = 0.50f;
@@ -27,15 +28,16 @@ public class ObservatoryLine
 	}
 
 	public void draw(int currentWidth, int currentHeight) {
-	    parent.println("Drawing line at " + hPos + ", " + vPos + " with length " + length + " and thickness " + thickness);
+	    PApplet.println("Drawing line at " + hPos + ", " + vPos + " with length " + length + " and thickness " + thickness + " and angle of " + angle);
 		parent.pushMatrix();
 		parent.rotate((float)angle);
 		parent.stroke(0);
 		parent.strokeWeight(thickness);
+		parent.strokeCap(PApplet.SQUARE);
 		parent.noFill();
-		float x1 = (hPos * currentHeight);
-		float y1 = (vPos * currentWidth) - (length/2);
-		float x2 = (hPos * currentHeight);
+		float x1 = (hPos * currentWidth);
+		float y1 = (vPos * currentHeight) - (length/2);
+		float x2 = (hPos * currentWidth);
 		float y2 = (vPos * currentWidth) + (length/2);
 		parent.line(x1, y1, x2, y2);
 		parent.popMatrix();

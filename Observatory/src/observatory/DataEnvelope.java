@@ -11,6 +11,11 @@ public class DataEnvelope
         deltaMagnitude = (int)(newPoint.magnitude - oldPoint.magnitude);
         
         // We have opposite (delta mag) and adjacent (duration) so use cotan to get angle
-        angle = Math.atan(deltaMagnitude/duration);
+        if (duration > 0) {
+        	angle = Math.atan(deltaMagnitude/duration);
+        }
+        else {
+        	angle = 0;
+        }
     }
 }

@@ -254,7 +254,7 @@ public class Observatory extends PApplet {
 	class GrabDataTask extends TimerTask {
 		public void run() {
 			if (!useStoredData) {
-				ArrayList<DataPoint> newData = currentDataFeed.getFreshData();
+				ArrayList<DataPoint> newData = currentDataFeed.getFreshData(thresholdLarge, thresholdMedium, magnitudeFactor);
 
 				for (DataPoint d : newData) {
 					incomingData.add(d);
