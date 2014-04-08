@@ -34,8 +34,9 @@ public class Observatory extends PApplet {
 	int bgColor = 255;
 	int dataUpdateFrequency = 10;
 	int templateRotationCount = 0;
-	int thresholdLarge = 400;
-	int thresholdMedium = 200;
+	int thresholdLarge = 100;
+	int thresholdMedium = 25;
+	int magnitudeFactor = 1000000000;
 	RecentData recentData = new RecentData(thresholdLarge, thresholdMedium);
 
 	float thicknessUnit = 0.0001f;
@@ -212,11 +213,11 @@ public class Observatory extends PApplet {
 	}
 
 	private void processDataPoint(ArrayList<DataPoint> currentData) {
-		println("Processing data point from data repo of size " + currentData.size());
+		println("Processing data point from data repo of size " + currentData.size() + " with magnitude of " + (currentData.get(0).magnitude * magnitudeFactor));
 		// Grab the last point in the list
 		DataPoint p = currentData.get(0);
 
-		if (p.magnitude > thresholdLarge) {
+		if (p.magnitude * magnitudeFactor > thresholdLarge) {
 			if (lines.size() < maxNumberOfLines) {
 				println("Creating new line from data point");
 				lines.add(new ObservatoryLine(p, currentTemplate, this));

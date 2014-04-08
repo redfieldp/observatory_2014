@@ -27,12 +27,13 @@ public class ObservatoryLine
 	}
 
 	public void draw(int currentWidth, int currentHeight) {
+	    parent.println("Drawing line at " + hPos + ", " + vPos + " with length " + length + " and thickness " + thickness);
 		parent.pushMatrix();
 		parent.rotate((float)angle);
 		parent.stroke(0);
 		parent.strokeWeight(thickness);
 		parent.noFill();
-		float x1 = (vPos * currentHeight);
+		float x1 = (hPos * currentHeight);
 		float y1 = (vPos * currentWidth) - (length/2);
 		float x2 = (hPos * currentHeight);
 		float y2 = (vPos * currentWidth) + (length/2);
