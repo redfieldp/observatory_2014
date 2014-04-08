@@ -1,5 +1,7 @@
 package observatory;
 
+import processing.core.PApplet;
+
 public class DataEnvelope
 {
     long duration;
@@ -9,6 +11,7 @@ public class DataEnvelope
     DataEnvelope (DataPoint newPoint, DataPoint oldPoint) {
         duration = newPoint.time - oldPoint.time;
         deltaMagnitude = (int)(newPoint.magnitude - oldPoint.magnitude);
+        PApplet.println("Envelope: " + duration + " , " + deltaMagnitude);
         
         // We have opposite (delta mag) and adjacent (duration) so use cotan to get angle
         if (duration > 0) {

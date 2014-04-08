@@ -16,7 +16,7 @@ public class ObservatoryLine
 	int magnitudeFactor = 10000000;
 
 	public ObservatoryLine(DataPoint p, Template currentTemplate, PApplet pRef) { 
-		this.lifeSpan = p.peakEnvelope.deltaMagnitude;
+		this.lifeSpan = p.peakEnvelope.deltaMagnitude + 1000;
 		this.birthDate = System.currentTimeMillis();
 		float anglePercentage = (float) (p.peakEnvelope.angle/Math.PI);
 		this.thickness = (int)(p.magnitude * magnitudeFactor);
@@ -28,7 +28,7 @@ public class ObservatoryLine
 	}
 
 	public void draw(int currentWidth, int currentHeight) {
-	    PApplet.println("Drawing line at " + hPos + ", " + vPos + " with length " + length + " and thickness " + thickness + " and angle of " + angle);
+	    PApplet.println("Drawing line at " + hPos + ", " + vPos + " with length " + length + " and thickness " + thickness + " and angle of " + angle + " and life span of " + lifeSpan);
 		parent.pushMatrix();
 		parent.rotate((float)angle);
 		parent.stroke(0);

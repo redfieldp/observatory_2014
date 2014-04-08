@@ -34,7 +34,7 @@ public class Observatory extends PApplet {
 	int bgColor = 255;
 	int dataUpdateFrequency = 10;
 	int templateRotationCount = 0;
-	int thresholdLarge = 100;
+	int thresholdLarge = 200;
 	int thresholdMedium = 25;
 	int magnitudeFactor = 1000000000;
 	RecentData recentData = new RecentData(thresholdLarge, thresholdMedium);
@@ -204,6 +204,7 @@ public class Observatory extends PApplet {
 
 		for (ObservatoryLine l : toRemove) {
 			lines.remove(l);
+			println("Removing line");
 		}
 	}
 
