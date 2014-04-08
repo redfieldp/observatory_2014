@@ -25,11 +25,12 @@ public class ObservatoryLine
 		this.vPos = 0.50f;
 		this.length = (int)(p.time % 500);
 		this.parent = pRef;
+		PApplet.println("Drawing line at " + hPos + ", " + vPos + " with length " + length + " and thickness " + thickness + " and angle of " + angle + " and life span of " + lifeSpan);
+       
 	}
 
 	public void draw(int currentWidth, int currentHeight) {
-	    PApplet.println("Drawing line at " + hPos + ", " + vPos + " with length " + length + " and thickness " + thickness + " and angle of " + angle + " and life span of " + lifeSpan);
-		parent.pushMatrix();
+	    parent.pushMatrix();
 		parent.rotate((float)angle);
 		parent.stroke(0);
 		parent.strokeWeight(thickness);
