@@ -16,7 +16,7 @@ public class ObservatoryLine
 	int magnitudeFactor = 10000000;
 
 	public ObservatoryLine(DataPoint p, Template currentTemplate, PApplet pRef) { 
-		this.lifeSpan = p.peakEnvelope.deltaMagnitude + 1000;
+		this.lifeSpan = p.peakEnvelope.deltaMagnitude;
 		this.birthDate = System.currentTimeMillis();
 		float anglePercentage = (float) (p.peakEnvelope.angle/Math.PI);
 		this.thickness = (int)(p.magnitude * magnitudeFactor);

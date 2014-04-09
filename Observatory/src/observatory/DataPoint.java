@@ -17,9 +17,10 @@ public class DataPoint
 
     DataEnvelope smoothedEnvelope;
     
-    public DataPoint(double magnitude, DataPoint lastBig, DataPoint lastMedium) {
+    public DataPoint(double originalMagnitude, double magnitude, DataPoint lastBig, DataPoint lastMedium) {
         // Parse Data point
         this.magnitude = magnitude;
+        this.originalMagnitude = originalMagnitude;
         
         // Grab other data point arguments
         lastBigPoint = lastBig;

@@ -58,12 +58,12 @@ public class DataFeed
             PApplet.println(dataInfo[0]);
             PApplet.println(dataInfo[2]);
             // Create a new DataPoint object and add to the array
-            double magnitude = Double.parseDouble(dataInfo[2]);
-            DataPoint currentReading = new DataPoint(magnitude, lastBigPoint, lastMediumPoint);
-            if (magnitude * magnitudeFactor > lastBigPoint.magnitude) {
+            double originalMagnitude = Double.parseDouble(dataInfo[2]);
+            DataPoint currentReading = new DataPoint(originalMagnitude, originalMagnitude * magnitudeFactor, lastBigPoint, lastMediumPoint);
+            if (originalMagnitude * magnitudeFactor > lastBigPoint.magnitude) {
             	lastBigPoint = currentReading;
             }
-            else if ( magnitude * magnitudeFactor > lastMediumPoint.magnitude) {
+            else if ( originalMagnitude * magnitudeFactor > lastMediumPoint.magnitude) {
             	lastMediumPoint = currentReading;
             }
             newData.add(currentReading);

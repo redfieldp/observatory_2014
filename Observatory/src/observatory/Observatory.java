@@ -34,7 +34,7 @@ public class Observatory extends PApplet {
 	int bgColor = 255;
 	int dataUpdateFrequency = 10;
 	int templateRotationCount = 0;
-	int thresholdLarge = 200;
+	int thresholdLarge = 75;
 	int thresholdMedium = 25;
 	int magnitudeFactor = 1000000000;
 	RecentData recentData = new RecentData(thresholdLarge, thresholdMedium);
@@ -58,6 +58,8 @@ public class Observatory extends PApplet {
 		// Schedule the timers
 		dataTimerSetup();
 		templateTimerSetup();
+		
+		frameRate(10);
 	}
 
 	public void draw() {
@@ -214,7 +216,7 @@ public class Observatory extends PApplet {
 	}
 
 	private void processDataPoint(ArrayList<DataPoint> currentData) {
-		println("Processing data point from data repo of size " + currentData.size() + " with magnitude of " + (currentData.get(0).magnitude * magnitudeFactor));
+		println("Processing data point from incoming data of size " + currentData.size() + " with magnitude of " + (currentData.get(0).magnitude * magnitudeFactor));
 		// Grab the last point in the list
 		DataPoint p = currentData.get(0);
 
