@@ -14,8 +14,9 @@ public class ObservatoryLine
 	long birthDate;
 	PApplet parent;
 	
-	int thicknessScalar = 20; // bigger number, smaller line
+	int thicknessScalar = 40; // bigger number, smaller line
     int lifeSpanScalar = 100; // bigger number, longer life
+    int timeScalar = 10000; // bigger number, longer line
 	
 	long birthTime;
 
@@ -24,10 +25,10 @@ public class ObservatoryLine
 		this.birthDate = System.currentTimeMillis();
 		float anglePercentage = (float) (p.peakEnvelope.angle/Math.PI);
 		this.thickness = (int)(p.magnitude/thicknessScalar);
-		this.angle = p.peakEnvelope.angle + (anglePercentage * currentTemplate.angleDeviance);
+		this.angle = PApplet.map((float)(p.peakEnvelope.angle + (anglePercentage * currentTemplate.angleDeviance)), 0, 2 * PApplet.PI, (float)Math.toRadians(currentTemplate.defaultAngle), (float)Math.toRadians(currentTemplate.defaultAngle + currentTemplate.angleDeviance));
 		this.hPos = currentTemplate.horizontalPlacement(p); 
 		this.vPos = 0.50f;
-		this.length = (int)(p.time % 10000);
+		this.length = (int)(p.time % timeScalar);
 		this.parent = pRef;
 		PApplet.println("Drawing line at " + hPos + ", " + vPos + " with length " + length + " and thickness " + thickness + " and angle of " + angle + " and life span of " + lifeSpan);
 		PApplet.println("Here's a change in the constructor.");
@@ -36,15 +37,16 @@ public class ObservatoryLine
 
 	public void draw(int currentWidth, int currentHeight) {
 	    parent.pushMatrix();
+	    parent.translate(parent.width/2, parent.height/2);
 		parent.rotate((float)angle);
 		parent.stroke(0);
 		parent.strokeWeight(thickness);
 		parent.strokeCap(PApplet.SQUARE);
 		parent.noFill();
-		float x1 = (hPos * currentWidth);
-		float y1 = (vPos * (currentHeight - (length/2)));
-		float x2 = (hPos * currentWidth);
-		float y2 = (vPos * (currentHeight + (length/2)));
+		float x1 = (hPos * currentWidth) - parent.width/2;
+		float y1 = (vPos * (currentHeight - (length/2))) - parent.height/2;
+		float x2 = (hPos * currentWidth) - parent.width/2;
+		float y2 = (vPos * (currentHeight + (length/2))) - parent.height/2;
 		parent.line(x1, y1, x2, y2);
 		parent.popMatrix();
 	}
