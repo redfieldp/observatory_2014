@@ -13,13 +13,17 @@ public class ObservatoryLine
 	int lifeSpan;
 	long birthDate;
 	PApplet parent;
-	int magnitudeFactor = 10000000;
+	
+	int thicknessScalar = 10;
+    int lifeSpanScalar = 100;
+	
+	long birthTime;
 
 	public ObservatoryLine(DataPoint p, Template currentTemplate, PApplet pRef) { 
-		this.lifeSpan = p.peakEnvelope.deltaMagnitude;
+		this.lifeSpan = Math.abs(p.peakEnvelope.deltaMagnitude)*lifeSpanScalar;
 		this.birthDate = System.currentTimeMillis();
 		float anglePercentage = (float) (p.peakEnvelope.angle/Math.PI);
-		this.thickness = (int)(p.magnitude * magnitudeFactor);
+		this.thickness = (int)(p.magnitude/thicknessScalar);
 		this.angle = p.peakEnvelope.angle + (anglePercentage * currentTemplate.angleDeviance);
 		this.hPos = currentTemplate.horizontalPlacement(p); 
 		this.vPos = 0.50f;
@@ -27,6 +31,7 @@ public class ObservatoryLine
 		this.parent = pRef;
 		PApplet.println("Drawing line at " + hPos + ", " + vPos + " with length " + length + " and thickness " + thickness + " and angle of " + angle + " and life span of " + lifeSpan);
 		PApplet.println("Here's a change in the constructor.");
+		birthTime = System.currentTimeMillis();
 	}
 
 	public void draw(int currentWidth, int currentHeight) {
@@ -45,7 +50,7 @@ public class ObservatoryLine
 	}
 
 	public boolean isExpired() {
-		if (System.currentTimeMillis() + lifeSpan < System.currentTimeMillis()) {
+		if (birthTime + lifeSpan < System.currentTimeMillis()) {
 			return true;
 		}
 		return false;
