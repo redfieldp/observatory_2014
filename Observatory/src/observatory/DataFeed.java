@@ -16,7 +16,7 @@ public class DataFeed
         processingInstance = parentApp;
     }
 
-    public ArrayList<DataPoint> getFreshData(int bigThreshod, int medThreshold, int magnitudeFactor) {
+    public ArrayList<DataPoint> getFreshData(int bigThreshold, int medThreshold, int magnitudeFactor) {
         ArrayList<DataPoint> newData = new ArrayList<DataPoint>();
 
         // Set up time for URL query
@@ -59,10 +59,13 @@ public class DataFeed
             // Create a new DataPoint object and add to the array
             double originalMagnitude = Double.parseDouble(dataInfo[2]);
             DataPoint currentReading = new DataPoint(originalMagnitude, originalMagnitude * magnitudeFactor, lastBigPoint, lastMediumPoint);
+            PApplet.println("Comparing " + (originalMagnitude * magnitudeFactor) + " to " + lastBigPoint.magnitude);
             if (originalMagnitude * magnitudeFactor > lastBigPoint.magnitude) {
+            	PApplet.println("New big point detected!");
             	lastBigPoint = currentReading;
             }
-            else if ( originalMagnitude * magnitudeFactor > lastMediumPoint.magnitude) {
+            else if (originalMagnitude * magnitudeFactor > lastMediumPoint.magnitude) {
+            	PApplet.println("New medium point detected!");
             	lastMediumPoint = currentReading;
             }
             newData.add(currentReading);
