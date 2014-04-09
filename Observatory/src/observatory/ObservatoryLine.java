@@ -14,8 +14,8 @@ public class ObservatoryLine
 	long birthDate;
 	PApplet parent;
 	
-	int thicknessScalar = 10;
-    int lifeSpanScalar = 100;
+	int thicknessScalar = 20; // bigger number, smaller line
+    int lifeSpanScalar = 100; // bigger number, longer life
 	
 	long birthTime;
 
@@ -27,7 +27,7 @@ public class ObservatoryLine
 		this.angle = p.peakEnvelope.angle + (anglePercentage * currentTemplate.angleDeviance);
 		this.hPos = currentTemplate.horizontalPlacement(p); 
 		this.vPos = 0.50f;
-		this.length = (int)(p.time % 500);
+		this.length = (int)(p.time % 10000);
 		this.parent = pRef;
 		PApplet.println("Drawing line at " + hPos + ", " + vPos + " with length " + length + " and thickness " + thickness + " and angle of " + angle + " and life span of " + lifeSpan);
 		PApplet.println("Here's a change in the constructor.");
@@ -42,9 +42,9 @@ public class ObservatoryLine
 		parent.strokeCap(PApplet.SQUARE);
 		parent.noFill();
 		float x1 = (hPos * currentWidth);
-		float y1 = (vPos * currentHeight) - (length/2);
+		float y1 = (vPos * (currentHeight - (length/2)));
 		float x2 = (hPos * currentWidth);
-		float y2 = (vPos * currentWidth) + (length/2);
+		float y2 = (vPos * (currentHeight + (length/2)));
 		parent.line(x1, y1, x2, y2);
 		parent.popMatrix();
 	}
