@@ -32,7 +32,7 @@ public class DataPoint
     }
     
     // This is the null constructor
-    public DataPoint() {
-        magnitude = 0;
+    public DataPoint(int threshold) {
+        magnitude = threshold;
     }
 }

@@ -9,11 +9,14 @@ public class DataFeed
 {
     PApplet processingInstance;
     float dataTimeInterval= 10.0f;
+    int timeExpiration = 30; // Time until a big point expires
     
-    DataPoint lastBigPoint = new DataPoint(), lastMediumPoint = new DataPoint();
+    DataPoint lastBigPoint, lastMediumPoint;
 
-    public DataFeed(PApplet parentApp) {
+    public DataFeed(PApplet parentApp, int bigThreshold, int medThreshold) {
         processingInstance = parentApp;
+        lastBigPoint = new DataPoint(bigThreshold);
+        lastMediumPoint = new DataPoint(medThreshold);
     }
 
     public ArrayList<DataPoint> getFreshData(int bigThreshold, int medThreshold, int magnitudeFactor) {
@@ -58,13 +61,14 @@ public class DataFeed
             //PApplet.println("mag "+dataInfo[2]);
             // Create a new DataPoint object and add to the array
             double originalMagnitude = Double.parseDouble(dataInfo[2]);
-            DataPoint currentReading = new DataPoint(originalMagnitude, originalMagnitude * magnitudeFactor, lastBigPoint, lastMediumPoint);
-            PApplet.println("Comparing " + (originalMagnitude * magnitudeFactor) + " to " + lastBigPoint.magnitude);
-            if (originalMagnitude * magnitudeFactor > lastBigPoint.magnitude) {
+            double scaledMagnitude = originalMagnitude * magnitudeFactor;
+            DataPoint currentReading = new DataPoint(originalMagnitude, scaledMagnitude, lastBigPoint, lastMediumPoint);
+            PApplet.println("Comparing " + scaledMagnitude + " to " + lastBigPoint.magnitude);
+            if (scaledMagnitude > bigThreshold && (scaledMagnitude > lastBigPoint.magnitude || (currentReading.time - lastBigPoint.time > timeExpiration))) {
             	PApplet.println("New big point detected!");
             	lastBigPoint = currentReading;
             }
-            else if (originalMagnitude * magnitudeFactor > lastMediumPoint.magnitude) {
+            else if (scaledMagnitude > lastMediumPoint.magnitude && (scaledMagnitude > lastMediumPoint.magnitude || (currentReading.time - lastMediumPoint.time > timeExpiration))) {
             	PApplet.println("New medium point detected!");
             	lastMediumPoint = currentReading;
             }

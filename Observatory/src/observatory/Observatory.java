@@ -11,7 +11,6 @@ import processing.core.PApplet;
 
 
 public class Observatory extends PApplet {
-	DataFeed currentDataFeed = new DataFeed(this);
 	Template currentTemplate;
 	ArrayList<DataPoint> incomingData = new ArrayList<DataPoint>();
 	ArrayList<DataPoint> storedDataPoints = new ArrayList<DataPoint>();
@@ -38,6 +37,7 @@ public class Observatory extends PApplet {
 	int thresholdMedium = 25;
 	int magnitudeFactor = 1000000000;
 	RecentData recentData = new RecentData(thresholdLarge, thresholdMedium);
+	DataFeed currentDataFeed = new DataFeed(this, thresholdLarge, thresholdMedium);
 
 	float thicknessUnit = 0.0001f;
 

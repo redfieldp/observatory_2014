@@ -14,9 +14,9 @@ public class ObservatoryLine
 	long birthDate;
 	PApplet parent;
 	
-	int thicknessScalar = 40; // bigger number, smaller line
+	int thicknessScalar = 80; // bigger number, smaller line
     int lifeSpanScalar = 100; // bigger number, longer life
-    int timeScalar = 10000; // bigger number, longer line
+    int timeScalar = 100000; // bigger number, longer line
 	
 	long birthTime;
 
