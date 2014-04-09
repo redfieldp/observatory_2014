@@ -26,7 +26,7 @@ public class ObservatoryLine
 		this.length = (int)(p.time % 500);
 		this.parent = pRef;
 		PApplet.println("Drawing line at " + hPos + ", " + vPos + " with length " + length + " and thickness " + thickness + " and angle of " + angle + " and life span of " + lifeSpan);
-		PApplet.println("Here's a change in th sconstructor.");
+		PApplet.println("Here's a change in the constructor.");
 	}
 
 	public void draw(int currentWidth, int currentHeight) {
