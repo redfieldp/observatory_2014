@@ -216,7 +216,7 @@ public class Observatory extends PApplet {
 	}
 
 	private void processDataPoint(ArrayList<DataPoint> currentData) {
-		println("Processing data point from incoming data of size " + currentData.size() + " with magnitude of " + (currentData.get(0).magnitude * magnitudeFactor));
+		//println("Processing data point from incoming data of size " + currentData.size() + " with magnitude of " + (currentData.get(0).magnitude * magnitudeFactor));
 		// Grab the last point in the list
 		DataPoint p = currentData.get(0);
 
@@ -233,7 +233,7 @@ public class Observatory extends PApplet {
 
 		currentData.remove(p);
 		recentData.addDataPoint(p);
-		println("Processing complete. Recent data size is " + recentData.listOfDataPoints.size() + " and data repo has size of " + currentData.size());
+		//println("Processing complete. Recent data size is " + recentData.listOfDataPoints.size() + " and data repo has size of " + currentData.size());
 	}
 
 	private void loadStoredData() {
