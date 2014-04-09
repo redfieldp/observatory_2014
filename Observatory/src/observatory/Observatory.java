@@ -44,7 +44,7 @@ public class Observatory extends PApplet {
 	public void setup() {
 		//***** figure out the display environment ****/
 		GraphicsEnvironment environment = GraphicsEnvironment.getLocalGraphicsEnvironment();
-		GraphicsDevice devices[] = environment.getScreenDevices();
+		GraphicsDevice devices[] = environment.getScreenDevices(); //gets resolution of devices
 
 		canvasWidth = devices[0].getDisplayMode().getWidth();
 		canvasHeight = devices[0].getDisplayMode().getHeight();
