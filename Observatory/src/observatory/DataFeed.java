@@ -49,8 +49,14 @@ public class DataFeed
                 ":00&duration="+dataTimeInterval+"&demean=true&bp=0.1-10.0&scale=AUTO&deci=10&envelope=true&output=ascii&loc=--";
 
         PApplet.println("Attempting to retrieve data set from '"+ feedTestUrl+"'");
-
-        String[] feedData = processingInstance.loadStrings(feedTestUrl); // gets params from datafeed URL
+        String[] feedData = {};
+        try {
+        	feedData = processingInstance.loadStrings(feedTestUrl); // gets params from datafeed URL
+        }
+        catch(Exception e) {
+        	// If retrieval failed just return the empty array list
+        	return newData;
+        }
 
         // Skip the first line since it is a description and then generate data objects for all others
         for (int i=1; i < feedData.length; i++) {
