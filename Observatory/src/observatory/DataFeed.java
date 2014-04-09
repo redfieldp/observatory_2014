@@ -45,18 +45,17 @@ public class DataFeed
                 fixDigits(minutes) +
                 ":00&duration="+dataTimeInterval+"&demean=true&bp=0.1-10.0&scale=AUTO&deci=10&envelope=true&output=ascii&loc=--";
 
-        PApplet.println("Attempting to retrieve data set...");
-        PApplet.println(feedTestUrl);
+        PApplet.println("Attempting to retrieve data set from '"+ feedTestUrl+"'");
 
-        String[] feedData = processingInstance.loadStrings(feedTestUrl);
+        String[] feedData = processingInstance.loadStrings(feedTestUrl); // gets params from datafeed URL
 
         // Skip the first line since it is a description and then generate data objects for all others
         for (int i=1; i < feedData.length; i++) {
             // Split the string
             String[] dataInfo = PApplet.split(feedData[i], " ");
             // There are actually two spaces, so skip [1] of the array
-            PApplet.println(dataInfo[0]);
-            PApplet.println(dataInfo[2]);
+            //PApplet.println("time "+dataInfo[0]);
+            //PApplet.println("mag "+dataInfo[2]);
             // Create a new DataPoint object and add to the array
             double originalMagnitude = Double.parseDouble(dataInfo[2]);
             DataPoint currentReading = new DataPoint(originalMagnitude, originalMagnitude * magnitudeFactor, lastBigPoint, lastMediumPoint);
