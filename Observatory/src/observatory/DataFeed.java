@@ -29,18 +29,16 @@ public class DataFeed
 		Calendar currentTime = Calendar.getInstance();
 
 		int minutes = currentTime.get(Calendar.MINUTE);
-		int hours = currentTime.get(Calendar.HOUR);
+		int hours = currentTime.get(Calendar.HOUR_OF_DAY);
 		int seconds = currentTime.get(Calendar.SECOND);
 
 		// Account for minutes being on a different scale, and hours being in GMT
-		
+		hours = hours + 4;
 		if (minutes == 0) {
 			minutes = 60;
-			hours = hours + 4 - 1;
 		}
 		else {
 			minutes = minutes - 1;
-			hours = hours + 4;
 		}
 
 		if (seconds == 60) {
