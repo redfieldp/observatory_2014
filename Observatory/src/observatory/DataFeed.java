@@ -2,6 +2,7 @@ package observatory;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 import processing.core.PApplet;
 
@@ -10,6 +11,8 @@ public class DataFeed
     PApplet processingInstance;
     float dataTimeInterval= 10.0f;
     int timeExpiration = 30; // Time until a big point expires
+    String lastDataReceived;
+    int lastPointCount = 0;
     
     DataPoint lastBigPoint, lastMediumPoint;
 
@@ -61,9 +64,14 @@ public class DataFeed
         }
         catch(Exception e) {
         	// If retrieval failed just return the empty array list
+        	lastDataReceived = "ERROR: " + e.getMessage();
+        	lastPointCount = 0;
         	return newData;
         }
-
+        
+        lastDataReceived = ""+ new Date();
+        lastPointCount = feedData.length - 1;
+        
         // Skip the first line since it is a description and then generate data objects for all others
         for (int i=1; i < feedData.length; i++) {
             // Split the string
