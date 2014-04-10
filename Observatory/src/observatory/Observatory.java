@@ -278,8 +278,7 @@ public class Observatory extends PApplet {
 
 	class TemplateRotationTask extends TimerTask {
 		public void run() {
-			// TODO: Decide random/in order for template rotation
-			templateRotationCount = (templateRotationCount + 1) % templates.length;
+			templateRotationCount = (int)random(0,templates.length);
 			currentTemplate = templates[templateRotationCount];
 		}
 	}
