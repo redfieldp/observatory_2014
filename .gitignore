@@ -4,3 +4,5 @@ Test1*
 Observatory/bin/java.policy.applet
 
 *.pdf
+
+*.html
