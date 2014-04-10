@@ -35,11 +35,10 @@ public class DataFeed
 		// Account for minutes being on a different scale, and hours being in GMT
 		if (minutes == 0) {
 			minutes = 60;
-			hours = hours - 1 + 4;
+			hours = hours - 1;
 		}
 		else {
 			minutes = minutes - 1;
-			hours = hours + 4;
 		}
 
 		if (seconds == 60) {
