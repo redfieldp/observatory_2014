@@ -10,7 +10,7 @@ public class DataFeed
 {
 	PApplet processingInstance;
 	float dataTimeInterval= 10.0f;
-	int timeExpiration = 30; // Time until a big point expires
+	int timeExpiration = 10; // Time until a big point expires
 	String lastDataReceived;
 	int lastPointCount = 0;
 
