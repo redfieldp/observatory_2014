@@ -233,7 +233,7 @@ public class Observatory extends PApplet {
 
 		currentData.remove(p);
 		recentData.addDataPoint(p);
-		//println("Processing complete. Recent data size is " + recentData.listOfDataPoints.size() + " and data repo has size of " + currentData.size());
+		println("Processing complete. Recent data size is " + recentData.listOfDataPoints.size() + " and incoming data has size of " + currentData.size());
 	}
 
 	private void loadStoredData() {
@@ -263,6 +263,16 @@ public class Observatory extends PApplet {
 					incomingData.add(d);
 				}
 			}
+			
+			// Clean up name of current template class for logging purposes
+			String templateName = ""+currentTemplate;
+			if (templateName.contains("@")) {
+				templateName = templateName.split("@")[0];
+			}
+			
+			templateName = templateName.substring(12);
+			
+			println("[ " + lines.size() + " lines | template " + templateName + " incomingData: " + incomingData.size() + "pts | recentData:" + recentData.listOfDataPoints.size() + " pts | Last data received: " + currentDataFeed.lastPointCount + " points on date " + currentDataFeed.lastDataReceived + " ]");
 		}
 	}
 
