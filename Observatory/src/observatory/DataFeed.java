@@ -49,7 +49,7 @@ public class DataFeed
 		// Each value that can potentially be one digit goes through a "fixer" to give it a leading zero
 		String feedTestUrl="http://service.iris.edu/irisws/timeseries/1/query?net=CC&sta=SEP&cha=EHZ&start="+
 				currentTime.get(Calendar.YEAR) + "-" +
-				fixDigits(currentTime.get(Calendar.MONTH)) +"-" +
+				fixDigits(currentTime.get(Calendar.MONTH) + 1) +"-" +
 				fixDigits(currentTime.get(Calendar.DATE)) + "T" +
 				fixDigits(hours) + ":" +
 				fixDigits(minutes) + ":" + 
