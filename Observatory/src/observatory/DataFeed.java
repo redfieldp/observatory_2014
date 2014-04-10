@@ -27,6 +27,7 @@ public class DataFeed
 
         int minutes = currentTime.get(Calendar.MINUTE);
         int hours = currentTime.get(Calendar.HOUR);
+        int seconds = currentTime.get(Calendar.SECOND);
 
         // Account for minutes being on a different scale, and hours being in GMT
         if (minutes == 0) {
@@ -37,6 +38,10 @@ public class DataFeed
             minutes = minutes - 1;
             hours = hours + 4;
         }
+        
+        if (seconds == 60) {
+        	seconds = 0;
+        }
 
         // Build URL from time variables
         // Each value that can potentially be one digit goes through a "fixer" to give it a leading zero
@@ -45,8 +50,9 @@ public class DataFeed
                 fixDigits(currentTime.get(Calendar.MONTH)) +"-" +
                 fixDigits(currentTime.get(Calendar.DATE)) + "T" +
                 fixDigits(hours) + ":" +
-                fixDigits(minutes) +
-                ":00&duration="+dataTimeInterval+"&demean=true&bp=0.1-10.0&scale=AUTO&deci=10&envelope=true&output=ascii&loc=--";
+                fixDigits(minutes) + ":" + 
+                fixDigits(seconds) +
+                "&duration="+dataTimeInterval+"&demean=true&bp=0.1-10.0&scale=AUTO&deci=10&envelope=true&output=ascii&loc=--";
 
         PApplet.println("Attempting to retrieve data set from '"+ feedTestUrl+"'");
         String[] feedData = {};
