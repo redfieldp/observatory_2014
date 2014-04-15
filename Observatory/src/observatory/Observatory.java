@@ -6,9 +6,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
-
 import processing.core.PApplet;
-
+import processing.core.PImage;
 
 public class Observatory extends PApplet {
 	Template currentTemplate;
@@ -18,12 +17,15 @@ public class Observatory extends PApplet {
 	Template[] templates = {new RainTemplate(), new ToothpicksTemplate(), new ClusteredRightTemplate(), new ClusteredLeftTemplate()};
 	Timer dataGrabber;
 	Timer templateSwitcher;
-
+	String currentDataGraphUrl="";
+	PImage currentDataGraph; // used to show debugging graph of recent data
+	
 	boolean performancePaused = false;
 	boolean useStoredData = false;
 	boolean fullScreenMode = false;
 	boolean saveDataToFile = false;
 	boolean pdfTrigger = false;
+	boolean showGraph = false; // if true, we show the currentDataGraph
 
 	int maxNumberOfLines = 100;
 	int rotateTemplateDuration = 20;
@@ -38,6 +40,8 @@ public class Observatory extends PApplet {
 	int magnitudeFactor = 1000000000;
 	RecentData recentData = new RecentData(thresholdLarge, thresholdMedium);
 	DataFeed currentDataFeed = new DataFeed(this, thresholdLarge, thresholdMedium);
+
+	public int lineCounter=0; // total number of lines created in this session
 
 	float thicknessUnit = 0.0001f;
 
@@ -62,12 +66,38 @@ public class Observatory extends PApplet {
 		frameRate(10);
 	}
 
+	public void printDebug(String s) {
+		println( s +
+				"[lines:" + lines.size() +
+				" incomingData:" + incomingData.size() +
+				" recentData:" + recentData.listOfDataPoints.size() +
+				" received:" + currentDataFeed.lastPointCount +
+				" when:" + currentDataFeed.lastDataReceived + 
+				" ("+ currentTemplate.getName() + ")" );
+		//currentData.size()
+	}
+	
 	public void draw() {
 		// Clear the background color
 		background (bgColor);
 		if (pdfTrigger) {
 			// #### will be replaced with the frame number
-			beginRecord(PDF, "LineDrawing_"+ new Date() + ".pdf"); 
+			// format date without special characters, so it can be used in filename
+			String tempDateString=new Date().toString().replace('/', '-').replace(' ', '_').replace(':', '-');
+			beginRecord(PDF, "LineDrawing_"+ tempDateString + ".pdf"); 
+		}
+
+		if (showGraph) { // show currentDataGraph over the top of the main diplay
+			if (currentDataGraphUrl!=currentDataFeed.feedGraphUrl) {
+				// url has changed. load a new image
+				this.println("Loading new Graph. currentDataGraphUrl = "+currentDataGraphUrl);
+				currentDataGraphUrl=currentDataFeed.feedGraphUrl;
+				currentDataGraph = loadImage (currentDataGraphUrl, "png");
+			} else {
+				// url has not changed. we don't need to load a new image.	
+			}				
+			tint(255, 40);
+			image(currentDataGraph, 0,0);
 		}
 
 		if (!performancePaused) {
@@ -98,6 +128,7 @@ public class Observatory extends PApplet {
 			if (saveDataToFile) {
 				recentData.saveData();
 			}
+						
 		}
 
 		if (pdfTrigger) {
@@ -134,6 +165,9 @@ public class Observatory extends PApplet {
 		else if (key == 'F'){
 			toggleFullScreen();
 		}
+		else if (key == 'G'){
+			toggleShowGraph();
+		}
 		else if (key == 'Q'){
 			exit();
 		}
@@ -148,7 +182,10 @@ public class Observatory extends PApplet {
 	{
 		fullScreenMode = !fullScreenMode;
 	}
-
+	private void toggleShowGraph()
+	{
+		showGraph = !showGraph;
+	}
 	private void toggleLiveData()
 	{
 		useStoredData = !useStoredData;
@@ -205,8 +242,8 @@ public class Observatory extends PApplet {
 		}
 
 		for (ObservatoryLine l : toRemove) {
+			printDebug("Remove line #"+l.id);
 			lines.remove(l);
-			println("Removing line");
 		}
 	}
 
@@ -219,21 +256,24 @@ public class Observatory extends PApplet {
 		//println("Processing data point from incoming data of size " + currentData.size() + " with magnitude of " + (currentData.get(0).magnitude * magnitudeFactor));
 		// Grab the last point in the list
 		DataPoint p = currentData.get(0);
+		String tempString="";
 
 		if (p.magnitude * magnitudeFactor > thresholdLarge) {
 			if (lines.size() < maxNumberOfLines) {
-				println("Creating new line from data point");
-				lines.add(new ObservatoryLine(p, currentTemplate, this));
+				lineCounter++;
+				lines.add(new ObservatoryLine(p, currentTemplate, this, lineCounter));
+				tempString = "Create line #" + lineCounter;
 			}
 		}
 		else if (p.magnitude > thresholdMedium) {
-			println("Modifying existing line from data point");
 			modifyExistingLine(p);
+			tempString = "Modify line #";
 		}
 
 		currentData.remove(p);
 		recentData.addDataPoint(p);
-		println("Processing complete. Recent data size is " + recentData.listOfDataPoints.size() + " and incoming data has size of " + currentData.size());
+		
+		printDebug(tempString);
 	}
 
 	private void loadStoredData() {
@@ -264,15 +304,7 @@ public class Observatory extends PApplet {
 				}
 			}
 			
-			// Clean up name of current template class for logging purposes
-			String templateName = ""+currentTemplate;
-			if (templateName.contains("@")) {
-				templateName = templateName.split("@")[0];
-			}
-			
-			templateName = templateName.substring(12);
-			
-			println("[ " + lines.size() + " lines | template " + templateName + " incomingData: " + incomingData.size() + "pts | recentData:" + recentData.listOfDataPoints.size() + " pts | Last data received: " + currentDataFeed.lastPointCount + " points on date " + currentDataFeed.lastDataReceived + " ]");
+			printDebug("");
 		}
 	}
 

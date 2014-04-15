@@ -13,7 +13,10 @@ public class DataFeed
 	int timeExpiration = 10; // Time until a big point expires
 	String lastDataReceived;
 	int lastPointCount = 0;
-
+	String feedTestUrl = "";
+	String feedGraphUrl = "";
+	boolean detailedDebugging=false;
+	
 	DataPoint lastBigPoint, lastMediumPoint;
 
 	public DataFeed(PApplet parentApp, int bigThreshold, int medThreshold) {
@@ -47,16 +50,21 @@ public class DataFeed
 
 		// Build URL from time variables
 		// Each value that can potentially be one digit goes through a "fixer" to give it a leading zero
-		String feedTestUrl="http://service.iris.edu/irisws/timeseries/1/query?net=CC&sta=SEP&cha=EHZ&start="+
+		
+		String feedBaseUrl="http://service.iris.edu/irisws/timeseries/1/query?net=CC&sta=SEP&cha=EHZ&start="+
 				currentTime.get(Calendar.YEAR) + "-" +
 				fixDigits(currentTime.get(Calendar.MONTH) + 1) +"-" +
 				fixDigits(currentTime.get(Calendar.DATE)) + "T" +
 				fixDigits(hours) + ":" +
 				fixDigits(minutes) + ":" + 
 				fixDigits(seconds) +
-				"&duration="+dataTimeInterval+"&demean=true&bp=0.1-10.0&scale=AUTO&deci=10&envelope=true&output=ascii&loc=--";
+				"&duration="+dataTimeInterval+"&demean=true&bp=0.1-10.0&scale=AUTO&deci=10&envelope=true&loc=--";
+		
+		feedTestUrl = feedBaseUrl+ "&output=ascii"; // used for main animation
+		feedGraphUrl = feedBaseUrl+ "&output=plot"; // used for image
 
-		PApplet.println("Attempting to retrieve data set from '"+ feedTestUrl+"'");
+		
+		PApplet.println("Datafeed: getting data from '"+ feedTestUrl+"'");
 		String[] feedData = {};
 		feedData = processingInstance.loadStrings(feedTestUrl); // gets params from datafeed URL
 		
@@ -67,7 +75,8 @@ public class DataFeed
 			return newData;
 		}
 		
-		lastDataReceived = ""+ new Date();
+		Date tempDate=new Date();
+		lastDataReceived = ""+ tempDate.getHours()+":"+tempDate.getMinutes()+":"+tempDate.getSeconds();
 		lastPointCount = feedData.length - 1;
 
 		// Skip the first line since it is a description and then generate data objects for all others
@@ -81,19 +90,20 @@ public class DataFeed
 			double originalMagnitude = Double.parseDouble(dataInfo[2]);
 			double scaledMagnitude = originalMagnitude * magnitudeFactor;
 			DataPoint currentReading = new DataPoint(originalMagnitude, scaledMagnitude, lastBigPoint, lastMediumPoint);
-			PApplet.println("Comparing " + scaledMagnitude + " to " + lastBigPoint.magnitude);
+			if (detailedDebugging) PApplet.println("Comparing " + scaledMagnitude + " to " + lastBigPoint.magnitude);
+			
 			if (scaledMagnitude > bigThreshold && (scaledMagnitude > lastBigPoint.magnitude || (currentReading.time - lastBigPoint.time > timeExpiration))) {
-				PApplet.println("New big point detected!");
+				if (detailedDebugging) PApplet.println("New big point detected!");
 				lastBigPoint = currentReading;
 			}
 			else if (scaledMagnitude > lastMediumPoint.magnitude && (scaledMagnitude > lastMediumPoint.magnitude || (currentReading.time - lastMediumPoint.time > timeExpiration))) {
-				PApplet.println("New medium point detected!");
+				if (detailedDebugging) PApplet.println("New medium point detected!");
 				lastMediumPoint = currentReading;
 			}
 			newData.add(currentReading);
 		}
 
-		PApplet.println("Acquired " + (feedData.length - 1) + " new data points.");
+		PApplet.println("DataFeed: " + (feedData.length - 1) + " new data points received.");
 
 		return newData;
 	}

@@ -13,6 +13,7 @@ public class ObservatoryLine
 	int lifeSpan;
 	long birthDate;
 	PApplet parent;
+	int id; // line ID
 	
 	int thicknessScalar = 40; // bigger number, smaller line
     int lifeSpanScalar = 100; // bigger number, longer life
@@ -20,7 +21,9 @@ public class ObservatoryLine
 	
 	long birthTime;
 
-	public ObservatoryLine(DataPoint p, Template currentTemplate, PApplet pRef) { 
+	public ObservatoryLine(DataPoint p, Template currentTemplate, PApplet pRef, int lineId) { 
+		// create a new line
+		this.id = lineId;
 		this.lifeSpan = Math.abs(p.peakEnvelope.deltaMagnitude)*lifeSpanScalar;
 		this.birthDate = System.currentTimeMillis();
 		float anglePercentage = (float) (p.peakEnvelope.angle/Math.PI);
@@ -30,7 +33,8 @@ public class ObservatoryLine
 		this.vPos = 0.50f;
 		this.length = (int)(p.time % timeScalar);
 		this.parent = pRef;
-		PApplet.println("Drawing line at " + hPos + ", " + vPos + " with length " + length + " and thickness " + thickness + " and angle of " + angle + " and life span of " + lifeSpan);
+		PApplet.println("   Drawing line #"+this.id);
+		//PApplet.println("Drawing line at " + hPos + ", " + vPos + " with length " + length + " and thickness " + thickness + " and angle of " + angle + " and life span of " + lifeSpan);
 		birthTime = System.currentTimeMillis();
 	}
 
