@@ -68,7 +68,7 @@ public class DataFeed
 		String[] feedData = {};
 		feedData = processingInstance.loadStrings(feedTestUrl); // gets params from datafeed URL
 		
-		if (feedData.length == 0) {
+		if (feedData == null || feedData.length == 0) {
 			// If retrieval failed just return the empty array list
 			lastDataReceived = "ERROR: Could not retrieve data.";
 			lastPointCount = 0;
