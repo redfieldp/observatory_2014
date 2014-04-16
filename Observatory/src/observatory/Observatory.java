@@ -92,7 +92,12 @@ public class Observatory extends PApplet {
 				// url has changed. load a new image
 				this.println("Loading new Graph. currentDataGraphUrl = "+currentDataGraphUrl);
 				currentDataGraphUrl=currentDataFeed.feedGraphUrl;
-				currentDataGraph = loadImage (currentDataGraphUrl, "png");
+				try {
+				    currentDataGraph = loadImage (currentDataGraphUrl, "png");
+				}
+				catch(Exception e) {
+				    println("Error loading data graph " + e);
+				}
 			} else {
 				// url has not changed. we don't need to load a new image.	
 			}				
