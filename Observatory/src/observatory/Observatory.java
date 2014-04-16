@@ -102,7 +102,9 @@ public class Observatory extends PApplet {
 				// url has not changed. we don't need to load a new image.	
 			}				
 			tint(255, 60);
-			image(currentDataGraph, 0,0);
+			if (currentDataGraph != null) {
+				image(currentDataGraph, 0,0);
+			}
 		}
 
 		if (!performancePaused) {
