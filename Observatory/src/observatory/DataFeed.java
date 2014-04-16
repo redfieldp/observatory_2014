@@ -10,7 +10,7 @@ public class DataFeed
 {
 	PApplet processingInstance;
 	float dataTimeInterval= 10.0f;
-	int timeExpiration = 10; // Time until a big point expires
+	int timeExpiration = 30; // Time until a big point expires
 	String lastDataReceived;
 	int lastPointCount = 0;
 	String feedTestUrl = "";
@@ -92,11 +92,11 @@ public class DataFeed
 			DataPoint currentReading = new DataPoint(originalMagnitude, scaledMagnitude, lastBigPoint, lastMediumPoint);
 			if (detailedDebugging) PApplet.println("Comparing " + scaledMagnitude + " to " + lastBigPoint.magnitude);
 			
-			if (scaledMagnitude > bigThreshold && (scaledMagnitude > lastBigPoint.magnitude || (currentReading.time - lastBigPoint.time > timeExpiration))) {
+			if (scaledMagnitude > bigThreshold || (currentReading.time - lastBigPoint.time > timeExpiration)) {
 				if (detailedDebugging) PApplet.println("New big point detected!");
 				lastBigPoint = currentReading;
 			}
-			else if (scaledMagnitude > lastMediumPoint.magnitude && (scaledMagnitude > lastMediumPoint.magnitude || (currentReading.time - lastMediumPoint.time > timeExpiration))) {
+			else if (scaledMagnitude > lastMediumPoint.magnitude || (currentReading.time - lastMediumPoint.time > timeExpiration)) {
 				if (detailedDebugging) PApplet.println("New medium point detected!");
 				lastMediumPoint = currentReading;
 			}
