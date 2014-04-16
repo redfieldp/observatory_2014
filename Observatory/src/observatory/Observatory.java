@@ -35,7 +35,7 @@ public class Observatory extends PApplet {
 	int bgColor = 255;
 	int dataUpdateFrequency = 10;
 	int templateRotationCount = 0;
-	int thresholdLarge = 500;
+	int thresholdLarge = 5;
 	int thresholdMedium = 25;
 	int magnitudeFactor = 1000000000;
 	RecentData recentData = new RecentData(thresholdLarge, thresholdMedium);
@@ -261,7 +261,13 @@ public class Observatory extends PApplet {
 		if (p.magnitude * magnitudeFactor > thresholdLarge) {
 			if (lines.size() < maxNumberOfLines) {
 				lineCounter++;
-				lines.add(new ObservatoryLine(p, currentTemplate, this, lineCounter));
+				ObservatoryLine l = new ObservatoryLine(p, currentTemplate, this, lineCounter);
+				if (l.thickness > 1) {
+				    lines.add(l);
+				}
+				else {
+				    println("non-visible line");
+				}
 				tempString = "Create line #" + lineCounter;
 			}
 		}

@@ -15,7 +15,7 @@ public class ObservatoryLine
 	PApplet parent;
 	int id; // line ID
 	
-	int thicknessScalar = 40; // bigger number, smaller line
+	int thicknessScalar = 4; // bigger number, smaller line
     int lifeSpanScalar = 100; // bigger number, longer life
     int timeScalar = 100000; // bigger number, longer line
 	
