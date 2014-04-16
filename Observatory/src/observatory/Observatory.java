@@ -19,6 +19,7 @@ public class Observatory extends PApplet {
 	Timer templateSwitcher;
 	String currentDataGraphUrl="";
 	PImage currentDataGraph; // used to show debugging graph of recent data
+	//EL new repo test
 	
 	boolean performancePaused = false;
 	boolean useStoredData = false;
