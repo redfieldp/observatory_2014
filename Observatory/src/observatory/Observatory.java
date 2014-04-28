@@ -343,24 +343,23 @@ public class Observatory extends PApplet {
 
         println(dataToLoad.getRowCount() + " total rows of storedData"); 
 
-        for (TableRow row : dataToLoad.rows()) {
-            
-        }
-        
+        currentDataFeed.setStoredData(dataToLoad);
     }
 
     class GrabDataTask extends TimerTask {
         public void run() {
+            ArrayList<DataPoint> newData;
             if (!useStoredData) {
-                ArrayList<DataPoint> newData = currentDataFeed.getFreshData(thresholdLarge, thresholdMedium, magnitudeFactor);
-
-                for (DataPoint d : newData) {
-                    incomingData.add(d);
-                }
+                newData = currentDataFeed.getFreshData(thresholdLarge, thresholdMedium, magnitudeFactor);
             }
             else {
+                newData = currentDataFeed.loadStoredData(thresholdLarge, thresholdMedium, magnitudeFactor);
             }
-
+            
+            for (DataPoint d : newData) {
+                incomingData.add(d);
+            }
+            
             printDebug("");
         }
     }

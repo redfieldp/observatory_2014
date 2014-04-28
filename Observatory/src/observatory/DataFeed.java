@@ -5,6 +5,8 @@ import java.util.Calendar;
 import java.util.Date;
 
 import processing.core.PApplet;
+import processing.data.Table;
+import processing.data.TableRow;
 
 public class DataFeed
 {
@@ -18,6 +20,10 @@ public class DataFeed
 	boolean detailedDebugging=false;
 	
 	DataPoint lastBigPoint, lastMediumPoint;
+	
+	Table storedData;
+	int expectedPointsPerQuery = (int)dataTimeInterval * 10;
+	int tableTraversalCounter = 0;
 
 	public DataFeed(PApplet parentApp, int bigThreshold, int medThreshold) {
 		processingInstance = parentApp;
@@ -120,4 +126,36 @@ public class DataFeed
 		}
 	}
 
+	public void setStoredData (Table dataTable) {
+	    storedData = dataTable;
+	}
+	
+	public ArrayList<DataPoint> loadStoredData(int bigThreshold, int medThreshold, int magnitudeFactor) {
+	    ArrayList<DataPoint> newData = new ArrayList<DataPoint>();
+	    
+	    if (storedData != null && tableTraversalCounter < storedData.getRowCount()) {
+	        int expectedDataCounter = 0;
+	        while (expectedDataCounter < expectedPointsPerQuery && tableTraversalCounter < storedData.getRowCount()) {
+	            TableRow r = storedData.getRow(tableTraversalCounter);
+	            double originalMagnitude = r.getDouble("originalMagnitude");
+	            double scaledMagnitude = r.getDouble("scaledMagnitude");
+	            DataPoint currentReading = new DataPoint(originalMagnitude, scaledMagnitude, lastBigPoint, lastMediumPoint);
+	            if (detailedDebugging) PApplet.println("Comparing " + scaledMagnitude + " to " + lastBigPoint.magnitude);
+	            
+	            if (scaledMagnitude > bigThreshold || (currentReading.time - lastBigPoint.time > timeExpiration)) {
+	                if (detailedDebugging) PApplet.println("New big point detected!");
+	                lastBigPoint = currentReading;
+	            }
+	            else if (scaledMagnitude > lastMediumPoint.magnitude || (currentReading.time - lastMediumPoint.time > timeExpiration)) {
+	                if (detailedDebugging) PApplet.println("New medium point detected!");
+	                lastMediumPoint = currentReading;
+	            }
+	            newData.add(currentReading);
+	            tableTraversalCounter++;
+	            expectedDataCounter++;
+	        }
+	    }
+	    
+	    return newData;
+	}
 }
