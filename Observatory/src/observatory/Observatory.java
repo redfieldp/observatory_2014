@@ -6,8 +6,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
+
 import processing.core.PApplet;
 import processing.core.PImage;
+import themidibus.MidiBus;
 
 public class Observatory extends PApplet {
 	Template currentTemplate;
@@ -45,6 +47,10 @@ public class Observatory extends PApplet {
 	public int lineCounter=0; // total number of lines created in this session
 
 	float thicknessUnit = 0.0001f;
+	
+	// MIDI Stuff
+	MidiBus midi;
+	int midiDeviceId = 0;
 
 	public void setup() {
 		//***** figure out the display environment ****/
@@ -65,6 +71,9 @@ public class Observatory extends PApplet {
 		templateTimerSetup();
 		
 		frameRate(10);
+		
+		midi = new MidiBus(this);
+		midi.addOutput(midiDeviceId);
 	}
 
 	public void printDebug(String s) {
@@ -306,6 +315,16 @@ public class Observatory extends PApplet {
 
 	public boolean sketchFullScreen() {
 		return fullScreenMode;
+	}
+	
+	public void sendMidiMessage(DataPoint d) {
+	    int channel = 0;
+	    int pitch = 0;
+	    int velocity = 0;
+	    
+	    // TODO: Figure out values based on the datapoint
+	    
+	    midi.sendNoteOn(channel, pitch, velocity);
 	}
 
 	class GrabDataTask extends TimerTask {
