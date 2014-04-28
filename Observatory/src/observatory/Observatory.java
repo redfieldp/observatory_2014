@@ -9,6 +9,8 @@ import java.util.TimerTask;
 
 import processing.core.PApplet;
 import processing.core.PImage;
+import processing.data.Table;
+import processing.data.TableRow;
 import themidibus.MidiBus;
 
 public class Observatory extends PApplet {
@@ -27,7 +29,6 @@ public class Observatory extends PApplet {
     boolean useStoredData = false;
     boolean systemInit = false;
     boolean fullScreenMode = false;
-    boolean saveDataToFile = false;
     boolean pdfTrigger = false;
     boolean showGraph = false; // if true, we show the currentDataGraph
 
@@ -52,6 +53,11 @@ public class Observatory extends PApplet {
     // MIDI Stuff
     MidiBus midi;
     int midiDeviceId = 0;
+    
+    // Stored Data Stuff
+    Table dataToLoad;
+    ArrayList<DataPoint> storedData = new ArrayList<DataPoint>();
+    int storedDataCounter = 0;
 
     public void setup() {
         //***** figure out the display environment ****/
@@ -63,9 +69,6 @@ public class Observatory extends PApplet {
         println("Adjusting animation size to "+canvasWidth+"x"+canvasHeight+" to fit primary display");
 
         size(canvasWidth, canvasHeight);
-
-        // Initialize Stored Data Points
-        loadStoredData();
 
         // Schedule the timers
         dataTimerSetup();
@@ -144,7 +147,7 @@ public class Observatory extends PApplet {
                     l.draw(width, height);
                 }
 
-                if (saveDataToFile) {
+                if (!useStoredData) {
                     recentData.saveData();
                 }
 
@@ -154,6 +157,9 @@ public class Observatory extends PApplet {
                 endRecord();
                 pdfTrigger = false;
             }
+        }
+        else {
+            background(0);
         }
     }
 
@@ -197,6 +203,7 @@ public class Observatory extends PApplet {
         else if (key == '2') {
             if (!systemInit) {
                 useStoredData = true;
+                loadStoredData();
                 systemInit = true;
             }
         }
@@ -307,10 +314,6 @@ public class Observatory extends PApplet {
         printDebug(tempString);
     }
 
-    private void loadStoredData() {
-        // TODO: Load to incoming data from a stored data file
-    }
-
     private void dataTimerSetup() {
         dataGrabber = new Timer();
         dataGrabber.schedule(new GrabDataTask(), 0, dataUpdateFrequency * 1000);
@@ -334,6 +337,17 @@ public class Observatory extends PApplet {
 
         midi.sendNoteOn(channel, pitch, velocity);
     }
+    
+    public void loadStoredData() {
+        dataToLoad = loadTable("storedData/data.csv", "header");
+
+        println(dataToLoad.getRowCount() + " total rows of storedData"); 
+
+        for (TableRow row : dataToLoad.rows()) {
+            
+        }
+        
+    }
 
     class GrabDataTask extends TimerTask {
         public void run() {
@@ -343,6 +357,8 @@ public class Observatory extends PApplet {
                 for (DataPoint d : newData) {
                     incomingData.add(d);
                 }
+            }
+            else {
             }
 
             printDebug("");
