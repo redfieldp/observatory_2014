@@ -30,6 +30,8 @@ public class DataFeed
 	
 	File saveDataFile;
 	FileWriter saveWriter;
+	
+	boolean firstRun = true;
 
 	public DataFeed(PApplet parentApp, int bigThreshold, int medThreshold) {
 		processingInstance = parentApp;
@@ -47,6 +49,12 @@ public class DataFeed
 
 		// Set up time for URL query
 		Calendar currentTime = Calendar.getInstance();
+		
+		if (firstRun) {
+		    // Set the calendar we are creating the URL from back 10 minutes
+		    // if it's the first run, since we need a bigger data range
+		    currentTime.add(Calendar.MINUTE, -10);
+		}
 
 		int minutes = currentTime.get(Calendar.MINUTE);
 		int hours = currentTime.get(Calendar.HOUR_OF_DAY);
@@ -67,8 +75,20 @@ public class DataFeed
 
 		// Build URL from time variables
 		// Each value that can potentially be one digit goes through a "fixer" to give it a leading zero
-		
-		String feedBaseUrl="http://service.iris.edu/irisws/timeseries/1/query?net=CC&sta=SEP&cha=EHZ&start="+
+		String feedBaseUrl;
+		if (firstRun) {
+		    feedBaseUrl="http://service.iris.edu/irisws/timeseries/1/query?net=CC&sta=SEP&cha=EHZ&start="+
+                currentTime.get(Calendar.YEAR) + "-" +
+                fixDigits(currentTime.get(Calendar.MONTH) + 1) +"-" +
+                fixDigits(currentTime.get(Calendar.DATE)) + "T" +
+                fixDigits(hours) + ":" +
+                fixDigits(minutes) + ":" + 
+                fixDigits(seconds) +
+                "&duration=600.0&demean=true&bp=0.1-10.0&scale=AUTO&deci=10&envelope=true&loc=--";
+		    firstRun = false;
+		}
+		else {
+		    feedBaseUrl="http://service.iris.edu/irisws/timeseries/1/query?net=CC&sta=SEP&cha=EHZ&start="+
 				currentTime.get(Calendar.YEAR) + "-" +
 				fixDigits(currentTime.get(Calendar.MONTH) + 1) +"-" +
 				fixDigits(currentTime.get(Calendar.DATE)) + "T" +
@@ -76,6 +96,7 @@ public class DataFeed
 				fixDigits(minutes) + ":" + 
 				fixDigits(seconds) +
 				"&duration="+dataTimeInterval+"&demean=true&bp=0.1-10.0&scale=AUTO&deci=10&envelope=true&loc=--";
+		}
 		
 		feedTestUrl = feedBaseUrl+ "&output=ascii"; // used for main animation
 		feedGraphUrl = feedBaseUrl+ "&output=plot"; // used for image
@@ -173,6 +194,11 @@ public class DataFeed
 	public ArrayList<DataPoint> loadStoredData(int bigThreshold, int medThreshold, int magnitudeFactor) {
 	    ArrayList<DataPoint> newData = new ArrayList<DataPoint>();
 	    
+	    if (firstRun) {
+	        // On the first run, we want to grab 10 minutes of stored data from the archive
+	        expectedPointsPerQuery = 6000;
+	    }
+	    
 	    if (storedData != null && tableTraversalCounter < storedData.getRowCount()) {
 	        int expectedDataCounter = 0;
 	        while (expectedDataCounter < expectedPointsPerQuery && tableTraversalCounter < storedData.getRowCount()) {
@@ -194,6 +220,11 @@ public class DataFeed
 	            tableTraversalCounter++;
 	            expectedDataCounter++;
 	        }
+	    }
+	    
+	    if (firstRun) {
+	        expectedPointsPerQuery = (int)dataTimeInterval * 10;
+	        firstRun = false;
 	    }
 	    
 	    return newData;
