@@ -6,3 +6,5 @@ Observatory/bin/java.policy.applet
 *.pdf
 
 *.html
+
+*.csv

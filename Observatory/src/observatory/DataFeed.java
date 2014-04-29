@@ -1,5 +1,8 @@
 package observatory;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -24,6 +27,9 @@ public class DataFeed
 	Table storedData;
 	int expectedPointsPerQuery = (int)dataTimeInterval * 10;
 	int tableTraversalCounter = 0;
+	
+	File saveDataFile;
+	FileWriter saveWriter;
 
 	public DataFeed(PApplet parentApp, int bigThreshold, int medThreshold) {
 		processingInstance = parentApp;
@@ -32,6 +38,11 @@ public class DataFeed
 	}
 
 	public ArrayList<DataPoint> getFreshData(int bigThreshold, int medThreshold, int magnitudeFactor) {
+	    
+	    if (saveDataFile == null) {
+	        setupSaveDataFile();
+	    }
+	    
 		ArrayList<DataPoint> newData = new ArrayList<DataPoint>();
 
 		// Set up time for URL query
@@ -84,7 +95,7 @@ public class DataFeed
 		Date tempDate=new Date();
 		lastDataReceived = ""+ tempDate.getHours()+":"+tempDate.getMinutes()+":"+tempDate.getSeconds();
 		lastPointCount = feedData.length - 1;
-
+		
 		// Skip the first line since it is a description and then generate data objects for all others
 		for (int i=1; i < feedData.length; i++) {
 			// Split the string
@@ -107,8 +118,25 @@ public class DataFeed
 				lastMediumPoint = currentReading;
 			}
 			newData.add(currentReading);
+			
+			try {
+	            saveWriter.write(originalMagnitude + "," + scaledMagnitude + "\n");
+	        }
+	        catch (IOException e) {
+	            PApplet.println("Could not write to data save file!");
+	        }
 		}
 
+		try
+        {
+            saveWriter.flush();
+            PApplet.println("Completed data write.");
+        }
+        catch (IOException e)
+        {
+            PApplet.println("Could not resolve writing of data save file!");
+        }
+		
 		PApplet.println("DataFeed: " + (feedData.length - 1) + " new data points received.");
 
 		return newData;
@@ -125,10 +153,22 @@ public class DataFeed
 			return "" + value;
 		}
 	}
-
-	public void setStoredData (Table dataTable) {
-	    storedData = dataTable;
+	
+	public void setupSaveDataFile() {
+	    Date now = new Date();
+	    saveDataFile = new File("saveData_" + now + ".csv");
+	    try {
+	        saveWriter = new FileWriter(saveDataFile);
+	        saveWriter.write("originalMagnitude,scaledMagnitude\n");
+	    }
+	    catch (IOException e) {
+	        PApplet.println("Could not create data save file!");
+	    }
 	}
+
+    public void setStoredData (Table dataTable) {
+        storedData = dataTable;
+    }
 	
 	public ArrayList<DataPoint> loadStoredData(int bigThreshold, int medThreshold, int magnitudeFactor) {
 	    ArrayList<DataPoint> newData = new ArrayList<DataPoint>();
