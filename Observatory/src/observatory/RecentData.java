@@ -12,7 +12,7 @@ public class RecentData
 
 	ArrayList<DataPoint> listOfDataPoints = new ArrayList<DataPoint>();
 
-	int maximumDataPoints = 1000;
+	int maximumDataPoints = 6000;
 
 	private int recentAverageOfBigShakes = 0;
 
@@ -26,13 +26,11 @@ public class RecentData
 
 	Timer calculationTimer;
 
-	int thresholdLarge, thresholdMedium;
+	int thresholdLarge = 25, thresholdMedium = 5;
 
-	public RecentData(int thresholdLArge, int thresholdMedium) {
+	public RecentData() {
 		calculationTimer = new Timer();
 		calculationTimer.schedule(new RecentDataCalculation(), 0, 5000);
-		this.thresholdLarge = thresholdLarge;
-		this.thresholdMedium = thresholdMedium;
 	}
 
 	public int getBigShakesAverage() {

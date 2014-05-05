@@ -10,7 +10,6 @@ import java.util.TimerTask;
 import processing.core.PApplet;
 import processing.core.PImage;
 import processing.data.Table;
-import processing.data.TableRow;
 import themidibus.MidiBus;
 
 public class Observatory extends PApplet {
@@ -40,11 +39,9 @@ public class Observatory extends PApplet {
     int bgColor = 255;
     int dataUpdateFrequency = 10;
     int templateRotationCount = 0;
-    int thresholdLarge = 5;
-    int thresholdMedium = 25;
     int magnitudeFactor = 1000000000;
-    RecentData recentData = new RecentData(thresholdLarge, thresholdMedium);
-    DataFeed currentDataFeed = new DataFeed(this, thresholdLarge, thresholdMedium);
+    RecentData recentData = new RecentData();
+    DataFeed currentDataFeed = new DataFeed(this, recentData.thresholdLarge, recentData.thresholdMedium);
 
     public int lineCounter=0; // total number of lines created in this session
 
@@ -164,19 +161,7 @@ public class Observatory extends PApplet {
     }
 
     public void keyPressed() {
-        if (key == '+') {
-            increaseLargeThreshold();
-        }
-        else if (key == '-'){
-            decreaseLargeThreshold();
-        }
-        else if (key == '9'){
-            decreaseMediumThreshold();
-        }
-        else if (key == '0'){
-            increaseMediumThreshold();
-        }
-        else if (key == 'T'){
+        if (key == 'T'){
             switchToNextTemplate();
         }
         else if (key == ' '){
@@ -234,36 +219,6 @@ public class Observatory extends PApplet {
         currentTemplate = templates[templateRotationCount];
     }
 
-    private void increaseMediumThreshold()
-    {
-        if (thresholdMedium < thresholdLarge - thresholdIncrement) {
-            thresholdMedium += thresholdIncrement;
-        }
-        recentData.setMediumThreshold(thresholdMedium);
-    }
-
-    private void decreaseMediumThreshold()
-    {
-        if (thresholdMedium > 0 + thresholdIncrement) {
-            thresholdMedium -= thresholdIncrement;
-        }
-        recentData.setMediumThreshold(thresholdMedium);
-    }
-
-    private void decreaseLargeThreshold()
-    {
-        if (thresholdLarge > thresholdMedium + thresholdIncrement) {
-            thresholdLarge -= thresholdIncrement;
-        }
-        recentData.setLargeThreshold(thresholdLarge);
-    }
-
-    private void increaseLargeThreshold()
-    {
-        thresholdLarge += thresholdIncrement;
-        recentData.setLargeThreshold(thresholdLarge);
-    }
-
     private void destroyOldLines() {
         ArrayList<ObservatoryLine> toRemove = new ArrayList<ObservatoryLine>();
 
@@ -290,7 +245,7 @@ public class Observatory extends PApplet {
         DataPoint p = currentData.get(0);
         String tempString="";
 
-        if (p.magnitude * magnitudeFactor > thresholdLarge) {
+        if (p.magnitude * magnitudeFactor > recentData.thresholdLarge) {
             if (lines.size() < maxNumberOfLines) {
                 lineCounter++;
                 ObservatoryLine l = new ObservatoryLine(p, currentTemplate, this, lineCounter);
@@ -303,7 +258,7 @@ public class Observatory extends PApplet {
                 tempString = "Create line #" + lineCounter;
             }
         }
-        else if (p.magnitude > thresholdMedium) {
+        else if (p.magnitude > recentData.thresholdMedium) {
             modifyExistingLine(p);
             tempString = "Modify line #";
         }
@@ -350,10 +305,10 @@ public class Observatory extends PApplet {
         public void run() {
             ArrayList<DataPoint> newData;
             if (!useStoredData) {
-                newData = currentDataFeed.getFreshData(thresholdLarge, thresholdMedium, magnitudeFactor);
+                newData = currentDataFeed.getFreshData(recentData.thresholdLarge, recentData.thresholdMedium, magnitudeFactor);
             }
             else {
-                newData = currentDataFeed.loadStoredData(thresholdLarge, thresholdMedium, magnitudeFactor);
+                newData = currentDataFeed.loadStoredData(recentData.thresholdLarge, recentData.thresholdMedium, magnitudeFactor);
             }
             
             for (DataPoint d : newData) {
