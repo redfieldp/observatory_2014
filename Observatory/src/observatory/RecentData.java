@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import observatory.Observatory.GrabDataTask;
+import processing.core.PApplet;
 
 public class RecentData
 {
@@ -26,7 +26,7 @@ public class RecentData
 
     Timer calculationTimer, thresholdTimer;
 
-    int thresholdRecalcInterval = 60000, thresholdCalcScope = 600000;
+    int thresholdRecalcInterval = 10000, thresholdCalcScope = 600000;
     int drawnLinesPerSecond = 5; 
     int thresholdLineLimit = (thresholdCalcScope/1000) * drawnLinesPerSecond;
 
@@ -112,6 +112,7 @@ public class RecentData
 
     class ThresholdCalculation extends TimerTask {
         public void run() {
+            PApplet.println("Attempting threshold recalculation...");
             ArrayList<DataPoint> thresholdPoints = new ArrayList<DataPoint>();
             if (listOfDataPoints.size() > 0) {
                 synchronized(listOfDataPoints) {
@@ -136,15 +137,24 @@ public class RecentData
                         }
                     }
 
+                    PApplet.println("Calculating new threshold based on " + thresholdPoints.size() + " points...");
                     int newThreshold = 1000000;
                     for (DataPoint d : thresholdPoints) {
                         if (d.magnitude < newThreshold) {
                             newThreshold = (int)d.magnitude;
                         }
                     }
-
-                    thresholdLarge = newThreshold;
+                    if (newThreshold != 1000000) {
+                        PApplet.println("New threshold set to " + newThreshold + "!");
+                        thresholdLarge = newThreshold;
+                    }
+                    else {
+                        PApplet.println("Insufficient data to recalculate threshold.");
+                    }
                 }
+            }
+            else {
+                PApplet.println("...failed due to lack of recent data.");
             }
         }
     }

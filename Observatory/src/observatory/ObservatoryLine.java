@@ -33,7 +33,6 @@ public class ObservatoryLine
 		this.vPos = 0.50f;
 		this.length = (int)(p.time % timeScalar);
 		this.parent = pRef;
-		PApplet.println("   Drawing line #"+this.id);
 		//PApplet.println("Drawing line at " + hPos + ", " + vPos + " with length " + length + " and thickness " + thickness + " and angle of " + angle + " and life span of " + lifeSpan);
 		birthTime = System.currentTimeMillis();
 	}

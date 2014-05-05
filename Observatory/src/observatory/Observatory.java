@@ -229,7 +229,7 @@ public class Observatory extends PApplet {
         }
 
         for (ObservatoryLine l : toRemove) {
-            printDebug("Remove line #"+l.id);
+            //printDebug("Remove line #"+l.id);
             lines.remove(l);
         }
     }
@@ -245,7 +245,7 @@ public class Observatory extends PApplet {
         DataPoint p = currentData.get(0);
         String tempString="";
 
-        if (p.magnitude * magnitudeFactor > recentData.thresholdLarge) {
+        if (p.magnitude > recentData.thresholdLarge) {
             if (lines.size() < maxNumberOfLines) {
                 lineCounter++;
                 ObservatoryLine l = new ObservatoryLine(p, currentTemplate, this, lineCounter);
@@ -266,7 +266,7 @@ public class Observatory extends PApplet {
         currentData.remove(p);
         recentData.addDataPoint(p);
 
-        printDebug(tempString);
+        //printDebug(tempString);
     }
 
     private void dataTimerSetup() {
@@ -315,7 +315,7 @@ public class Observatory extends PApplet {
                 incomingData.add(d);
             }
             
-            printDebug("");
+            //printDebug("");
         }
     }
 
