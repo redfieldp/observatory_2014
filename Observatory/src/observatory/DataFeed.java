@@ -176,8 +176,9 @@ public class DataFeed
 	}
 	
 	public void setupSaveDataFile() {
-	    Date now = new Date();
-	    saveDataFile = new File("saveData_" + now + ".csv");
+		// format date without special characters, so it can be used in filename
+        String tempDateString=new Date().toString().replace('/', '-').replace(' ', '_').replace(':', '-');
+	    saveDataFile = new File("saveData_" + tempDateString + ".csv");
 	    try {
 	        saveWriter = new FileWriter(saveDataFile);
 	        saveWriter.write("originalMagnitude,scaledMagnitude\n");
