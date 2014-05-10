@@ -119,33 +119,38 @@ public class DataFeed
 		
 		// Skip the first line since it is a description and then generate data objects for all others
 		for (int i=1; i < feedData.length; i++) {
-			// Split the string
-			String[] dataInfo = PApplet.split(feedData[i], " ");
-			// There are actually two spaces, so skip [1] of the array
-			//PApplet.println("time "+dataInfo[0]);
-			//PApplet.println("mag "+dataInfo[2]);
-			// Create a new DataPoint object and add to the array
-			double originalMagnitude = Double.parseDouble(dataInfo[2]);
-			double scaledMagnitude = originalMagnitude * magnitudeFactor;
-			DataPoint currentReading = new DataPoint(originalMagnitude, scaledMagnitude, lastBigPoint, lastMediumPoint);
-			if (detailedDebugging) PApplet.println("Comparing " + scaledMagnitude + " to " + lastBigPoint.magnitude);
-			
-			if (scaledMagnitude > bigThreshold || (currentReading.time - lastBigPoint.time > timeExpiration)) {
-				if (detailedDebugging) PApplet.println("New big point detected!");
-				lastBigPoint = currentReading;
-			}
-			else if (scaledMagnitude > lastMediumPoint.magnitude || (currentReading.time - lastMediumPoint.time > timeExpiration)) {
-				if (detailedDebugging) PApplet.println("New medium point detected!");
-				lastMediumPoint = currentReading;
-			}
-			newData.add(currentReading);
-			
-			try {
-	            saveWriter.write(originalMagnitude + "," + scaledMagnitude + "\n");
-	        }
-	        catch (IOException e) {
-	            PApplet.println("Could not write to data save file!");
-	        }
+		    try {
+    			// Split the string
+    			String[] dataInfo = PApplet.split(feedData[i], " ");
+    			// There are actually two spaces, so skip [1] of the array
+    			//PApplet.println("time "+dataInfo[0]);
+    			//PApplet.println("mag "+dataInfo[2]);
+    			// Create a new DataPoint object and add to the array
+    			double originalMagnitude = Double.parseDouble(dataInfo[2]);
+    			double scaledMagnitude = originalMagnitude * magnitudeFactor;
+    			DataPoint currentReading = new DataPoint(originalMagnitude, scaledMagnitude, lastBigPoint, lastMediumPoint);
+    			if (detailedDebugging) PApplet.println("Comparing " + scaledMagnitude + " to " + lastBigPoint.magnitude);
+    			
+    			if (scaledMagnitude > bigThreshold || (currentReading.time - lastBigPoint.time > timeExpiration)) {
+    				if (detailedDebugging) PApplet.println("New big point detected!");
+    				lastBigPoint = currentReading;
+    			}
+    			else if (scaledMagnitude > lastMediumPoint.magnitude || (currentReading.time - lastMediumPoint.time > timeExpiration)) {
+    				if (detailedDebugging) PApplet.println("New medium point detected!");
+    				lastMediumPoint = currentReading;
+    			}
+    			newData.add(currentReading);
+    			
+    			try {
+    	            saveWriter.write(originalMagnitude + "," + scaledMagnitude + "\n");
+    	        }
+    	        catch (IOException e) {
+    	            PApplet.println("Could not write to data save file!");
+    	        }
+		    }
+		    catch (NumberFormatException e) {
+		        PApplet.println("Error parsing data from feed: \"" + feedData[i] + "\"");
+		    }
 		}
 
 		try
