@@ -235,8 +235,11 @@ public class Observatory extends PApplet {
     }
 
     private void modifyExistingLine(DataPoint p) {
-        ObservatoryLine lineToModify = lines.get((int)(p.time % lines.size()));
-        lineToModify.modify(p, recentData, currentTemplate);
+        // Only try to find a line to modify if there are lines in existence
+        if (lines.size() > 0) {
+            ObservatoryLine lineToModify = lines.get((int)(p.time % lines.size()));
+            lineToModify.modify(p, recentData, currentTemplate);
+        }
     }
 
     private void processDataPoint(ArrayList<DataPoint> currentData) {
