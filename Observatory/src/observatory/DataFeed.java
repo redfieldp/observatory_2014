@@ -130,11 +130,6 @@ public class DataFeed
     	// Each line looks like this: 2014-05-16T16:32:21.600000  5.0102454e-08
 		// Note that the times include fractional seconds
         
-		//dataPointTime = dataPointDate + dataPointMilliSeconds
-		Date dataPointDate = new Date (); // Only the date of the datapoint, accurate to seconds e.g. 2014-05-16T16:32:21
-	    int dataPointMilliSeconds = 0; // 600 is .6 seconds
-	    long dataPointTime = 0; // Correct time of the datapoint, including milliseconds
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'kk:mm:ss");
 
 		// Look over lines, skipping the first (description)
 	    
@@ -149,15 +144,21 @@ public class DataFeed
 		    	
     			// Parse the date    			
 				String[] tempDataPointString = PApplet.split(dataInfo[0], "."); // tempDataPointString looks like ["2014-05-16T16:32:21", "600000"]
+
+				//Formula: dataPointTime = dataPointDate + dataPointMilliSeconds
+				Date dataPointDate = new Date (); // Only the date of the datapoint, accurate to seconds e.g. 2014-05-16T16:32:21
+			    int dataPointMilliSeconds = 0; // 600 is .6 seconds
+			    long dataPointTime = 0; // Correct time of the datapoint, including milliseconds
+				SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'kk:mm:ss");
 				
     			try {
 					dataPointDate = format.parse(tempDataPointString[0]); // e.g. 2014-05-16T16:32:21
 					dataPointMilliSeconds = Integer.parseInt(tempDataPointString[1])/1000; // e.g. 600
 					dataPointTime = dataPointDate.getTime() + dataPointMilliSeconds; // e.g. 1400293222000 + 600 = 1400293222600
 					
-					PApplet.println("dataInfo[0]: "+dataInfo[0] +" ==? "+ dataPointDate + " + "+dataPointMilliSeconds+"ms");
-					PApplet.println(" dataPointTime: "+ (dataPointDate.getTime()) +" + "+ (dataPointMilliSeconds) + " ==? "+dataPointTime);
-					PApplet.println(" check math: "+dataPointDate +" ==? " + (new Date(dataPointTime)) );
+//					PApplet.println("dataInfo[0]: "+dataInfo[0] +" ==? "+ dataPointDate + " + "+dataPointMilliSeconds+"ms");
+//					PApplet.println(" dataPointTime: "+ (dataPointDate.getTime()) +" + "+ (dataPointMilliSeconds) + " ==? "+dataPointTime);
+//					PApplet.println(" check math: "+dataPointDate +" ==? " + (new Date(dataPointTime)) );
         		}
     	        catch(ParseException pe) {
     	        	PApplet.println("ERROR: Cannot parse date from this line /"+dataInfo[0]);
@@ -170,7 +171,6 @@ public class DataFeed
     			//Create currentDatapoint, add to data
     			double originalMagnitude = Double.parseDouble(dataInfo[2]);
     			double scaledMagnitude = originalMagnitude * magnitudeFactor;
-    			
 
     			DataPoint currentDataPoint = new DataPoint(originalMagnitude, scaledMagnitude, lastBigPoint, lastMediumPoint);
 
