@@ -9,7 +9,6 @@ import java.util.Date;
 public class DataPoint
 {
     long time = 0;// Time should be the time-of-event as reflected in the datafeed. In ms, including fractional seconds from datafeed.
-    
     double magnitude; // scaled number is easier to deal with. ref: magnitudeFactor
     double originalMagnitude = 0.0; // original value from data service
     DataPoint lastBigPoint;
@@ -22,7 +21,7 @@ public class DataPoint
 	//DataPoint currentDataPoint = new DataPoint(originalMagnitude, scaledMagnitude, lastBigPoint, lastMediumPoint, dataPointTime, dataPointFractionalSeconds);
 
     
-    public DataPoint(double originalMagnitude, double magnitude, DataPoint lastBig, DataPoint lastMedium, long time) {
+    public DataPoint(long time, double originalMagnitude, double magnitude, DataPoint lastBig, DataPoint lastMedium) {
     	
         // Parse Data point
         this.magnitude = magnitude;

@@ -33,13 +33,13 @@ public class DataEnvelope
         
         if (detailedDebugging) {
 
-        	//DecimalFormat df = new DecimalFormat("####.##");
+        	DecimalFormat df = new DecimalFormat("####.######");
 //        	PApplet.println("Envelope: newPoint.time:" + newPoint.time +
 //        			" oldPoint.time:" + oldPoint.time );
         	
         	PApplet.println("Envelope: duration:" + duration +
-        			" deltaMag:" + deltaMagnitude +
-        			" angle:" + angle );
+        			" deltaMag:" + df.format(deltaMagnitude) +
+        			" angle:" + df.format(angle) );
         	
         }
         

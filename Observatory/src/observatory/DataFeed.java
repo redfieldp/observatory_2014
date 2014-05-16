@@ -22,7 +22,10 @@ public class DataFeed
 	String feedGraphUrl = "";
 	boolean detailedDebugging=false;
 	
-	DataPoint lastBigPoint, lastMediumPoint;
+	// Datafeed saves the most recent dataPoints where the magnitude excedes bigThreshold, or mediumThreshold.
+	// These gets updated while processing new data, so should always be current
+	DataPoint lastBigPoint; 
+	DataPoint lastMediumPoint;
 	
 	Table storedData;
 	int expectedPointsPerQuery = (int)dataTimeInterval * 10;
@@ -32,17 +35,10 @@ public class DataFeed
 	FileWriter saveWriter;
 	
 	boolean firstRun = true;
-
-//	Datafeed result looks like this (line 1 is a description):
-//	TIMESERIES CC_SEP__EHZ_D, 101 samples, 10 sps, 2014-05-16T16:32:20.000000, TSPAIR, FLOAT, M/S
-//	2014-05-16T16:32:20.000000  5.2979015e-08
-//	2014-05-16T16:32:20.100000  9.9552274e-08
-//	2014-05-16T16:32:20.200000  9.1067754e-08
-//	2014-05-16T16:32:20.300000  7.493982e-08
-//	time-of-event   magnitude-of-event	
 	
 	public DataFeed(PApplet parentApp, int bigThreshold, int medThreshold) {
 		processingInstance = parentApp;
+		// set the initial values of lastBigPoint and lastMediumPoint, so that they are non-zero
 		lastBigPoint = new DataPoint(bigThreshold);
 		lastMediumPoint = new DataPoint(medThreshold);
 	}
@@ -125,15 +121,19 @@ public class DataFeed
 
 		// PROCESS RESULTS - SUCCESS //
 
-		// First line since it is a description and then generate data objects for all others
-		// For each subsequent line, we will create a dataPoint
-    	// Each line looks like this: 2014-05-16T16:32:21.600000  5.0102454e-08
+		// Datafeed result looks like this (line 1 is a description):
+		// TIMESERIES CC_SEP__EHZ_D, 101 samples, 10 sps, 2014-05-16T16:32:20.000000, TSPAIR, FLOAT, M/S
+		// 2014-05-16T16:32:20.000000  5.2979015e-08
+		// 2014-05-16T16:32:20.100000  9.9552274e-08
+		// 2014-05-16T16:32:20.200000  9.1067754e-08
+		// 2014-05-16T16:32:20.300000  7.493982e-08
+		// time-of-event   magnitude-of-event	
 		// Note that the times include fractional seconds
-        
+		
+		// Look over lines, skipping the first one
+	    for (int i=1; i < feedData.length; i++) {
 
-		// Look over lines, skipping the first (description)
-	    
-		for (int i=1; i < feedData.length; i++) {
+			// For each subsequent line, we will create a dataPoint
 			
 		    try {
     			// Split the string
@@ -165,16 +165,17 @@ public class DataFeed
     	        }
     			    			    			
     			// Parse the magnitude
-    			
-    			//PApplet.println("mag "+dataInfo[2]);
-    			
-    			//Create currentDatapoint, add to data
+    			// PApplet.println("mag "+dataInfo[2]);
     			double originalMagnitude = Double.parseDouble(dataInfo[2]);
     			double scaledMagnitude = originalMagnitude * magnitudeFactor;
+    			
+    			//Create currentDatapoint, add to data
+    			// includes lastBigPoint is 
 
-    			DataPoint currentDataPoint = new DataPoint(originalMagnitude, scaledMagnitude, lastBigPoint, lastMediumPoint, dataPointTime);
+    			DataPoint currentDataPoint = new DataPoint(dataPointTime, originalMagnitude, scaledMagnitude, lastBigPoint, lastMediumPoint);
 
     			// Calculate lastBigPoint, lastMediumPoint
+    			
     			if (detailedDebugging) PApplet.println("Comparing " + scaledMagnitude + " to " + lastBigPoint.magnitude);
     			if (scaledMagnitude > bigThreshold || (currentDataPoint.time - lastBigPoint.time > timeExpiration)) {
     				if (detailedDebugging) PApplet.println("New big point detected!");
@@ -262,7 +263,9 @@ public class DataFeed
 	            TableRow r = storedData.getRow(tableTraversalCounter);
 	            
 	            /*
-	            // COMMENTED OUT WHILE CHANGING DATAPOINT.TIME
+	            // I COMMENTED THIS OUT WHILE CHANGING DATAPOINT.TIME
+	            // STORED DATA IS BROKEN
+	            // WE NEED TO STORE THE DATAPOINT TIME AS WELL AS MAGNITUDE IN THE FILE
 	             
 	            //Create currentDatapoint, add to data
 	            double originalMagnitude = r.getDouble("originalMagnitude");

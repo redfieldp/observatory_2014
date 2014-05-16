@@ -8,29 +8,28 @@ import processing.core.PApplet;
 
 public class RecentData
 {
-    int recentDataDuration = 100;
+	//int recentDataDuration = 100;// QUESTION: UNUSED?
 
     ArrayList<DataPoint> listOfDataPoints = new ArrayList<DataPoint>();
 
-    int maximumDataPoints = 6000;
+    int maximumDataPoints = 6000; // number of points to keep in recentdata. 600 points is 10 minutes
 
     private int recentAverageOfBigShakes = 0;
-
     private int recentAverageOfMediumShakes = 0;
-
     private int recentAverageOfSmallShakes = 0;
-
     private int recentAverageOfAllShakes  = 0;
 
     int recentPeak = 0;
 
     Timer calculationTimer, thresholdTimer;
 
-    int thresholdRecalcInterval = 10000, thresholdCalcScope = 600000;
-    int drawnLinesPerSecond = 5; 
-    int thresholdLineLimit = (thresholdCalcScope/1000) * drawnLinesPerSecond;
+    int thresholdRecalcInterval = 10000; // 10 seconds
+    int thresholdCalcScope = 600000; // 10 minutes
+    int expectedAverageLinesPerSecond = 5; // 
+    int thresholdLineLimit = (thresholdCalcScope/1000) * expectedAverageLinesPerSecond;
 
-    int thresholdLarge = 25, thresholdMedium = 5;
+    int thresholdLarge = 25; // how large must a datapoint be to be considerred 'large'
+    int thresholdMedium = 5; // how large must a datapoint be to be considerred 'medium'
 
     public RecentData() {
         calculationTimer = new Timer();
@@ -66,7 +65,7 @@ public class RecentData
     }
 
     public void saveData(){
-
+    	// QUESTION WHAT DOES THIS DO?
     }
 
     public void setLargeThreshold(int lt) {
@@ -79,6 +78,7 @@ public class RecentData
 
     class RecentDataCalculation extends TimerTask {
         public void run() {
+        	PApplet.println("RecentData: RecentDataCalculation");
             int counter = 0;
             if (listOfDataPoints.size() > 0) {
                 synchronized(listOfDataPoints) {
