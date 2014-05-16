@@ -180,10 +180,10 @@ public class DataFeed
     				if (detailedDebugging) PApplet.println("New big point detected!");
     				lastBigPoint = currentDataPoint;
     			}
-    			else if (scaledMagnitude > lastMediumPoint.magnitude || (currentDataPoint.time - lastMediumPoint.time > timeExpiration)) {
-    				if (detailedDebugging) PApplet.println("New medium point detected!");
-    				lastMediumPoint = currentDataPoint;
-    			}
+				//else if (scaledMagnitude > lastMediumPoint.magnitude || (currentDataPoint.time - lastMediumPoint.time > timeExpiration)) {
+				//	if (detailedDebugging) PApplet.println("New medium point detected!");
+				//	lastMediumPoint = currentDataPoint;
+				//}
     			
     			//Add new dataPoint to our data
     			newData.add(currentDataPoint);

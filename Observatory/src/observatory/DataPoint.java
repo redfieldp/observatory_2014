@@ -17,7 +17,7 @@ public class DataPoint
     DataEnvelope peakEnvelope;
     DataEnvelope smoothedEnvelope;
     
-    boolean detailedDebugging=true;
+    boolean detailedDebugging=false;
 
 	//DataPoint currentDataPoint = new DataPoint(originalMagnitude, scaledMagnitude, lastBigPoint, lastMediumPoint, dataPointTime, dataPointFractionalSeconds);
 
@@ -31,11 +31,11 @@ public class DataPoint
         
         // Grab other data point arguments
         lastBigPoint = lastBig;
-        lastMediumPoint = lastMedium;
+        //lastMediumPoint = lastMedium;
         
         // Create envelopes using points
         peakEnvelope = new DataEnvelope(this, lastBigPoint);
-        smoothedEnvelope = new DataEnvelope(this, lastMediumPoint);
+        //smoothedEnvelope = new DataEnvelope(this, lastMediumPoint);
         
         if (detailedDebugging) {
         	DecimalFormat df = new DecimalFormat("####.##");

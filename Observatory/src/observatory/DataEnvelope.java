@@ -12,7 +12,7 @@ public class DataEnvelope
 	// Useful as another parameter for a stream of data
 
 	long duration;
-    int deltaMagnitude;
+    double deltaMagnitude;
     double angle;
     int durationScalar = 100;
     
@@ -20,7 +20,7 @@ public class DataEnvelope
 	
     DataEnvelope (DataPoint newPoint, DataPoint oldPoint) {
         duration = (newPoint.time - oldPoint.time) * durationScalar;
-        deltaMagnitude = (int)(newPoint.magnitude - oldPoint.magnitude);
+        deltaMagnitude = (newPoint.magnitude - oldPoint.magnitude);
         
         // We have opposite (delta mag) and adjacent (duration) so use cotan to get angle
         if (duration > 0) {
@@ -34,12 +34,12 @@ public class DataEnvelope
         if (detailedDebugging) {
 
         	//DecimalFormat df = new DecimalFormat("####.##");
-//        	PApplet.println("New Envelope: newPoint.time:" + newPoint.time +
+//        	PApplet.println("Envelope: newPoint.time:" + newPoint.time +
 //        			" oldPoint.time:" + oldPoint.time );
         	
-//        	PApplet.println("New Envelope: duration:" + duration +
-//        			" deltaMag:" + deltaMagnitude +
-//        			" angle:" + angle );
+        	PApplet.println("Envelope: duration:" + duration +
+        			" deltaMag:" + deltaMagnitude +
+        			" angle:" + angle );
         	
         }
         

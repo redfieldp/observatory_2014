@@ -24,7 +24,7 @@ public class ObservatoryLine
 	public ObservatoryLine(DataPoint p, Template currentTemplate, PApplet pRef, int lineId) { 
 		// create a new line
 		this.id = lineId;
-		this.lifeSpan = Math.abs(p.peakEnvelope.deltaMagnitude)*lifeSpanScalar;
+		this.lifeSpan = (int) ( Math.abs(p.peakEnvelope.deltaMagnitude)*lifeSpanScalar );
 		this.birthDate = System.currentTimeMillis();
 		this.thickness = (int)(p.magnitude/thicknessScalar);
 		/*
