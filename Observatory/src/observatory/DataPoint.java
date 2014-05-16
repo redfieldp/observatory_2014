@@ -1,21 +1,22 @@
 package observatory;
 
+import com.ibm.icu.text.DecimalFormat;
+
+import processing.core.PApplet;
+
 public class DataPoint
 {
     // TODO: What to use for time?
     long time = System.currentTimeMillis();
 
-    double originalMagnitude = 0.0;
-
-    double magnitude;
-    
+    double originalMagnitude = 0.0; // original value from data service
+    double magnitude; // scaled number is easier to deal with
     DataPoint lastBigPoint;
-
     DataPoint lastMediumPoint;
-
     DataEnvelope peakEnvelope;
-
     DataEnvelope smoothedEnvelope;
+    
+    boolean detailedDebugging=true;
     
     public DataPoint(double originalMagnitude, double magnitude, DataPoint lastBig, DataPoint lastMedium) {
         // Parse Data point
@@ -29,6 +30,10 @@ public class DataPoint
         // Create envelopes using points
         peakEnvelope = new DataEnvelope(this, lastBigPoint);
         smoothedEnvelope = new DataEnvelope(this, lastMediumPoint);
+        
+        DecimalFormat df = new DecimalFormat("####.##");
+        if (detailedDebugging) PApplet.println("New DataPoint:" + " mag:" + df.format(magnitude) + " (" + originalMagnitude + ")" );
+		
     }
     
     // This is the null constructor

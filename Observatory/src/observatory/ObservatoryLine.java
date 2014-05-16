@@ -26,7 +26,6 @@ public class ObservatoryLine
 		this.id = lineId;
 		this.lifeSpan = Math.abs(p.peakEnvelope.deltaMagnitude)*lifeSpanScalar;
 		this.birthDate = System.currentTimeMillis();
-		float anglePercentage = (float) (p.peakEnvelope.angle/Math.PI);
 		this.thickness = (int)(p.magnitude/thicknessScalar);
 		/*
 		Let D be a very small number, much smaller than the magnitude of a typical datapoint.
@@ -34,6 +33,7 @@ public class ObservatoryLine
 		Datapoint.angle = ( (datapoint.magnitude mod D) / D) * 2pi)
 		Line.angle = Template.baseAngle + (datapoint.angle * template.angleVariation)
 		*/
+		float anglePercentage = (float) (p.peakEnvelope.angle/Math.PI);
 		this.angle = PApplet.map((float)(p.peakEnvelope.angle + (anglePercentage * currentTemplate.angleDeviance)), 0, 2 * PApplet.PI, (float)Math.toRadians(currentTemplate.defaultAngle), (float)Math.toRadians(currentTemplate.defaultAngle + currentTemplate.angleDeviance));
 		this.hPos = currentTemplate.horizontalPlacement(p); 
 		this.vPos = 0.50f;

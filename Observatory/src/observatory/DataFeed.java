@@ -145,7 +145,7 @@ public class DataFeed
     	            saveWriter.write(originalMagnitude + "," + scaledMagnitude + "\n");
     	        }
     	        catch (IOException e) {
-    	            PApplet.println("Could not write to data save file!");
+    	            PApplet.println("DataFeed: Error writing to saveDataFile (1) !");
     	        }
 		    }
 		    catch (NumberFormatException e) {
@@ -156,11 +156,11 @@ public class DataFeed
 		try
         {
             saveWriter.flush();
-            PApplet.println("Completed data write.");
+            //PApplet.println("DataFeed: Successfully wrote data to saveDataFile.");
         }
         catch (IOException e)
         {
-            PApplet.println("Could not resolve writing of data save file!");
+            PApplet.println("DataFeed: !!! Error writing to saveDataFile (2) !");
         }
 		
 		PApplet.println("DataFeed: " + (feedData.length - 1) + " new data points received.");
