@@ -41,7 +41,7 @@ public class Observatory extends PApplet {
     int bgColor = 255;
     int dataUpdateFrequency = 10;
     int templateRotationCount = 0;
-    int magnitudeFactor = 1000000000;
+    int magnitudeFactor = 1000000000; // used to scale datapoint magnitudes to a more readible range. 
     RecentData recentData = new RecentData();
     DataFeed currentDataFeed = new DataFeed(this, recentData.thresholdLarge, recentData.thresholdMedium);
 
@@ -132,6 +132,7 @@ public class Observatory extends PApplet {
                     }
                 } else {
                     // url has not changed. we don't need to load a new image.	
+                    //this.println("Showing old graph.");
                 }				
                 tint(255, 60);
                 if (currentDataGraph != null) {

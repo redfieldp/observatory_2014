@@ -75,31 +75,29 @@ public class DataFeed
 
 		// Build URL from time variables
 		// Each value that can potentially be one digit goes through a "fixer" to give it a leading zero
-		String feedBaseUrl;
-		if (firstRun) {
-		    feedBaseUrl="http://service.iris.edu/irisws/timeseries/1/query?net=CC&sta=SEP&cha=EHZ&start="+
-                currentTime.get(Calendar.YEAR) + "-" +
-                fixDigits(currentTime.get(Calendar.MONTH) + 1) +"-" +
-                fixDigits(currentTime.get(Calendar.DATE)) + "T" +
-                fixDigits(hours) + ":" +
-                fixDigits(minutes) + ":" + 
-                fixDigits(seconds) +
-                "&duration=600.0&demean=true&bp=0.1-10.0&scale=AUTO&deci=10&envelope=true&loc=--";
-		    firstRun = false;
-		}
-		else {
-		    feedBaseUrl="http://service.iris.edu/irisws/timeseries/1/query?net=CC&sta=SEP&cha=EHZ&start="+
-				currentTime.get(Calendar.YEAR) + "-" +
-				fixDigits(currentTime.get(Calendar.MONTH) + 1) +"-" +
-				fixDigits(currentTime.get(Calendar.DATE)) + "T" +
-				fixDigits(hours) + ":" +
-				fixDigits(minutes) + ":" + 
-				fixDigits(seconds) +
-				"&duration="+dataTimeInterval+"&demean=true&bp=0.1-10.0&scale=AUTO&deci=10&envelope=true&loc=--";
-		}
+		String tempFeedBaseUrl;
+		float tempFeedDuration; //
 		
-		feedTestUrl = feedBaseUrl+ "&output=ascii"; // used for main animation
-		feedGraphUrl = feedBaseUrl+ "&output=plot"; // used for image
+		if (firstRun) {	
+			tempFeedDuration=600.0f;//
+			firstRun = false;
+		} else {
+			tempFeedDuration=dataTimeInterval;//
+		}
+			
+		tempFeedBaseUrl="http://service.iris.edu/irisws/timeseries/1/query?net=CC&sta=SEP&cha=EHZ&start="+
+					currentTime.get(Calendar.YEAR) + "-" +
+					fixDigits(currentTime.get(Calendar.MONTH) + 1) +"-" +
+					fixDigits(currentTime.get(Calendar.DATE)) + "T" +
+					fixDigits(hours) + ":" +
+					fixDigits(minutes) + ":" + 
+					fixDigits(seconds) +
+					"&duration="+tempFeedDuration +
+					"&demean=true&bp=0.1-10.0&scale=AUTO&deci=10&envelope=true&loc=--";
+		
+		
+		feedTestUrl = tempFeedBaseUrl+ "&output=ascii"; // used for main animation
+		feedGraphUrl = tempFeedBaseUrl+ "&output=plot"; // used for image
 
 		
 		PApplet.println("Datafeed: getting data from '"+ feedTestUrl+"'");

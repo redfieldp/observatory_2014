@@ -9,7 +9,7 @@ public class DataPoint
     // TODO: What to use for time?
     long time = System.currentTimeMillis();
 
-    double magnitude; // scaled number is easier to deal with
+    double magnitude; // scaled number is easier to deal with. ref: magnitudeFactor
     double originalMagnitude = 0.0; // original value from data service
     DataPoint lastBigPoint;
     DataPoint lastMediumPoint;
