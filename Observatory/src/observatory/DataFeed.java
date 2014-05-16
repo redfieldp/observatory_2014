@@ -10,6 +10,8 @@ import java.util.Date;
 import processing.core.PApplet;
 import processing.data.Table;
 import processing.data.TableRow;
+import java.text.SimpleDateFormat;
+import java.text.ParseException;
 
 public class DataFeed
 {
@@ -122,16 +124,37 @@ public class DataFeed
 		// Skip the first line since it is a description and then generate data objects for all others
 		for (int i=1; i < feedData.length; i++) {
 			// for each line...
+			SimpleDateFormat format =
+		            new SimpleDateFormat("yyyy-mm-dd'T'hh:mm:ss.SSSSSS");
+		    Date tempDate;
+	        
 		    try {
+		    	// Each line looks like this: 2014-05-16T16:32:21.600000  5.0102454e-08
     			// Split the string
-    			String[] dataInfo = PApplet.split(feedData[i], " ");
-    			// There are actually two spaces, so skip [1] of the array
-    			PApplet.println("time "+dataInfo[0]);
+		    	String[] dataInfo = PApplet.split(feedData[i], " ");
+    			
+		    	// [0] is the time-of-the-event.
+		    	// There are actually two spaces, so skip [1] of the array
+	    		// [2] is the magnitude
+		    	
+    			// Parse the date
+    			try {
+    			    tempDate = format.parse(dataInfo[0]);
+    			    PApplet.println("time "+dataInfo[0] +" = "+tempDate);
+    	        }
+    	        catch(ParseException pe) {
+    	        	tempDate = new Date();
+    	        	PApplet.println("ERROR: Cannot parse date from this line /"+dataInfo[0]);
+    	        }
+    			    			    			
+    			// Parse the magnitude
+    			
     			//PApplet.println("mag "+dataInfo[2]);
-    				
-	            //Create currentDatapoint, add to data
+    			
+    			//Create currentDatapoint, add to data
     			double originalMagnitude = Double.parseDouble(dataInfo[2]);
     			double scaledMagnitude = originalMagnitude * magnitudeFactor;
+    			
 
     			DataPoint currentDataPoint = new DataPoint(originalMagnitude, scaledMagnitude, lastBigPoint, lastMediumPoint);
 
