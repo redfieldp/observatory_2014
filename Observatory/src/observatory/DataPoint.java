@@ -9,8 +9,8 @@ public class DataPoint
     // TODO: What to use for time?
     long time = System.currentTimeMillis();
 
-    double originalMagnitude = 0.0; // original value from data service
     double magnitude; // scaled number is easier to deal with
+    double originalMagnitude = 0.0; // original value from data service
     DataPoint lastBigPoint;
     DataPoint lastMediumPoint;
     DataEnvelope peakEnvelope;
@@ -31,11 +31,12 @@ public class DataPoint
         peakEnvelope = new DataEnvelope(this, lastBigPoint);
         smoothedEnvelope = new DataEnvelope(this, lastMediumPoint);
         
-        DecimalFormat df = new DecimalFormat("####.##");
-        if (detailedDebugging) PApplet.println("New DataPoint:" + " mag:" + df.format(magnitude) + " (" + originalMagnitude + ")" );
-		
+        if (detailedDebugging) {
+        	DecimalFormat df = new DecimalFormat("####.##");
+        	PApplet.println("New DataPoint:" + " mag:" + df.format(magnitude)); // + " (" + originalMagnitude + ")" );
+        }
     }
-    
+        
     // This is the null constructor
     public DataPoint(int threshold) {
         magnitude = threshold;
