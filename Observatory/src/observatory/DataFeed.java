@@ -172,7 +172,7 @@ public class DataFeed
     			double originalMagnitude = Double.parseDouble(dataInfo[2]);
     			double scaledMagnitude = originalMagnitude * magnitudeFactor;
 
-    			DataPoint currentDataPoint = new DataPoint(originalMagnitude, scaledMagnitude, lastBigPoint, lastMediumPoint);
+    			DataPoint currentDataPoint = new DataPoint(originalMagnitude, scaledMagnitude, lastBigPoint, lastMediumPoint, dataPointTime);
 
     			// Calculate lastBigPoint, lastMediumPoint
     			if (detailedDebugging) PApplet.println("Comparing " + scaledMagnitude + " to " + lastBigPoint.magnitude);
