@@ -26,7 +26,7 @@ public class Observatory extends PApplet {
 
     boolean performancePaused = false;
     boolean useStoredData = false;
-    boolean systemInit = false;
+    boolean systemInit = true;// EL turned this on for debugging. Usually false; // application initially waits for input before animating
     boolean fullScreenMode = false;
     boolean pdfTrigger = false;
     boolean showGraph = false; // if true, we show the currentDataGraph
