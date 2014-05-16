@@ -28,7 +28,7 @@ public class DataFeed
 	int expectedPointsPerQuery = (int)dataTimeInterval * 10;
 	int tableTraversalCounter = 0;
 	
-	File saveDataFile;
+	File saveDataFile; // the file to which we write saved data. 
 	FileWriter saveWriter;
 	
 	boolean firstRun = true;
@@ -182,6 +182,8 @@ public class DataFeed
 	
 	public void setupSaveDataFile() {
 		// format date without special characters, so it can be used in filename
+	    // We always record data to a file, with filename like this: bin/saveData_Fri_May_16_09-35-10_EDT_2014.csv
+
         String tempDateString=new Date().toString().replace('/', '-').replace(' ', '_').replace(':', '-');
 	    saveDataFile = new File("saveData_" + tempDateString + ".csv");
 	    try {

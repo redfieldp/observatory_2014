@@ -22,11 +22,10 @@ public class Observatory extends PApplet {
     Timer templateSwitcher;
     String currentDataGraphUrl="";
     PImage currentDataGraph; // used to show debugging graph of recent data
-    //EL new repo test
 
     boolean performancePaused = false;
-    boolean useStoredData = false;
-    boolean systemInit = true;// EL turned this on for debugging. Usually false; // application initially waits for input before animating
+    boolean useStoredData = false; // If true, we run in 'prerecorded mode,' using data from 
+    boolean systemInit = true; // EL turned this on for debugging. Usually false; // application initially waits for input before animating
     boolean fullScreenMode = false;
     boolean pdfTrigger = false;
     boolean showGraph = false; // if true, we show the currentDataGraph
@@ -43,6 +42,9 @@ public class Observatory extends PApplet {
     RecentData recentData = new RecentData();
     DataFeed currentDataFeed = new DataFeed(this, recentData.thresholdLarge, recentData.thresholdMedium);
 
+    // We always record data to a file, with filename like this: bin/saveData_Fri_May_16_09-35-10_EDT_2014.csv
+    // See DataFeed.saveDataFile
+    
     public int lineCounter=0; // total number of lines created in this session
 
     float thicknessUnit = 0.0001f;
@@ -123,7 +125,7 @@ public class Observatory extends PApplet {
                 // Load data from either file or feed
                 ArrayList<DataPoint> currentData;
                 if (useStoredData) {
-                    currentData = storedDataPoints;
+					currentData = storedDataPoints;
                 }
                 else {
                     currentData = incomingData;
