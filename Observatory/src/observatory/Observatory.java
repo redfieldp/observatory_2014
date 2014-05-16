@@ -13,6 +13,9 @@ import processing.data.Table;
 import themidibus.MidiBus;
 
 public class Observatory extends PApplet {
+	
+    ////////// DECLARATIONS //////////
+
     Template currentTemplate;
     ArrayList<DataPoint> incomingData = new ArrayList<DataPoint>();
     ArrayList<DataPoint> storedDataPoints = new ArrayList<DataPoint>();
@@ -42,9 +45,6 @@ public class Observatory extends PApplet {
     RecentData recentData = new RecentData();
     DataFeed currentDataFeed = new DataFeed(this, recentData.thresholdLarge, recentData.thresholdMedium);
 
-    // We always record data to a file, with filename like this: bin/saveData_Fri_May_16_09-35-10_EDT_2014.csv
-    // See DataFeed.saveDataFile
-    
     public int lineCounter=0; // total number of lines created in this session
 
     float thicknessUnit = 0.0001f;
@@ -54,9 +54,17 @@ public class Observatory extends PApplet {
     int midiDeviceId = 0;
     
     // Stored Data Stuff
+
+    // We always record data to a file, with filename like this: bin/saveData_Fri_May_16_09-35-10_EDT_2014.csv
+    // See DataFeed.saveDataFile
+    // When running from saved data, we use: storedData/data.csv
+
     Table dataToLoad;
     ArrayList<DataPoint> storedData = new ArrayList<DataPoint>();
     int storedDataCounter = 0;
+
+    
+    ////////// SETUP //////////
 
     public void setup() {
         //***** figure out the display environment ****/
@@ -90,18 +98,28 @@ public class Observatory extends PApplet {
         //currentData.size()
     }
 
+    
+    ////////// MAIN DRAW LOOP //////////
+
     public void draw() {
-        if (systemInit) {
+    	
+        if (!systemInit) {
+        		// before init, we start with a black background.
+                background(0);
+        } else {
             // Clear the background color
             background (bgColor);
+            
+            // if pdfTrigger, record this draw loop to a PDF
             if (pdfTrigger) {
                 // #### will be replaced with the frame number
                 // format date without special characters, so it can be used in filename
                 String tempDateString=new Date().toString().replace('/', '-').replace(' ', '_').replace(':', '-');
                 beginRecord(PDF, "LineDrawing_"+ tempDateString + ".pdf"); 
             }
-
-            if (showGraph) { // show currentDataGraph over the top of the main diplay
+            
+            // if showGraph, show currentDataGraph over the top of the main diplay
+            if (showGraph) { 
                 if (currentDataGraphUrl!=currentDataFeed.feedGraphUrl) {
                     // url has changed. load a new image
                     this.println("Loading new Graph. currentDataGraphUrl = "+currentDataGraphUrl);
@@ -121,8 +139,10 @@ public class Observatory extends PApplet {
                 }
             }
 
+            // if not paused, draw some lines from the data
             if (!performancePaused) {
-                // Load data from either file or feed
+
+            	// Load data from either file or feed
                 ArrayList<DataPoint> currentData;
                 if (useStoredData) {
 					currentData = storedDataPoints;
@@ -147,7 +167,7 @@ public class Observatory extends PApplet {
                 }
 
                 if (!useStoredData) {
-                    recentData.saveData();
+                    recentData.saveData(); // QUESTION: WHAT DOES THIS DO?
                 }
 
             }
@@ -157,10 +177,105 @@ public class Observatory extends PApplet {
                 pdfTrigger = false;
             }
         }
-        else {
-            background(0);
+    }
+
+
+    ////////// MANAGING LINES //////////
+
+    // Creating a line is handled by ObservatoryLine constructor
+
+    private void destroyOldLines() {
+        ArrayList<ObservatoryLine> toRemove = new ArrayList<ObservatoryLine>();
+
+        for (ObservatoryLine l : lines) {
+            if (l.isExpired()) {
+                toRemove.add(l);
+            }
+        }
+
+        for (ObservatoryLine l : toRemove) {
+            //printDebug("Remove line #"+l.id);
+            lines.remove(l);
         }
     }
+
+    private void modifyExistingLine(DataPoint p) {
+        // Only try to find a line to modify if there are lines in existence
+        if (lines.size() > 0) {
+            ObservatoryLine lineToModify = lines.get((int)(p.time % lines.size()));
+            lineToModify.modify(p, recentData, currentTemplate);
+        }
+    }
+
+    ////////// PROCESSING DATA POINTS //////////
+
+    private void processDataPoint(ArrayList<DataPoint> currentData) {
+        //println("Processing data point from incoming data of size " + currentData.size() + " with magnitude of " + (currentData.get(0).magnitude * magnitudeFactor));
+        // Grab the last point in the list
+        DataPoint p = currentData.get(0);
+        String tempString="";
+
+        if (p.magnitude > recentData.thresholdLarge) {
+            if (lines.size() < maxNumberOfLines) {
+                lineCounter++;
+                ObservatoryLine l = new ObservatoryLine(p, currentTemplate, this, lineCounter);
+                if (l.thickness > 1) {
+                    lines.add(l);
+                }
+                else {
+                    println("non-visible line");
+                }
+                tempString = "Create line #" + lineCounter;
+            }
+        }
+        else if (p.magnitude > recentData.thresholdMedium) {
+            modifyExistingLine(p);
+            tempString = "Modify line #";
+        }
+
+        currentData.remove(p);
+        recentData.addDataPoint(p);
+
+        //printDebug(tempString);
+    }
+
+    ////////// TIMERS //////////
+    
+    private void dataTimerSetup() {
+        dataGrabber = new Timer();
+        dataGrabber.schedule(new GrabDataTask(), 0, dataUpdateFrequency * 1000);
+    }
+
+    private void templateTimerSetup() {
+        templateSwitcher = new Timer();
+        templateSwitcher.schedule(new TemplateRotationTask(), 0, rotateTemplateDuration * 1000);
+    }
+    
+    class GrabDataTask extends TimerTask {
+        public void run() {
+            ArrayList<DataPoint> newData;
+            if (!useStoredData) {
+                newData = currentDataFeed.getFreshData(recentData.thresholdLarge, recentData.thresholdMedium, magnitudeFactor);
+            }
+            else {
+                newData = currentDataFeed.loadStoredData(recentData.thresholdLarge, recentData.thresholdMedium, magnitudeFactor);
+            }
+            
+            for (DataPoint d : newData) {
+                incomingData.add(d);
+            }
+            
+        }
+    }
+
+    class TemplateRotationTask extends TimerTask {
+        public void run() {
+            templateRotationCount = (int)random(0,templates.length);
+            currentTemplate = templates[templateRotationCount];
+        }
+    }
+
+    ////////// INTERACTIVITY //////////
 
     public void keyPressed() {
         if (key == 'T'){
@@ -195,6 +310,8 @@ public class Observatory extends PApplet {
             }
         }
     }
+    
+    ////////// HELPERS //////////
 
     private void savePDF()
     {
@@ -220,70 +337,7 @@ public class Observatory extends PApplet {
         templateRotationCount = (templateRotationCount + 1) % templates.length;
         currentTemplate = templates[templateRotationCount];
     }
-
-    private void destroyOldLines() {
-        ArrayList<ObservatoryLine> toRemove = new ArrayList<ObservatoryLine>();
-
-        for (ObservatoryLine l : lines) {
-            if (l.isExpired()) {
-                toRemove.add(l);
-            }
-        }
-
-        for (ObservatoryLine l : toRemove) {
-            //printDebug("Remove line #"+l.id);
-            lines.remove(l);
-        }
-    }
-
-    private void modifyExistingLine(DataPoint p) {
-        // Only try to find a line to modify if there are lines in existence
-        if (lines.size() > 0) {
-            ObservatoryLine lineToModify = lines.get((int)(p.time % lines.size()));
-            lineToModify.modify(p, recentData, currentTemplate);
-        }
-    }
-
-    private void processDataPoint(ArrayList<DataPoint> currentData) {
-        //println("Processing data point from incoming data of size " + currentData.size() + " with magnitude of " + (currentData.get(0).magnitude * magnitudeFactor));
-        // Grab the last point in the list
-        DataPoint p = currentData.get(0);
-        String tempString="";
-
-        if (p.magnitude > recentData.thresholdLarge) {
-            if (lines.size() < maxNumberOfLines) {
-                lineCounter++;
-                ObservatoryLine l = new ObservatoryLine(p, currentTemplate, this, lineCounter);
-                if (l.thickness > 1) {
-                    lines.add(l);
-                }
-                else {
-                    println("non-visible line");
-                }
-                tempString = "Create line #" + lineCounter;
-            }
-        }
-        else if (p.magnitude > recentData.thresholdMedium) {
-            modifyExistingLine(p);
-            tempString = "Modify line #";
-        }
-
-        currentData.remove(p);
-        recentData.addDataPoint(p);
-
-        //printDebug(tempString);
-    }
-
-    private void dataTimerSetup() {
-        dataGrabber = new Timer();
-        dataGrabber.schedule(new GrabDataTask(), 0, dataUpdateFrequency * 1000);
-    }
-
-    private void templateTimerSetup() {
-        templateSwitcher = new Timer();
-        templateSwitcher.schedule(new TemplateRotationTask(), 0, rotateTemplateDuration * 1000);
-    }
-
+    
     public boolean sketchFullScreen() {
         return fullScreenMode;
     }
@@ -300,36 +354,10 @@ public class Observatory extends PApplet {
     
     public void loadStoredData() {
         dataToLoad = loadTable("storedData/data.csv", "header");
-
         println(dataToLoad.getRowCount() + " total rows of storedData"); 
-
         currentDataFeed.setStoredData(dataToLoad);
     }
 
-    class GrabDataTask extends TimerTask {
-        public void run() {
-            ArrayList<DataPoint> newData;
-            if (!useStoredData) {
-                newData = currentDataFeed.getFreshData(recentData.thresholdLarge, recentData.thresholdMedium, magnitudeFactor);
-            }
-            else {
-                newData = currentDataFeed.loadStoredData(recentData.thresholdLarge, recentData.thresholdMedium, magnitudeFactor);
-            }
-            
-            for (DataPoint d : newData) {
-                incomingData.add(d);
-            }
-            
-            //printDebug("");
-        }
-    }
-
-    class TemplateRotationTask extends TimerTask {
-        public void run() {
-            templateRotationCount = (int)random(0,templates.length);
-            currentTemplate = templates[templateRotationCount];
-        }
-    }
 
     public static void main(String args[]) {
         PApplet.main(new String[] { "--present", "observatory.Observatory" });
