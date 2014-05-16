@@ -34,8 +34,8 @@ public class DataEnvelope
         if (detailedDebugging) {
 
         	//DecimalFormat df = new DecimalFormat("####.##");
-        	PApplet.println("New Envelope: newPoint.time:" + newPoint.time +
-        			" oldPoint.time:" + oldPoint.time );
+//        	PApplet.println("New Envelope: newPoint.time:" + newPoint.time +
+//        			" oldPoint.time:" + oldPoint.time );
         	
 //        	PApplet.println("New Envelope: duration:" + duration +
 //        			" deltaMag:" + deltaMagnitude +

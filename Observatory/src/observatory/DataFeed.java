@@ -57,7 +57,7 @@ public class DataFeed
 	    
 		ArrayList<DataPoint> newData = new ArrayList<DataPoint>();
 
-		// Set up time for URL query
+		// SET UP TIME //
 		Calendar currentTime = Calendar.getInstance();
 		
 		if (firstRun) {
@@ -83,7 +83,7 @@ public class DataFeed
 			seconds = 0;
 		}
 
-		// Set Up Data URLs //
+		// SET UP DATA URLs //
 
 		// Each value that can potentially be one digit goes through a "fixer" to give it a leading zero
 		String tempFeedBaseUrl;
@@ -109,41 +109,57 @@ public class DataFeed
 		feedTestUrl = tempFeedBaseUrl+ "&output=ascii"; // used for main animation
 		feedGraphUrl = tempFeedBaseUrl+ "&output=plot"; // used for graph image overlay
 
-		// Get Data
+		// GET DATA //
+		
 		PApplet.println("Datafeed: getting data from '"+ feedTestUrl+"'");
 		String[] feedData = {};
 		feedData = processingInstance.loadStrings(feedTestUrl); // gets params from datafeed URL
 		
-		// Process Results
+		// PROCESS RESULTS - FAIL //
+		
 		if (feedData == null || feedData.length == 0) {
 			// If retrieval failed just return the empty array list
 			PApplet.println("DataFeed: ERROR Could not retrieve data! feedData is null or empty!");
 			return newData;
 		}
-		
-		// Skip the first line since it is a description and then generate data objects for all others
+
+		// PROCESS RESULTS - SUCCESS //
+
+		// First line since it is a description and then generate data objects for all others
+		// For each subsequent line, we will create a dataPoint
+    	// Each line looks like this: 2014-05-16T16:32:21.600000  5.0102454e-08
+		// Note that the times include fractional seconds
+        
+		//dataPointTime = dataPointDate + dataPointMilliSeconds
+		Date dataPointDate = new Date (); // Only the date of the datapoint, accurate to seconds e.g. 2014-05-16T16:32:21
+	    int dataPointMilliSeconds = 0; // 600 is .6 seconds
+	    long dataPointTime = 0; // Correct time of the datapoint, including milliseconds
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'kk:mm:ss");
+
+		// Look over lines, skipping the first (description)
+	    
 		for (int i=1; i < feedData.length; i++) {
-			// for each line...
-			SimpleDateFormat format =
-		            new SimpleDateFormat("yyyy-mm-dd'T'hh:mm:ss.SSSSSS");
-		    Date tempDate;
-	        
+			
 		    try {
-		    	// Each line looks like this: 2014-05-16T16:32:21.600000  5.0102454e-08
     			// Split the string
 		    	String[] dataInfo = PApplet.split(feedData[i], " ");
-    			
-		    	// [0] is the time-of-the-event.
+		    	// [0] is the time-of-the-event, including fractional seconds.
 		    	// There are actually two spaces, so skip [1] of the array
 	    		// [2] is the magnitude
 		    	
-    			// Parse the date
+    			// Parse the date    			
+				String[] tempDataPointString = PApplet.split(dataInfo[0], "."); // tempDataPointString looks like ["2014-05-16T16:32:21", "600000"]
+				
     			try {
-    			    tempDate = format.parse(dataInfo[0]);
-    			    PApplet.println("time "+dataInfo[0] +" = "+tempDate);
-    	        }
+					dataPointDate = format.parse(tempDataPointString[0]); // e.g. 2014-05-16T16:32:21
+					dataPointMilliSeconds = Integer.parseInt(tempDataPointString[1])/1000; // e.g. 600
+					dataPointTime = dataPointDate.getTime() + dataPointMilliSeconds; // e.g. 1400293222000 + 600 = 1400293222600
+					
+					PApplet.println("dataInfo[0]: "+dataInfo[0] +" ==? "+ dataPointDate + " + "+dataPointMilliSeconds+"ms");
+					PApplet.println(" dataPointTime: "+ (dataPointDate.getTime()) +" + "+ (dataPointMilliSeconds) + " ==? "+dataPointTime);
+					PApplet.println(" check math: "+dataPointDate +" ==? " + (new Date(dataPointTime)) );
+        		}
     	        catch(ParseException pe) {
-    	        	tempDate = new Date();
     	        	PApplet.println("ERROR: Cannot parse date from this line /"+dataInfo[0]);
     	        }
     			    			    			
@@ -217,8 +233,8 @@ public class DataFeed
 		// format date without special characters, so it can be used in filename
 	    // We always record data to a file, with filename like this: bin/saveData_Fri_May_16_09-35-10_EDT_2014.csv
 
-        String tempDateString=new Date().toString().replace('/', '-').replace(' ', '_').replace(':', '-');
-	    saveDataFile = new File("saveData_" + tempDateString + ".csv");
+        String dateString=new Date().toString().replace('/', '-').replace(' ', '_').replace(':', '-');
+	    saveDataFile = new File("saveData_" + dateString + ".csv");
 	    try {
 	        saveWriter = new FileWriter(saveDataFile);
 	        saveWriter.write("originalMagnitude,scaledMagnitude\n");
@@ -245,6 +261,9 @@ public class DataFeed
 	        while (expectedDataCounter < expectedPointsPerQuery && tableTraversalCounter < storedData.getRowCount()) {
 	            TableRow r = storedData.getRow(tableTraversalCounter);
 	            
+	            /*
+	            // COMMENTED OUT WHILE CHANGING DATAPOINT.TIME
+	             
 	            //Create currentDatapoint, add to data
 	            double originalMagnitude = r.getDouble("originalMagnitude");
 	            double scaledMagnitude = r.getDouble("scaledMagnitude");
@@ -260,6 +279,10 @@ public class DataFeed
 	                if (detailedDebugging) PApplet.println("New medium point detected!");
 	                lastMediumPoint = currentDataPoint;
 	            }
+	            */
+	            
+	            //KLUDGE
+	            DataPoint currentDataPoint = new DataPoint(0);
 	            
 	            //add new dataPoint to our data
 	            newData.add(currentDataPoint);
