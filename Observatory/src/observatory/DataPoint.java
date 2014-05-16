@@ -7,7 +7,7 @@ import processing.core.PApplet;
 public class DataPoint
 {
     // TODO: What to use for time?
-    long time = System.currentTimeMillis();
+    long time = System.currentTimeMillis();// // Time should be the time-of-event as reflected in the datafeed (was: )
 
     double magnitude; // scaled number is easier to deal with. ref: magnitudeFactor
     double originalMagnitude = 0.0; // original value from data service
@@ -18,7 +18,8 @@ public class DataPoint
     
     boolean detailedDebugging=true;
     
-    public DataPoint(double originalMagnitude, double magnitude, DataPoint lastBig, DataPoint lastMedium) {
+    public DataPoint(double originalMagnitude, double magnitude, DataPoint lastBig, DataPoint lastMedium, long time) {
+    	
         // Parse Data point
         this.magnitude = magnitude;
         this.originalMagnitude = originalMagnitude;
