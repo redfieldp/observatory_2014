@@ -92,10 +92,11 @@ public class Observatory extends PApplet {
                 "[lines:" + lines.size() +
                 " incomingData:" + incomingData.size() +
                 " recentData:" + recentData.listOfDataPoints.size() +
-                " received:" + currentDataFeed.lastPointCount +
-                " when:" + currentDataFeed.lastDataReceived + 
                 " ("+ currentTemplate.getName() + ")" );
         //currentData.size()
+        //" received:" + currentDataFeed.lastPointCount +
+        //" when:" + currentDataFeed.lastDataReceived + 
+    
     }
 
     
@@ -252,6 +253,9 @@ public class Observatory extends PApplet {
         templateSwitcher.schedule(new TemplateRotationTask(), 0, rotateTemplateDuration * 1000);
     }
     
+    
+    // GRAB DATA //
+    // This is the main data loop //
     class GrabDataTask extends TimerTask {
         public void run() {
             ArrayList<DataPoint> newData;

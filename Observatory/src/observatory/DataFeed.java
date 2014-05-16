@@ -16,8 +16,6 @@ public class DataFeed
 	PApplet processingInstance;
 	float dataTimeInterval= 10.0f;
 	int timeExpiration = 30; // Time until a big point expires
-	String lastDataReceived;
-	int lastPointCount = 0;
 	String feedTestUrl = "";
 	String feedGraphUrl = "";
 	boolean detailedDebugging=false;
@@ -33,11 +31,21 @@ public class DataFeed
 	
 	boolean firstRun = true;
 
+//	Datafeed result looks like this (line 1 is a description):
+//	TIMESERIES CC_SEP__EHZ_D, 101 samples, 10 sps, 2014-05-16T16:32:20.000000, TSPAIR, FLOAT, M/S
+//	2014-05-16T16:32:20.000000  5.2979015e-08
+//	2014-05-16T16:32:20.100000  9.9552274e-08
+//	2014-05-16T16:32:20.200000  9.1067754e-08
+//	2014-05-16T16:32:20.300000  7.493982e-08
+//	time-of-event   magnitude-of-event	
+	
 	public DataFeed(PApplet parentApp, int bigThreshold, int medThreshold) {
 		processingInstance = parentApp;
 		lastBigPoint = new DataPoint(bigThreshold);
 		lastMediumPoint = new DataPoint(medThreshold);
 	}
+
+	// GRAB DATA //
 
 	public ArrayList<DataPoint> getFreshData(int bigThreshold, int medThreshold, int magnitudeFactor) {
 	    
@@ -73,7 +81,8 @@ public class DataFeed
 			seconds = 0;
 		}
 
-		// Build URL from time variables
+		// Set Up Data URLs //
+
 		// Each value that can potentially be one digit goes through a "fixer" to give it a leading zero
 		String tempFeedBaseUrl;
 		float tempFeedDuration; //
@@ -95,50 +104,52 @@ public class DataFeed
 					"&duration="+tempFeedDuration +
 					"&demean=true&bp=0.1-10.0&scale=AUTO&deci=10&envelope=true&loc=--";
 		
-		
 		feedTestUrl = tempFeedBaseUrl+ "&output=ascii"; // used for main animation
-		feedGraphUrl = tempFeedBaseUrl+ "&output=plot"; // used for image
+		feedGraphUrl = tempFeedBaseUrl+ "&output=plot"; // used for graph image overlay
 
-		
+		// Get Data
 		PApplet.println("Datafeed: getting data from '"+ feedTestUrl+"'");
 		String[] feedData = {};
 		feedData = processingInstance.loadStrings(feedTestUrl); // gets params from datafeed URL
 		
+		// Process Results
 		if (feedData == null || feedData.length == 0) {
 			// If retrieval failed just return the empty array list
-			lastDataReceived = "ERROR: Could not retrieve data.";
-			lastPointCount = 0;
+			PApplet.println("DataFeed: ERROR Could not retrieve data! feedData is null or empty!");
 			return newData;
 		}
 		
-		Date tempDate=new Date();
-		lastDataReceived = ""+ tempDate.getHours()+":"+tempDate.getMinutes()+":"+tempDate.getSeconds();
-		lastPointCount = feedData.length - 1;
-		
 		// Skip the first line since it is a description and then generate data objects for all others
 		for (int i=1; i < feedData.length; i++) {
+			// for each line...
 		    try {
     			// Split the string
     			String[] dataInfo = PApplet.split(feedData[i], " ");
     			// There are actually two spaces, so skip [1] of the array
-    			//PApplet.println("time "+dataInfo[0]);
+    			PApplet.println("time "+dataInfo[0]);
     			//PApplet.println("mag "+dataInfo[2]);
-    			// Create a new DataPoint object and add to the array
+    				
+	            //Create currentDatapoint, add to data
     			double originalMagnitude = Double.parseDouble(dataInfo[2]);
     			double scaledMagnitude = originalMagnitude * magnitudeFactor;
-    			DataPoint currentReading = new DataPoint(originalMagnitude, scaledMagnitude, lastBigPoint, lastMediumPoint);
+
+    			DataPoint currentDataPoint = new DataPoint(originalMagnitude, scaledMagnitude, lastBigPoint, lastMediumPoint);
+
+    			// Calculate lastBigPoint, lastMediumPoint
     			if (detailedDebugging) PApplet.println("Comparing " + scaledMagnitude + " to " + lastBigPoint.magnitude);
-    			
-    			if (scaledMagnitude > bigThreshold || (currentReading.time - lastBigPoint.time > timeExpiration)) {
+    			if (scaledMagnitude > bigThreshold || (currentDataPoint.time - lastBigPoint.time > timeExpiration)) {
     				if (detailedDebugging) PApplet.println("New big point detected!");
-    				lastBigPoint = currentReading;
+    				lastBigPoint = currentDataPoint;
     			}
-    			else if (scaledMagnitude > lastMediumPoint.magnitude || (currentReading.time - lastMediumPoint.time > timeExpiration)) {
+    			else if (scaledMagnitude > lastMediumPoint.magnitude || (currentDataPoint.time - lastMediumPoint.time > timeExpiration)) {
     				if (detailedDebugging) PApplet.println("New medium point detected!");
-    				lastMediumPoint = currentReading;
+    				lastMediumPoint = currentDataPoint;
     			}
-    			newData.add(currentReading);
     			
+    			//Add new dataPoint to our data
+    			newData.add(currentDataPoint);
+    			
+    			//Write to our saved data file...
     			try {
     	            saveWriter.write(originalMagnitude + "," + scaledMagnitude + "\n");
     	        }
@@ -147,7 +158,8 @@ public class DataFeed
     	        }
 		    }
 		    catch (NumberFormatException e) {
-		        PApplet.println("Error parsing data from feed: \"" + feedData[i] + "\"");
+		    	// this happens when the line of data isn't formatted as expected
+		        PApplet.println("Datafeed: Error parsing data from feed: \"" + feedData[i] + "\"");
 		    }
 		}
 
@@ -209,20 +221,26 @@ public class DataFeed
 	        int expectedDataCounter = 0;
 	        while (expectedDataCounter < expectedPointsPerQuery && tableTraversalCounter < storedData.getRowCount()) {
 	            TableRow r = storedData.getRow(tableTraversalCounter);
+	            
+	            //Create currentDatapoint, add to data
 	            double originalMagnitude = r.getDouble("originalMagnitude");
 	            double scaledMagnitude = r.getDouble("scaledMagnitude");
-	            DataPoint currentReading = new DataPoint(originalMagnitude, scaledMagnitude, lastBigPoint, lastMediumPoint);
-	            if (detailedDebugging) PApplet.println("Comparing " + scaledMagnitude + " to " + lastBigPoint.magnitude);
+	            DataPoint currentDataPoint = new DataPoint(originalMagnitude, scaledMagnitude, lastBigPoint, lastMediumPoint);
 	            
-	            if (scaledMagnitude > bigThreshold || (currentReading.time - lastBigPoint.time > timeExpiration)) {
+    			// Calculate lastBigPoint, lastMediumPoint
+	            if (detailedDebugging) PApplet.println("Comparing " + scaledMagnitude + " to " + lastBigPoint.magnitude);
+	            if (scaledMagnitude > bigThreshold || (currentDataPoint.time - lastBigPoint.time > timeExpiration)) {
 	                if (detailedDebugging) PApplet.println("New big point detected!");
-	                lastBigPoint = currentReading;
+	                lastBigPoint = currentDataPoint;
 	            }
-	            else if (scaledMagnitude > lastMediumPoint.magnitude || (currentReading.time - lastMediumPoint.time > timeExpiration)) {
+	            else if (scaledMagnitude > lastMediumPoint.magnitude || (currentDataPoint.time - lastMediumPoint.time > timeExpiration)) {
 	                if (detailedDebugging) PApplet.println("New medium point detected!");
-	                lastMediumPoint = currentReading;
+	                lastMediumPoint = currentDataPoint;
 	            }
-	            newData.add(currentReading);
+	            
+	            //add new dataPoint to our data
+	            newData.add(currentDataPoint);
+	            
 	            tableTraversalCounter++;
 	            expectedDataCounter++;
 	        }
