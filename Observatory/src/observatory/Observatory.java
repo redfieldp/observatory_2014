@@ -221,11 +221,11 @@ public class Observatory extends PApplet {
             if (lines.size() < maxNumberOfLines) {
                 lineCounter++;
                 ObservatoryLine l = new ObservatoryLine(p, currentTemplate, this, lineCounter);
-                if (l.thickness > 1) {
+                if (l.thickness >= 1) {
                     lines.add(l);
                 }
                 else {
-                    println("non-visible line");
+                    println("ERROR: non-visible line");// this should never happen
                 }
                 tempString = "Create line #" + lineCounter;
             }

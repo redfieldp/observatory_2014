@@ -15,8 +15,9 @@ public class ObservatoryLine
 	PApplet parent;
 	int id; // line ID
 	
-	int thicknessScalar = 4; // bigger number, smaller line
-    int lifeSpanScalar = 100; // bigger number, longer life
+	int thicknessScalar = 60; // bigger number, smaller line.
+	int minimumThickness=1;
+    int lifeSpanScalar = 1000; // bigger number, longer life
     int timeScalar = 100000; // bigger number, longer line
 	
 	long birthTime;
@@ -26,7 +27,7 @@ public class ObservatoryLine
 		this.id = lineId;
 		this.lifeSpan = (int) ( Math.abs(p.peakEnvelope.deltaMagnitude)*lifeSpanScalar );
 		this.birthDate = System.currentTimeMillis();
-		this.thickness = (int)(p.magnitude/thicknessScalar);
+		this.thickness = Math.max( (int)(p.magnitude/thicknessScalar), minimumThickness);
 		/*
 		Let D be a very small number, much smaller than the magnitude of a typical datapoint.
 		E.g., if our datapoint.magnitutes are around 5x10-8 (.00000005), then set D to be 1x10-9 (.000000001).
