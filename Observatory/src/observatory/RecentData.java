@@ -28,14 +28,15 @@ public class RecentData
     int expectedAverageLinesPerSecond = 5; // 
     int thresholdLineLimit = (thresholdCalcScope/1000) * expectedAverageLinesPerSecond;
 
-    int thresholdLarge = 25; // how large must a datapoint be to be considerred 'large'
-    int thresholdMedium = 5; // how large must a datapoint be to be considerred 'medium'
+    int thresholdLarge = 100; // how large must a datapoint be to be considered 'large'
+    int thresholdMedium = 5; // how large must a datapoint be to be considered 'medium'
 
     public RecentData() {
         calculationTimer = new Timer();
         calculationTimer.schedule(new RecentDataCalculation(), 0, 5000);
         thresholdTimer = new Timer();
-        thresholdTimer.schedule(new ThresholdCalculation(), 0, thresholdRecalcInterval);
+        // TURN OFF MOVING THRESHOLD
+        //thresholdTimer.schedule(new ThresholdCalculation(), 0, thresholdRecalcInterval);
     }
 
     public int getBigShakesAverage() {

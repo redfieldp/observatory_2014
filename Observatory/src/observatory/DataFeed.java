@@ -17,10 +17,10 @@ public class DataFeed
 {
 	PApplet processingInstance;
 	float dataTimeInterval= 10.0f;
-	int timeExpiration = 30; // Time until a big point expires
+	int bigPointTimeExpiration = 600000; // Time until a big point expires, in ms. 60000 is 10 minutes
 	String feedTestUrl = "";
 	String feedGraphUrl = "";
-	boolean detailedDebugging=false;
+	boolean detailedDebugging=true;
 	
 	// Datafeed saves the most recent dataPoints where the magnitude excedes bigThreshold, or mediumThreshold.
 	// These gets updated while processing new data, so should always be current
@@ -117,6 +117,8 @@ public class DataFeed
 			// If retrieval failed just return the empty array list
 			PApplet.println("DataFeed: ERROR Could not retrieve data! feedData is null or empty!");
 			return newData;
+		} else {
+			PApplet.println("DataFeed: received "+ (feedData.length-1) +" points");
 		}
 
 		// PROCESS RESULTS - SUCCESS //
@@ -155,10 +157,9 @@ public class DataFeed
 					dataPointDate = format.parse(tempDataPointString[0]); // e.g. 2014-05-16T16:32:21
 					dataPointMilliSeconds = Integer.parseInt(tempDataPointString[1])/1000; // e.g. 600
 					dataPointTime = dataPointDate.getTime() + dataPointMilliSeconds; // e.g. 1400293222000 + 600 = 1400293222600
-					
-//					PApplet.println("dataInfo[0]: "+dataInfo[0] +" ==? "+ dataPointDate + " + "+dataPointMilliSeconds+"ms");
-//					PApplet.println(" dataPointTime: "+ (dataPointDate.getTime()) +" + "+ (dataPointMilliSeconds) + " ==? "+dataPointTime);
-//					PApplet.println(" check math: "+dataPointDate +" ==? " + (new Date(dataPointTime)) );
+					//PApplet.println("dataInfo[0]: "+dataInfo[0] +" ==? "+ dataPointDate + " + "+dataPointMilliSeconds+"ms");
+					//PApplet.println(" dataPointTime: "+ (dataPointDate.getTime()) +" + "+ (dataPointMilliSeconds) + " ==? "+dataPointTime);
+					//PApplet.println(" check math: "+dataPointDate +" ==? " + (new Date(dataPointTime)) );
         		}
     	        catch(ParseException pe) {
     	        	PApplet.println("ERROR: Cannot parse date from this line /"+dataInfo[0]);
@@ -169,19 +170,20 @@ public class DataFeed
     			double originalMagnitude = Double.parseDouble(dataInfo[2]);
     			double scaledMagnitude = originalMagnitude * magnitudeFactor;
     			
-    			//Create currentDatapoint, add to data
-    			// includes lastBigPoint is 
+    			// CREATE CURRENT DATA POINT, ADD TO DATA //
 
     			DataPoint currentDataPoint = new DataPoint(dataPointTime, originalMagnitude, scaledMagnitude, lastBigPoint, lastMediumPoint);
 
-    			// Calculate lastBigPoint, lastMediumPoint
+    			// Recalculate lastBigPoint, lastMediumPoint
     			
-    			if (detailedDebugging) PApplet.println("Comparing " + scaledMagnitude + " to " + lastBigPoint.magnitude);
-    			if (scaledMagnitude > bigThreshold || (currentDataPoint.time - lastBigPoint.time > timeExpiration)) {
-    				if (detailedDebugging) PApplet.println("New big point detected!");
-    				lastBigPoint = currentDataPoint;
+    			// if our current datapoint is large enough, or if 
+    			PApplet.println("Datafeed: bigThreshold:"+bigThreshold+" mag:"+scaledMagnitude);
+    			
+    			if (scaledMagnitude > bigThreshold || (currentDataPoint.time - lastBigPoint.time > bigPointTimeExpiration)) {
+        			PApplet.println("Datafeed: New big point detected!");
+        			lastBigPoint = currentDataPoint;
     			}
-				//else if (scaledMagnitude > lastMediumPoint.magnitude || (currentDataPoint.time - lastMediumPoint.time > timeExpiration)) {
+				//else if (scaledMagnitude > lastMediumPoint.magnitude || (currentDataPoint.time - lastMediumPoint.time > bigPointTimeExpiration)) {
 				//	if (detailedDebugging) PApplet.println("New medium point detected!");
 				//	lastMediumPoint = currentDataPoint;
 				//}

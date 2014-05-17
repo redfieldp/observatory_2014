@@ -14,19 +14,20 @@ public class DataEnvelope
 	long duration;
     double deltaMagnitude;
     double angle;
-    int durationScalar = 100;
+    double durationScalar = .05; // highly important for calculating angle.
     
 	boolean detailedDebugging=true;
 	
     DataEnvelope (DataPoint newPoint, DataPoint oldPoint) {
-        duration = (newPoint.time - oldPoint.time) * durationScalar;
+        duration = (newPoint.time - oldPoint.time);
         deltaMagnitude = (newPoint.magnitude - oldPoint.magnitude);
         
         // We have opposite (delta mag) and adjacent (duration) so use cotan to get angle
         if (duration > 0) {
-        	angle = Math.atan(deltaMagnitude/duration);
+        	angle = Math.atan(deltaMagnitude/ (duration * durationScalar) );
         }
         else {
+        	PApplet.println("Envelope: ERROR: Duration is zero");
         	angle = 0;
         }
 
@@ -37,9 +38,9 @@ public class DataEnvelope
 //        	PApplet.println("Envelope: newPoint.time:" + newPoint.time +
 //        			" oldPoint.time:" + oldPoint.time );
         	
-        	PApplet.println("Envelope: duration:" + duration +
-        			" deltaMag:" + df.format(deltaMagnitude) +
-        			" angle:" + df.format(angle) );
+//        	PApplet.println("Envelope: duration:" + duration +
+//        			" deltaMag:" + df.format(deltaMagnitude) +
+//        			" angle:" + df.format(angle) );
         	
         }
         
