@@ -184,8 +184,8 @@ public class Observatory extends PApplet {
 
     ////////// MANAGING LINES //////////
 
-    // Creating a line is handled by ObservatoryLine constructor
-
+    // Creating a line is handled by ObservatoryLine constructor.
+    
     private void destroyOldLines() {
         ArrayList<ObservatoryLine> toRemove = new ArrayList<ObservatoryLine>();
 
