@@ -271,6 +271,7 @@ public class Observatory extends PApplet {
                 incomingData.add(d);
             }
             
+            printDebug( "Observatory.Grabdata ");
         }
     }
 

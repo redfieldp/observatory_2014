@@ -32,7 +32,7 @@ public class DataPoint
         
         if (detailedDebugging) {
         	DecimalFormat df = new DecimalFormat("####.##");
-        	PApplet.println("Creating New DataPoint:" + " mag:" + df.format(magnitude) + " time:"+time + " angle:" + df.format(peakEnvelope.angle) ); 
+        	PApplet.println("DataPoint: New DataPoint:" + " mag:" + df.format(magnitude) + " time:"+time + " angle:" + df.format(peakEnvelope.angle) ); 
         }
     }
         
