@@ -187,6 +187,7 @@ public class Observatory extends PApplet {
     // Creating a line is handled by ObservatoryLine constructor.
     
     private void destroyOldLines() {
+    	// removes all expired lines
         ArrayList<ObservatoryLine> toRemove = new ArrayList<ObservatoryLine>();
 
         for (ObservatoryLine l : lines) {
@@ -196,7 +197,7 @@ public class Observatory extends PApplet {
         }
 
         for (ObservatoryLine l : toRemove) {
-            //printDebug("Remove line #"+l.id);
+            //printDebug ("Observatory:Remove line #"+l.id+" lifespan:"+(l.lifeSpan/1000)+"s");
             lines.remove(l);
         }
     }
