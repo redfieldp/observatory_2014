@@ -5,7 +5,7 @@ public class ClusteredRightTemplate extends Template
     public ClusteredRightTemplate() {
         defaultAngle = 0;
 
-        angleDeviance = 20;
+        angleDeviance = 0;
 
         verticalPlacementOffset = -50;
     }

@@ -21,7 +21,7 @@ public class Observatory extends PApplet {
     ArrayList<DataPoint> storedDataPoints = new ArrayList<DataPoint>();
     ArrayList<ObservatoryLine> lines = new ArrayList<ObservatoryLine>();
     //Template[] templates = {new RainTemplate(), new ToothpicksTemplate(), new ClusteredRightTemplate(), new ClusteredLeftTemplate()};
-    Template[] templates = {new ToothpicksTemplate()}; // Test
+    Template[] templates = {new ClusteredRightTemplate(), new ToothpicksTemplate()}; // Test
     
     
     Timer dataGrabber;
@@ -221,28 +221,19 @@ public class Observatory extends PApplet {
         DataPoint p = currentData.get(0);
         String tempString="";
 
-        if (p.magnitude > recentData.thresholdLarge) {
-            if (lines.size() < maxNumberOfLines) {
-                lineCounter++;
-                ObservatoryLine l = new ObservatoryLine(p, currentTemplate, this, lineCounter);
-                if (l.thickness >= 1) {
-                    lines.add(l);
-                }
-                else {
-                    println("ERROR: non-visible line");// this should never happen
-                }
-                tempString = "Create line #" + lineCounter;
-            }
+        if ( (p.magnitude > recentData.thresholdLarge) && (lines.size() < maxNumberOfLines)) {
+           	// Create new line
+            lineCounter++;
+            ObservatoryLine l = new ObservatoryLine(p, currentTemplate, this, lineCounter);
+            lines.add(l);
         }
-        else if (p.magnitude > recentData.thresholdMedium) {
-            modifyExistingLine(p);
-            tempString = "Modify line #";
-        }
+        // else if (p.magnitude > recentData.thresholdMedium) {
+        //    modifyExistingLine(p);
+        // }
 
         currentData.remove(p);
         recentData.addDataPoint(p);
 
-        //printDebug(tempString);
     }
 
     ////////// TIMERS //////////

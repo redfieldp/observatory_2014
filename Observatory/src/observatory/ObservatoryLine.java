@@ -5,7 +5,7 @@ import processing.core.PApplet;
 
 public class ObservatoryLine
 {
-	int thickness;
+	int thickness; // larger than minimumThickness
 	double angle;
 	float hPos;
 	float vPos;
@@ -15,7 +15,7 @@ public class ObservatoryLine
 	PApplet parent;
 	int id; // line ID
 	
-	int thicknessScalar = 75; // bigger number, smaller line.
+	int thicknessScalar = 60; // bigger number, smaller line.
 	int minimumThickness=1;
     int lifeSpanScalar = 1000; // bigger number, longer life
     int timeScalar = 100000; // bigger number, longer line
@@ -48,7 +48,7 @@ public class ObservatoryLine
 		
 		// each line should be visible to the eye. common problems
 		// Is the line drawn offscreen?
-		// Is the line‘s lifespan too short?
+		// Is the line's lifespan too short?
 		if (this.lifeSpan < 1000) PApplet.println("!!! ObservatoryLine: line#"+this.id+" lifespan:"+this.lifeSpan +" peak:"+ p.peakEnvelope.deltaMagnitude);
 		// Is the line’s thickness too small?
 		if (this.thickness < 1) PApplet.println("!!! ObservatoryLine: line#"+this.id+" Thickness:"+this.thickness);
