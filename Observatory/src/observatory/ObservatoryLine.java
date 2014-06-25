@@ -34,14 +34,12 @@ public class ObservatoryLine
 		Datapoint.angle = ( (datapoint.magnitude mod D) / D) * 2pi)
 		Line.angle = Template.baseAngle + (datapoint.angle * template.angleVariation)
 		*/
-		p.peakEnvelope.angle = Math.round(p.peakEnvelope.angle*100)/100.000;
-		double anglePercentage = (double) (p.peakEnvelope.angle/Math.PI);
-		anglePercentage = Math.round(anglePercentage*100)/100.000;
-		this.angle = PApplet.map((float)(p.peakEnvelope.angle + (anglePercentage * currentTemplate.angleDeviance)), 0, 2 * PApplet.PI, (float)Math.toRadians(currentTemplate.defaultAngle), (float)Math.toRadians(currentTemplate.defaultAngle + currentTemplate.angleDeviance));
-		this.angle = Math.round(this.angle*100)/100.000;
+		p.peakEnvelope.angle = truncateDecimals (p.peakEnvelope.angle);
+		double anglePercentage = truncateDecimals ( (double) (p.peakEnvelope.angle/Math.PI) );
+		this.angle = truncateDecimals ( PApplet.map((float)(p.peakEnvelope.angle + (anglePercentage * currentTemplate.angleDeviance)), 0, 2 * PApplet.PI, (float)Math.toRadians(currentTemplate.defaultAngle), (float)Math.toRadians(currentTemplate.defaultAngle + currentTemplate.angleDeviance)) );
 		
-		this.hPos = currentTemplate.horizontalPlacement(p); 
-		this.vPos = 0.50f;
+		this.hPos = (float) truncateDecimals(currentTemplate.horizontalPlacement(p)); 
+		this.vPos = (float) truncateDecimals( 0.50f );
 		this.length = (int)(p.time % timeScalar);
 		this.parent = pRef;
 		PApplet.println("ObservatoryLine: New line #"+this.id+" ("+numLines+") (" + hPos + ", " + vPos + ") length:" + length + " thickness:" + thickness + " angle:" + angle + " lifespan:" + (lifeSpan/1000) + "ms");
@@ -56,7 +54,14 @@ public class ObservatoryLine
 		if (this.thickness < 1) PApplet.println("!!! ObservatoryLine: line#"+this.id+" Thickness:"+this.thickness);
 		
 	}
-
+	public double truncateDecimals(double f) {
+		// We go to thousandsths, no more.
+		double r=Math.round(f*1000)/1000.000;
+		
+		//PApplet.println("truncateDecimals "+r+" == "+f);
+		return r;
+	}
+	
 	public void draw(int currentWidth, int currentHeight) {
 		// visualize the line on the canvas.
 		
