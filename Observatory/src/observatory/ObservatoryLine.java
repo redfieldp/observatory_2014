@@ -15,7 +15,7 @@ public class ObservatoryLine
 	PApplet parent;
 	int id; // line ID
 	
-	int thicknessScalar = 60; // bigger number, smaller line.
+	int thicknessScalar = 180; // bigger number, smaller line.
 	int minimumThickness=1;
     int lifeSpanScalar = 1000; // bigger number, longer life
     int timeScalar = 100000; // bigger number, longer line
@@ -32,15 +32,18 @@ public class ObservatoryLine
 		Datapoint.angle = ( (datapoint.magnitude mod D) / D) * 2pi)
 		Line.angle = Template.baseAngle + (datapoint.angle * template.angleVariation)
 		*/
-		float anglePercentage = (float) (p.peakEnvelope.angle/Math.PI);
+		p.peakEnvelope.angle = Math.round(p.peakEnvelope.angle*100)/100.000;
+		double anglePercentage = (double) (p.peakEnvelope.angle/Math.PI);
+		anglePercentage = Math.round(anglePercentage*100)/100.000;
 		this.angle = PApplet.map((float)(p.peakEnvelope.angle + (anglePercentage * currentTemplate.angleDeviance)), 0, 2 * PApplet.PI, (float)Math.toRadians(currentTemplate.defaultAngle), (float)Math.toRadians(currentTemplate.defaultAngle + currentTemplate.angleDeviance));
-		this.angle = Math.round(this.angle*100)/100.00;
+		this.angle = Math.round(this.angle*100)/100.000;
 		
 		this.hPos = currentTemplate.horizontalPlacement(p); 
 		this.vPos = 0.50f;
 		this.length = (int)(p.time % timeScalar);
 		this.parent = pRef;
 		PApplet.println("ObservatoryLine: New line #"+this.id+" (" + hPos + ", " + vPos + ") length:" + length + " thickness:" + thickness + " angle:" + angle + " lifespan:" + (lifeSpan/1000) + "ms");
+		PApplet.println("... *p.peakEnvelope.angle:" + p.peakEnvelope.angle + " *anglePercentage:" + anglePercentage + " *angle:" + angle);
 		//PApplet.println("ObservatoryLine: New line #"+id+" lifeSpan:" + (lifeSpan/1000)+"s");
 		
 		// each line should be visible to the eye. common problems

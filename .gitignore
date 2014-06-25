@@ -8,3 +8,5 @@ Observatory/bin/java.policy.applet
 *.html
 
 *.csv
+
+*.class

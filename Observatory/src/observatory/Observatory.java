@@ -10,7 +10,7 @@ import java.util.TimerTask;
 import processing.core.PApplet;
 import processing.core.PImage;
 import processing.data.Table;
-import themidibus.MidiBus;
+//import themidibus.MidiBus;
 
 public class Observatory extends PApplet {
 	
@@ -33,9 +33,9 @@ public class Observatory extends PApplet {
     boolean pdfTrigger = false;
     boolean showGraph = false; // if true, we show the currentDataGraph
 
-    int maxNumberOfLines = 100;
+    int maxNumberOfLines = 50;
     int rotateTemplateDuration = 20;
-    int thresholdIncrement = 10;
+    //int thresholdIncrement = 10;
     int canvasHeight = 480;
     int canvasWidth = 640;
     int bgColor = 255;
@@ -50,7 +50,7 @@ public class Observatory extends PApplet {
     float thicknessUnit = 0.0001f;
 
     // MIDI Stuff
-    MidiBus midi;
+    //MidiBus midi;
     int midiDeviceId = 0;
     
     // Stored Data Stuff
@@ -83,8 +83,8 @@ public class Observatory extends PApplet {
 
         frameRate(10);
 
-        midi = new MidiBus(this);
-        midi.addOutput(midiDeviceId);
+        //midi = new MidiBus(this);
+        //midi.addOutput(midiDeviceId);
     }
 
     public void printDebug(String s) {
@@ -356,7 +356,7 @@ public class Observatory extends PApplet {
 
         // TODO: Figure out values based on the datapoint
 
-        midi.sendNoteOn(channel, pitch, velocity);
+        //midi.sendNoteOn(channel, pitch, velocity);
     }
     
     public void loadStoredData() {
