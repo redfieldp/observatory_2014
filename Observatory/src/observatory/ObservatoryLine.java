@@ -1,5 +1,7 @@
 package observatory;
 
+import java.util.ArrayList;
+
 import processing.core.PApplet;
 
 
@@ -20,7 +22,7 @@ public class ObservatoryLine
     int lifeSpanScalar = 1000; // bigger number, longer life
     int timeScalar = 100000; // bigger number, longer line
 	
-	public ObservatoryLine(DataPoint p, Template currentTemplate, PApplet pRef, int lineId) { 
+	public ObservatoryLine(DataPoint p, Template currentTemplate, PApplet pRef, int lineId, int numLines) { 
 		// create a new line
 		this.id = lineId;
 		this.birthTime = System.currentTimeMillis();
@@ -42,7 +44,7 @@ public class ObservatoryLine
 		this.vPos = 0.50f;
 		this.length = (int)(p.time % timeScalar);
 		this.parent = pRef;
-		PApplet.println("ObservatoryLine: New line #"+this.id+" (" + hPos + ", " + vPos + ") length:" + length + " thickness:" + thickness + " angle:" + angle + " lifespan:" + (lifeSpan/1000) + "ms");
+		PApplet.println("ObservatoryLine: New line #"+this.id+" ("+numLines+") (" + hPos + ", " + vPos + ") length:" + length + " thickness:" + thickness + " angle:" + angle + " lifespan:" + (lifeSpan/1000) + "ms");
 		PApplet.println("... *p.peakEnvelope.angle:" + p.peakEnvelope.angle + " *anglePercentage:" + anglePercentage + " *angle:" + angle);
 		//PApplet.println("ObservatoryLine: New line #"+id+" lifeSpan:" + (lifeSpan/1000)+"s");
 		

@@ -179,8 +179,7 @@ public class DataFeed
     			// if our current datapoint is large enough, or if 
     			
     			if (scaledMagnitude > bigThreshold || (currentDataPoint.time - lastBigPoint.time > bigPointTimeExpiration)) {
-        			//PApplet.println("Datafeed: New big point detected!");
-    				PApplet.println("Datafeed: New Big Point. bigThreshold:"+bigThreshold+" mag:"+scaledMagnitude);
+        			// USE THIS ONE // PApplet.println("Datafeed: New Big Point. bigThreshold:"+bigThreshold+" mag:"+scaledMagnitude);
         			lastBigPoint = currentDataPoint;
     			}
 				//else if (scaledMagnitude > lastMediumPoint.magnitude || (currentDataPoint.time - lastMediumPoint.time > bigPointTimeExpiration)) {
