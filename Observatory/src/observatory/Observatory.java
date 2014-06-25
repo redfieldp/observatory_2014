@@ -21,7 +21,7 @@ public class Observatory extends PApplet {
     ArrayList<DataPoint> storedDataPoints = new ArrayList<DataPoint>();
     ArrayList<ObservatoryLine> lines = new ArrayList<ObservatoryLine>();
     //Template[] templates = {new RainTemplate(), new ToothpicksTemplate(), new ClusteredRightTemplate(), new ClusteredLeftTemplate()};
-    Template[] templates = {new ClusteredRightTemplate(), new ToothpicksTemplate()}; // Test
+    Template[] templates = {new ClusteredRightTemplate()}; // Test
     
     
     Timer dataGrabber;
