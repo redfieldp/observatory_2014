@@ -21,7 +21,7 @@ public class Observatory extends PApplet {
     ArrayList<DataPoint> storedDataPoints = new ArrayList<DataPoint>();
     ArrayList<ObservatoryLine> lines = new ArrayList<ObservatoryLine>();
     //Template[] templates = {new RainTemplate(), new ToothpicksTemplate(), new ClusteredRightTemplate(), new ClusteredLeftTemplate()};
-    Template[] templates = {new ClusteredRightTemplate()}; // Test
+    Template[] templates = {new ClusteredRightTemplate(), new ToothpicksTemplate()}; // Test
     
     
     Timer dataGrabber;
@@ -316,20 +316,24 @@ public class Observatory extends PApplet {
 
     private void savePDF()
     {
+    	println("savePDF. ");
         pdfTrigger = true;
     }
 
     private void toggleFullScreen()
     {
+    	println("toggleFullScreen. ");
         fullScreenMode = !fullScreenMode;
     }
     private void toggleShowGraph()
     {
+    	println("toggleShowGraph. ");
         showGraph = !showGraph;
     }
 
     private void togglePause()
     {
+    	println("togglePause ");
         performancePaused = !performancePaused;
     }
 
@@ -337,9 +341,11 @@ public class Observatory extends PApplet {
     {
         templateRotationCount = (templateRotationCount + 1) % templates.length;
         currentTemplate = templates[templateRotationCount];
+    	println("switchToNextTemplate "+currentTemplate.getName());
     }
     
     public boolean sketchFullScreen() {
+    	println(" ");
         return fullScreenMode;
     }
 
