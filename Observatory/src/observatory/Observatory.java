@@ -20,7 +20,10 @@ public class Observatory extends PApplet {
     ArrayList<DataPoint> incomingData = new ArrayList<DataPoint>();
     ArrayList<DataPoint> storedDataPoints = new ArrayList<DataPoint>();
     ArrayList<ObservatoryLine> lines = new ArrayList<ObservatoryLine>();
-    Template[] templates = {new RainTemplate(), new ToothpicksTemplate(), new ClusteredRightTemplate(), new ClusteredLeftTemplate()};
+    //Template[] templates = {new RainTemplate(), new ToothpicksTemplate(), new ClusteredRightTemplate(), new ClusteredLeftTemplate()};
+    Template[] templates = {new ToothpicksTemplate()}; // Test
+    
+    
     Timer dataGrabber;
     Timer templateSwitcher;
     String currentDataGraphUrl="";
