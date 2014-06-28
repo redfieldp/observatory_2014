@@ -36,15 +36,17 @@ public class ObservatoryLine
 		*/
 		p.peakEnvelope.angle = truncateDecimals (p.peakEnvelope.angle);
 		double anglePercentage = truncateDecimals ( (double) (p.peakEnvelope.angle/Math.PI) );
-		this.angle = truncateDecimals ( PApplet.map((float)(p.peakEnvelope.angle + (anglePercentage * currentTemplate.angleDeviance)), 0, 2 * PApplet.PI, (float)Math.toRadians(currentTemplate.defaultAngle), (float)Math.toRadians(currentTemplate.defaultAngle + currentTemplate.angleDeviance)) );
-		
+		//this.angle = truncateDecimals ( PApplet.map((float)(p.peakEnvelope.angle + (anglePercentage * currentTemplate.angleDeviance)), 0, 2 * PApplet.PI, (float)Math.toRadians(currentTemplate.defaultAngle), (float)Math.toRadians(currentTemplate.defaultAngle + currentTemplate.angleDeviance)) );
+		this.angle = truncateDecimals ( PApplet.map ((float)p.randomized1, (float)0.0, (float)1.0, (float)0.0, (float)Math.PI /2) );
+
 		this.hPos = (float) truncateDecimals(currentTemplate.horizontalPlacement(p)); 
 		this.vPos = (float) truncateDecimals( 0.50f );
 		this.length = (int)(p.time % timeScalar);
 		this.parent = pRef;
-		PApplet.println("ObservatoryLine: New line #"+this.id+" ("+numLines+") (" + hPos + ", " + vPos + ") length:" + length + " thickness:" + thickness + " angle:" + angle + " lifespan:" + (lifeSpan/1000) + "ms");
-		PApplet.println("... *p.peakEnvelope.angle:" + p.peakEnvelope.angle + " *anglePercentage:" + anglePercentage + " *angle:" + angle);
+		//PApplet.println("ObservatoryLine: New line #"+this.id+" ("+numLines+") mag:"+p.magnitude+" pos("+numLines+" (" + hPos + ", " + vPos + ") length:" + length + " thickness:" + thickness + " angle:" + angle + " lifespan:" + (lifeSpan/1000) + "ms");
+		//PApplet.println("... *p.peakEnvelope.angle:" + p.peakEnvelope.angle + " *anglePercentage:" + anglePercentage + " *angle:" + angle);
 		//PApplet.println("ObservatoryLine: New line #"+id+" lifeSpan:" + (lifeSpan/1000)+"s");
+		
 		
 		// each line should be visible to the eye. common problems
 		// Is the line drawn offscreen?
@@ -55,10 +57,8 @@ public class ObservatoryLine
 		
 	}
 	public double truncateDecimals(double f) {
-		// We go to thousandsths, no more.
-		double r=Math.round(f*1000)/1000.000;
-		
-		//PApplet.println("truncateDecimals "+r+" == "+f);
+		// We go to ten thousandsths, no more.
+		double r=Math.round(f*10000)/10000.0000;
 		return r;
 	}
 	

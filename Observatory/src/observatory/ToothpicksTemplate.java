@@ -9,8 +9,16 @@ public class ToothpicksTemplate extends Template
 
         verticalPlacementOffset = 0;
     }
-    
+    public float horizontalPlacementCentered(DataPoint p) {
+        return (float) .5;
+    }
+
+    public float horizontalPlacementRandom(DataPoint p) {
+    	// evently distributed between 0 and 1
+        return (float) p.randomized2;
+    }
+
     public float horizontalPlacement(DataPoint p) {
-        return (float) (p.time % 1000)/1000;
+        return horizontalPlacementRandom(p);
     }
 }

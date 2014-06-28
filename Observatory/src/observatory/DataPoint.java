@@ -11,6 +11,8 @@ public class DataPoint
     long time = 0;// Time should be the time-of-event as reflected in the datafeed. In ms, including fractional seconds from datafeed.
     double magnitude=0.0; // scaled number is easier to deal with. ref: magnitudeFactor
     double originalMagnitude = 0.0; // original value from data service
+    double randomized1 = 0.0; // a 'random' number between 0 and 1. Note that this number is not actually random. It is always the same for a given datapoint. For all datapoints, however, it should be smoothly distributed between all values of 0 and 1 
+    double randomized2 = 0.0; // a different 'random' number between 0 and 1 
     DataEnvelope peakEnvelope;
     DataEnvelope smoothedEnvelope;
 
@@ -25,7 +27,11 @@ public class DataPoint
         this.magnitude = magnitude;
         this.originalMagnitude = originalMagnitude;
         this.time = time;
-        
+        this.randomized1 = truncateDecimals (magnitude % 1); // produces a 'random' number between 0 and 1.
+        this.randomized2 = truncateDecimals (magnitude*100 % 1); // produces a 'random' number between 0 and 1.
+        //this.randomized2 = (float) (time % 10000000)/10000000; // a different 'random' number between 0 and 1.
+
+        //PApplet.println("p.mag:"+truncateDecimals(magnitude)+" p.random:"+randomized1+" p.random:"+randomized2);
         // Create envelopes using points
         peakEnvelope = new DataEnvelope(this, lastBig);
         //smoothedEnvelope = new DataEnvelope(this, lastMediumPoint);
@@ -44,4 +50,11 @@ public class DataPoint
         	PApplet.println("DataPoint: New DataPoint:" + " mag:" + df.format(magnitude) + " time:"+time + " angle:" + df.format(peakEnvelope.angle) ); 
         }
     }
+
+	public double truncateDecimals(double f) {
+		// We go to ten thousandsths, no more.
+		double r=Math.round(f*10000)/10000.0000;
+		return r;
+	}
+
 }
