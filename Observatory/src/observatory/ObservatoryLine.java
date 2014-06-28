@@ -37,7 +37,18 @@ public class ObservatoryLine
 		p.peakEnvelope.angle = truncateDecimals (p.peakEnvelope.angle);
 		double anglePercentage = truncateDecimals ( (double) (p.peakEnvelope.angle/Math.PI) );
 		//this.angle = truncateDecimals ( PApplet.map((float)(p.peakEnvelope.angle + (anglePercentage * currentTemplate.angleDeviance)), 0, 2 * PApplet.PI, (float)Math.toRadians(currentTemplate.defaultAngle), (float)Math.toRadians(currentTemplate.defaultAngle + currentTemplate.angleDeviance)) );
-		this.angle = truncateDecimals ( PApplet.map ((float)p.randomized1, (float)0.0, (float)1.0, (float)0.0, (float)Math.PI /2) );
+		// this is perfectly random:
+		//this.angle = truncateDecimals ( PApplet.map ((float)p.randomized1, (float)0.0, (float)1.0, (float)0.0, (float)Math.PI) );
+		this.angle = truncateDecimals (
+				PApplet.map (
+						(float)p.randomized1,
+						(float)0.0,
+						(float)1.0,
+						(float)Math.toRadians(- currentTemplate.angleDeviance/2),
+						(float)Math.toRadians(currentTemplate.angleDeviance/2)
+						)
+						+ Math.toRadians(currentTemplate.defaultAngle)
+				);
 
 		this.hPos = (float) truncateDecimals(currentTemplate.horizontalPlacement(p)); 
 		this.vPos = (float) truncateDecimals( 0.50f );

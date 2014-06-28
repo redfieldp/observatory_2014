@@ -10,6 +10,16 @@ public abstract class Template
     
     abstract float horizontalPlacement(DataPoint p);
     
+    public float horizontalPlacementCentered(DataPoint p) {
+        return (float) .5;
+    }
+
+    public float horizontalPlacementRandom(DataPoint p) {
+    	// evenly distributed between 0 and 1
+        return (float) p.randomized2;
+    }
+
+    
     public String getName() {
 		// Clean up name of current template class for logging purposes
 		String templateName = ""+this;

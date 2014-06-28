@@ -3,20 +3,13 @@ package observatory;
 public class ToothpicksTemplate extends Template
 {
     public ToothpicksTemplate() {
-        defaultAngle = 0;
+        defaultAngle = 0; // 0 to 360
 
-        angleDeviance = 90;
+        angleDeviance = 45; // from 0 to 180 (360 is equivalend to 180)
 
         verticalPlacementOffset = 0;
     }
-    public float horizontalPlacementCentered(DataPoint p) {
-        return (float) .5;
-    }
 
-    public float horizontalPlacementRandom(DataPoint p) {
-    	// evently distributed between 0 and 1
-        return (float) p.randomized2;
-    }
 
     public float horizontalPlacement(DataPoint p) {
         return horizontalPlacementRandom(p);
