@@ -83,22 +83,32 @@ public class DataFeed
 
 		// Each value that can potentially be one digit goes through a "fixer" to give it a leading zero
 		String tempFeedBaseUrl;
-		float tempFeedDuration; //
-		
+		float tempFeedDuration; //		
 		if (firstRun) {	
 			tempFeedDuration=600.0f;//
 			firstRun = false;
 		} else {
 			tempFeedDuration=dataTimeInterval;//
 		}
-			
+		
+		// Start date/time
+		String startYear = currentTime.get(Calendar.YEAR)+"";
+		String startMonth = fixDigits(currentTime.get(Calendar.MONTH) + 1);
+		String startDate = fixDigits(currentTime.get(Calendar.DATE));
+		String startHours = fixDigits(hours);
+		String startMinutes = fixDigits(minutes);
+		String startSeconds = fixDigits(seconds);
+		
+		// If the service is down, or not returning current data, we can adjust the date to run from historical data.
+		startMonth = "05"; // Override month 
+		
 		tempFeedBaseUrl="http://service.iris.edu/irisws/timeseries/1/query?net=CC&sta=SEP&cha=EHZ&start="+
-					currentTime.get(Calendar.YEAR) + "-" +
-					fixDigits(currentTime.get(Calendar.MONTH) + 1) +"-" +
-					fixDigits(currentTime.get(Calendar.DATE)) + "T" +
-					fixDigits(hours) + ":" +
-					fixDigits(minutes) + ":" + 
-					fixDigits(seconds) +
+					startYear + "-" +
+					startMonth +"-" +
+					startDate + "T" +
+					startHours + ":" +
+					startMinutes + ":" + 
+					startSeconds +
 					"&duration="+tempFeedDuration +
 					"&demean=true&bp=0.1-10.0&scale=AUTO&deci=10&envelope=true&loc=--";
 		
