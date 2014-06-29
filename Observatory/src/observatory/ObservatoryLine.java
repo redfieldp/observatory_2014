@@ -17,17 +17,32 @@ public class ObservatoryLine
 	PApplet parent;
 	int id; // line ID
 	
-	int thicknessScalar = 60; // bigger number, smaller line.
+	int thicknessScalar = 120; // bigger number, smaller line.
+	double thicknessScalar2 = .5; // bigger number, bigger line.
 	int minimumThickness=1;
+	int maximumThickness=50;
     int lifeSpanScalar = 1000; // bigger number, longer life
     int timeScalar = 100000; // bigger number, longer line
 	
-	public ObservatoryLine(DataPoint p, Template currentTemplate, PApplet pRef, int lineId, int numLines) { 
+	public ObservatoryLine(DataPoint p, Template currentTemplate, PApplet pRef, int lineId, int numLines, int thresholdLarge) { 
 		// create a new line
 		this.id = lineId;
 		this.birthTime = System.currentTimeMillis();
 		this.lifeSpan = (int) ( Math.abs(p.peakEnvelope.deltaMagnitude)*lifeSpanScalar );
-		this.thickness = Math.max( (int)(p.magnitude/thicknessScalar), minimumThickness);
+		
+		// thickness
+		// Start by using the amount by which the datapoint magnitude exceeds our threshold
+		double relativeMagnitude = Math.max(1, truncateDecimals(p.magnitude-thresholdLarge) ); // expected values between 1 and 1000 or more
+		// log it
+		double logRelativeMagnitude= truncateDecimals( Math.log(relativeMagnitude) / Math.log(100)); // between 0 and 10. (log10=2, log100=4, log500=6, log50000= 10)
+		double tempThickness = truncateDecimals( PApplet.map((float) logRelativeMagnitude, (float)0.0, (float)10.0, (float)minimumThickness, (float)maximumThickness));
+
+		this.thickness = (int) tempThickness;
+
+		PApplet.println("... thickness:"+this.thickness+". relativeMagnitude:"+ relativeMagnitude + " map:"+ tempThickness);
+		//PApplet.println("... "+this.thickness+". mag:"+ truncateDecimals(p.magnitude) +"-"+ thresholdLarge + "="+ relativeMagnitude + ", "+ logRelativeMagnitude + ", "+ tempThickness);
+		
+		// OLD this.thickness = Math.max( (int)((p.magnitude - thresholdLarge) /thicknessScalar), minimumThickness);
 		/*
 		Let D be a very small number, much smaller than the magnitude of a typical datapoint.
 		E.g., if our datapoint.magnitutes are around 5x10-8 (.00000005), then set D to be 1x10-9 (.000000001).

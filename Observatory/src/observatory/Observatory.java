@@ -228,7 +228,7 @@ public class Observatory extends PApplet {
         if ( (p.magnitude > recentData.thresholdLarge) && (lines.size() < maxNumberOfLines)) {
            	// Create new line
             lineCounter++;
-            ObservatoryLine l = new ObservatoryLine(p, currentTemplate, this, lineCounter,  lines.size());
+            ObservatoryLine l = new ObservatoryLine(p, currentTemplate, this, lineCounter,  lines.size(), recentData.thresholdLarge);
             lines.add(l);
         }
         // else if (p.magnitude > recentData.thresholdMedium) {
