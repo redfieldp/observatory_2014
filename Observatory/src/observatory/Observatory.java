@@ -36,7 +36,7 @@ public class Observatory extends PApplet {
     boolean pdfTrigger = false;
     boolean showGraph = false; // if true, we show the currentDataGraph
 
-    int maxNumberOfLines = 50;
+    int maxNumberOfLines = 500;
     boolean rotateTemplate = false; //if true, we rotate templates every X minutes
     int rotateTemplateDuration = 20;
     //int thresholdIncrement = 10;
