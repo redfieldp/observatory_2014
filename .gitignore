@@ -10,3 +10,5 @@ Observatory/bin/java.policy.applet
 *.csv
 
 *.class
+
+*.class
