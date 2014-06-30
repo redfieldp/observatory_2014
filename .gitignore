@@ -12,3 +12,9 @@ Observatory/bin/java.policy.applet
 *.class
 
 *.class
+
+Observatory/bin/observatory/ClusteredLeftTemplate.class
+
+Observatory/bin/observatory/DataEnvelope.class
+
+Observatory/bin/observatory/RainTemplate.class
