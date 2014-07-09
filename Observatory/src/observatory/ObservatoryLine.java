@@ -39,7 +39,7 @@ public class ObservatoryLine
 
 		this.thickness = (int) tempThickness;
 
-		PApplet.println("... thickness:"+this.thickness+". relativeMagnitude:"+ relativeMagnitude + " map:"+ tempThickness);
+		PApplet.println("... thickness:"+this.thickness+". thresholdLarge:"+thresholdLarge+" relativeMagnitude:"+ relativeMagnitude + " map:"+ tempThickness+" thickness:"+thickness);
 		//PApplet.println("... "+this.thickness+". mag:"+ truncateDecimals(p.magnitude) +"-"+ thresholdLarge + "="+ relativeMagnitude + ", "+ logRelativeMagnitude + ", "+ tempThickness);
 		
 		// OLD this.thickness = Math.max( (int)((p.magnitude - thresholdLarge) /thicknessScalar), minimumThickness);
