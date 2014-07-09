@@ -37,12 +37,13 @@ public class ObservatoryLine
 		double logRelativeMagnitude= truncateDecimals( Math.log(relativeMagnitude) / Math.log(100)); // between 0 and 10. (log10=2, log100=4, log500=6, log50000= 10)
 		double tempThickness = truncateDecimals( PApplet.map((float) logRelativeMagnitude, (float)0.0, (float)10.0, (float)minimumThickness, (float)maximumThickness));
 
-		this.thickness = (int) tempThickness;
+		//this.thickness = (int) tempThickness;
 
-		PApplet.println("... thickness:"+this.thickness+". thresholdLarge:"+thresholdLarge+" relativeMagnitude:"+ relativeMagnitude + " map:"+ tempThickness+" thickness:"+thickness);
+		//PApplet.println("... thickness:"+this.thickness+". thresholdLarge:"+thresholdLarge+" relativeMagnitude:"+ relativeMagnitude + " map:"+ tempThickness+" thickness:"+thickness);
 		//PApplet.println("... "+this.thickness+". mag:"+ truncateDecimals(p.magnitude) +"-"+ thresholdLarge + "="+ relativeMagnitude + ", "+ logRelativeMagnitude + ", "+ tempThickness);
 		
-		// OLD this.thickness = Math.max( (int)((p.magnitude - thresholdLarge) /thicknessScalar), minimumThickness);
+		// OLD
+		this.thickness = Math.max( (int)((p.magnitude - thresholdLarge) /thicknessScalar), minimumThickness);
 		/*
 		Let D be a very small number, much smaller than the magnitude of a typical datapoint.
 		E.g., if our datapoint.magnitutes are around 5x10-8 (.00000005), then set D to be 1x10-9 (.000000001).
@@ -69,7 +70,7 @@ public class ObservatoryLine
 		this.vPos = (float) truncateDecimals( 0.50f );
 		this.length = (int)(p.time % timeScalar);
 		this.parent = pRef;
-		//PApplet.println("ObservatoryLine: New line #"+this.id+" ("+numLines+") mag:"+p.magnitude+" pos("+numLines+" (" + hPos + ", " + vPos + ") length:" + length + " thickness:" + thickness + " angle:" + angle + " lifespan:" + (lifeSpan/1000) + "ms");
+		PApplet.println("ObservatoryLine: New line #"+this.id+" ("+numLines+") mag:"+p.magnitude+" pos("+numLines+" (" + hPos + ", " + vPos + ") length:" + length + " thickness:" + thickness + " angle:" + angle + " lifespan:" + (lifeSpan/1000) + "ms");
 		//PApplet.println("... *p.peakEnvelope.angle:" + p.peakEnvelope.angle + " *anglePercentage:" + anglePercentage + " *angle:" + angle);
 		//PApplet.println("ObservatoryLine: New line #"+id+" lifeSpan:" + (lifeSpan/1000)+"s");
 		
