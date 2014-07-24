@@ -10,7 +10,10 @@ import java.util.TimerTask;
 import processing.core.PApplet;
 import processing.core.PImage;
 import processing.data.Table;
+
 //import themidibus.MidiBus;
+import java.awt.Toolkit;
+import java.awt.datatransfer.*;
 
 public class Observatory extends PApplet {
 	
@@ -302,6 +305,9 @@ public class Observatory extends PApplet {
         else if (key == 'Q'){
             exit();
         }
+        else if (key == 'U'){
+            copyDataFeedURLtoClipboard();
+        }
         else if (key == '1'){
             if (!systemInit) {
                 useStoredData = false;
@@ -364,6 +370,13 @@ public class Observatory extends PApplet {
         //midi.sendNoteOn(channel, pitch, velocity);
     }
     
+    Clipboard clipboard;
+    
+    public void copyDataFeedURLtoClipboard(){
+     println("copyDataFeedURLtoClipboard "+currentDataFeed.feedGraphUrl);
+     clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+     clipboard.setContents(new StringSelection(currentDataFeed.feedGraphUrl), null);
+    }
     public void loadStoredData() {
         dataToLoad = loadTable("storedData/data.csv", "header");
         println(dataToLoad.getRowCount() + " total rows of storedData"); 
