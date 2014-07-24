@@ -39,9 +39,9 @@ public class Observatory extends PApplet {
     boolean pdfTrigger = false;
     boolean showGraph = false; // if true, we show the currentDataGraph
 
-    int maxNumberOfLines = 500;
+    int maxNumberOfLines = 120;
     boolean rotateTemplate = false; //if true, we rotate templates every X minutes
-    int rotateTemplateDuration = 20;
+    int rotateTemplateDurationMs = 120 * 1000; // 2 minutes. in miliseconds
     //int thresholdIncrement = 10;
     int canvasHeight = 480;
     int canvasWidth = 640;
@@ -252,7 +252,7 @@ public class Observatory extends PApplet {
 
     private void templateTimerSetup() {
         templateSwitcher = new Timer();
-        templateSwitcher.schedule(new TemplateRotationTask(), 0, rotateTemplateDuration * 1000);
+        templateSwitcher.schedule(new TemplateRotationTask(), 0, rotateTemplateDurationMs);
     }
     
     
@@ -278,12 +278,12 @@ public class Observatory extends PApplet {
 
     class TemplateRotationTask extends TimerTask {
         public void run() {
-        	//templateRotationCount = templateRotationCount;
-        	//templateRotationCount = (int)random(0,templates.length);
-            //currentTemplate = templates[templateRotationCount];
+        	switchToNextTemplate();
         }
     }
 
+   
+    
     ////////// INTERACTIVITY //////////
 
     public void keyPressed() {

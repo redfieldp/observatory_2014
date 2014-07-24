@@ -7,7 +7,7 @@ public class ClusteredRightTemplate extends Template
 
         angleDeviance = 60;
 
-        verticalPlacementOffset = -50;
+        verticalPlacementOffset = 0;
     }
     
     public float horizontalPlacement(DataPoint p) {
