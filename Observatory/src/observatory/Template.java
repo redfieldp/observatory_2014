@@ -22,14 +22,11 @@ public abstract class Template
     }
 
     public float horizontalPlacementLeft(DataPoint p) {
-    	// sin wave with max 75% to the left
-    	//PApplet.println ("p.randomized2:"+p.randomized2+", "+(p.randomized2*Math.PI*2) + ","+ Math.sin( p.randomized2 * Math.PI*2)+", "+(1+ (Math.sin( p.randomized2 * Math.PI*2) )));
-    	return (float) ( (Math.sin(p.randomized2*Math.PI*2) + 1) / 2 );
+    	return (float) (p.randomized2 /2);
     }
     
     public float horizontalPlacementRight(DataPoint p) {
-    	// sin wave with max 75% to the right
-        return (float) ( ( - Math.sin(p.randomized2*Math.PI*2) + 1) / 2 );
+        return (float) ( .5 + (p.randomized2/2));
     }
 
     

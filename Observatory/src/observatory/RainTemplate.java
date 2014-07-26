@@ -11,6 +11,6 @@ public class RainTemplate extends Template
     }
     
     public float horizontalPlacement(DataPoint p) {
-        return (float)(Math.random() * 100) + 1;
+        return horizontalPlacementRandom(p);
     }
 }

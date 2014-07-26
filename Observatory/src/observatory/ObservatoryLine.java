@@ -67,7 +67,7 @@ public class ObservatoryLine
 				);
 		//debug
 		//this.angle=0;
-		//this.lifeSpan=5000;
+		this.lifeSpan=5000;
 		
 		this.hPos = (float) truncateDecimals(currentTemplate.horizontalPlacement(p)); 
 		this.vPos = (float) truncateDecimals( 0.50f );

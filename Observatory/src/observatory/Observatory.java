@@ -23,8 +23,7 @@ public class Observatory extends PApplet {
     ArrayList<DataPoint> incomingData = new ArrayList<DataPoint>();
     ArrayList<DataPoint> storedDataPoints = new ArrayList<DataPoint>();
     ArrayList<ObservatoryLine> lines = new ArrayList<ObservatoryLine>();
-    //Template[] templates = {new RainTemplate(), new ToothpicksTemplate(), new ClusteredRightTemplate(), new ClusteredLeftTemplate()};
-    Template[] templates = {new ToothpicksTemplate(), new ClusteredLeftTemplate(), new ClusteredRightTemplate()}; // Test
+    Template[] templates = {new RainTemplate(), new ToothpicksTemplate(), new ClusteredRightTemplate(), new ClusteredLeftTemplate()};
     Template currentTemplate = templates[0];    
     
     Timer dataGrabber;
@@ -40,7 +39,7 @@ public class Observatory extends PApplet {
     boolean showGraph = false; // if true, we show the currentDataGraph
 
     int maxNumberOfLines = 120;
-    boolean rotateTemplate = false; //if true, we rotate templates every X minutes
+    boolean rotateTemplate = true; //if true, we rotate templates every X minutes
     int rotateTemplateDurationMs = 120 * 1000; // 2 minutes. in miliseconds
     //int thresholdIncrement = 10;
     int canvasHeight = 480;

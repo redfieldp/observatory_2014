@@ -3,9 +3,9 @@ package observatory;
 public class ClusteredLeftTemplate extends Template
 {
     public ClusteredLeftTemplate() {
-        defaultAngle = 0;
+        defaultAngle = 20;
 
-        angleDeviance = 20;
+        angleDeviance = 40;
 
         verticalPlacementOffset = -50;
     }
