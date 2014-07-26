@@ -65,12 +65,15 @@ public class ObservatoryLine
 						)
 						+ Math.toRadians(currentTemplate.defaultAngle)
 				);
-
+		//debug
+		//this.angle=0;
+		//this.lifeSpan=5000;
+		
 		this.hPos = (float) truncateDecimals(currentTemplate.horizontalPlacement(p)); 
 		this.vPos = (float) truncateDecimals( 0.50f );
 		this.length = (int)(p.time % timeScalar);
 		this.parent = pRef;
-		PApplet.println("ObservatoryLine: New line #"+this.id+" ("+numLines+") mag:"+p.magnitude+" pos("+numLines+" (" + hPos + ", " + vPos + ") length:" + length + " thickness:" + thickness + " angle:" + angle + " lifespan:" + (lifeSpan/1000) + "ms");
+		PApplet.println("ObservatoryLine: New line #"+this.id+" ("+numLines+","+currentTemplate.getName()+") mag:"+p.magnitude+" pos(" + hPos + ", " + vPos + ") length:" + length + " thickness:" + thickness + " angle:" + angle + " lifespan:" + (lifeSpan/1000) + "ms");
 		//PApplet.println("... *p.peakEnvelope.angle:" + p.peakEnvelope.angle + " *anglePercentage:" + anglePercentage + " *angle:" + angle);
 		//PApplet.println("ObservatoryLine: New line #"+id+" lifeSpan:" + (lifeSpan/1000)+"s");
 		
@@ -99,6 +102,7 @@ public class ObservatoryLine
 		parent.strokeWeight(thickness);
 		parent.strokeCap(PApplet.SQUARE);
 		parent.noFill();
+		
 		float x1 = (hPos * currentWidth) - parent.width/2;
 		float y1 = (vPos * (currentHeight - (length/2))) - parent.height/2;
 		float x2 = (hPos * currentWidth) - parent.width/2;

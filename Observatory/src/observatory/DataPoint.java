@@ -24,8 +24,8 @@ public class DataPoint
     public DataPoint(long time, double originalMagnitude, double magnitude, DataPoint lastBig, DataPoint lastMedium) {
     	
         // Parse Data point
-        this.magnitude = magnitude;
-        this.originalMagnitude = originalMagnitude;
+        this.magnitude = truncateDecimals(magnitude);
+        this.originalMagnitude = truncateDecimals(originalMagnitude);
         this.time = time;
         this.randomized1 = truncateDecimals (magnitude % 1); // produces a 'random' number between 0 and 1.
         this.randomized2 = truncateDecimals (magnitude*100 % 1); // produces a 'random' number between 0 and 1.

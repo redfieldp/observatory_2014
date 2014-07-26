@@ -24,7 +24,7 @@ public class Observatory extends PApplet {
     ArrayList<DataPoint> storedDataPoints = new ArrayList<DataPoint>();
     ArrayList<ObservatoryLine> lines = new ArrayList<ObservatoryLine>();
     //Template[] templates = {new RainTemplate(), new ToothpicksTemplate(), new ClusteredRightTemplate(), new ClusteredLeftTemplate()};
-    Template[] templates = {new ToothpicksTemplate(), new ClusteredRightTemplate()}; // Test
+    Template[] templates = {new ToothpicksTemplate(), new ClusteredLeftTemplate(), new ClusteredRightTemplate()}; // Test
     Template currentTemplate = templates[0];    
     
     Timer dataGrabber;
@@ -278,7 +278,7 @@ public class Observatory extends PApplet {
 
     class TemplateRotationTask extends TimerTask {
         public void run() {
-        	switchToNextTemplate();
+        	if (rotateTemplate) switchToNextTemplate();
         }
     }
 

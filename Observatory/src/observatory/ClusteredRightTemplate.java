@@ -11,6 +11,6 @@ public class ClusteredRightTemplate extends Template
     }
     
     public float horizontalPlacement(DataPoint p) {
-        return horizontalPlacementRandom(p); // (float) (100 - (Math.sin(Math.random() * Math.PI/2) * 100));
+    	return horizontalPlacementRight(p);
     }
 }
