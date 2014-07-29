@@ -73,7 +73,7 @@ public class ObservatoryLine
 		this.vPos = (float) truncateDecimals( 0.50f );
 		this.length = (int)(p.time % timeScalar);
 		this.parent = pRef;
-		PApplet.println("ObservatoryLine: New line #"+this.id+" ("+numLines+","+currentTemplate.getName()+") mag:"+p.magnitude+" pos(" + hPos + ", " + vPos + ") length:" + length + " thickness:" + thickness + " angle:" + angle + " lifespan:" + (lifeSpan/1000) + "ms");
+		PApplet.println("ObservatoryLine: New line #"+this.id+" ("+numLines+","+currentTemplate.getName()+") mag:"+p.magnitude+">"+thresholdLarge+" pos(" + hPos + ", " + vPos + ") length:" + length + " thickness:" + thickness + " angle:" + angle + " lifespan:" + (lifeSpan/1000) + "ms");
 		//PApplet.println("... *p.peakEnvelope.angle:" + p.peakEnvelope.angle + " *anglePercentage:" + anglePercentage + " *angle:" + angle);
 		//PApplet.println("ObservatoryLine: New line #"+id+" lifeSpan:" + (lifeSpan/1000)+"s");
 		
