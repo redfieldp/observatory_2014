@@ -14,6 +14,7 @@ public class RecentData
 
     int maximumDataPoints = 6000; // number of points to keep in recentdata. 600 points is 10 minutes
 
+    // These are not currently used
     private int recentAverageOfBigShakes = 0;
     private int recentAverageOfMediumShakes = 0;
     private int recentAverageOfSmallShakes = 0;
@@ -21,7 +22,8 @@ public class RecentData
 
     int recentPeak = 0;
 
-    Timer calculationTimer, thresholdTimer;
+    Timer recentDataCalculationTimer; //UNUSED
+    Timer thresholdCalculationTimer; // mooving threshold
 
     int thresholdRecalcInterval = 10000; // 10 seconds
     int thresholdCalcScope = 600000; // 10 minutes
@@ -32,11 +34,12 @@ public class RecentData
     int thresholdMedium = 5; // how large must a datapoint be to be considered 'medium'
 
     public RecentData() {
-        calculationTimer = new Timer();
-        calculationTimer.schedule(new RecentDataCalculation(), 0, 5000);
-        thresholdTimer = new Timer();
+        //UNUSED
+    	//recentDataCalculationTimer = new Timer();
+        //recentDataCalculationTimer.schedule(new RecentDataCalculation(), 0, 5000);
+    	thresholdCalculationTimer = new Timer();
         // TURN OFF MOVING THRESHOLD
-        //thresholdTimer.schedule(new ThresholdCalculation(), 0, thresholdRecalcInterval);
+        //thresholdCalculationTimer.schedule(new ThresholdCalculation(), 0, thresholdRecalcInterval);
     }
 
     public int getBigShakesAverage() {
@@ -77,6 +80,7 @@ public class RecentData
         thresholdMedium = mt;
     }
 
+    // UNUSED
     class RecentDataCalculation extends TimerTask {
         public void run() {
         	PApplet.println("RecentData: RecentDataCalculation");

@@ -119,7 +119,8 @@ public class ObservatoryLine
 	}
 
 	public void modify(DataPoint p, RecentData data, Template currentTemplate) {
-		int modifcationVariable = (int)(p.time % 5);
+		/*
+		 * int modifcationVariable = (int)(p.time % 5);
 
 		switch (modifcationVariable) {
 		case 0:
@@ -138,6 +139,7 @@ public class ObservatoryLine
 			modifyLength(p.smoothedEnvelope.duration);
 			break;
 		}
+		*/
 	}
 
 	private void modifyThickness(int magnitude, int shakesAvg) {
