@@ -96,20 +96,24 @@ public class Observatory extends PApplet {
 
     public void printDebug(String s) {
     	String temp="";
-    	if (incomingData != null) {
-    		println( incomingData );
-    		for (DataPoint d : incomingData) {
-    			//println( temp+ " " + d.magnitude);
-    			 temp=temp+ " " + d.magnitude;
-          }
-    	}
+//    	if (incomingData != null) {
+ //   		println( "here" + incomingData );
+   // 		for (DataPoint d : incomingData) {
+    //			//println( temp+ " " + d.magnitude);
+    	//		if (d != null) {
+//    			 temp=temp+ " " + d.magnitude;
+    //		}
+  //        }
+//    		println( "there" + incomingData );
+//    	}
+    	
         println( s +
                 "[lines:" + lines.size() +
                 " threshold:"+recentData.thresholdLarge +
                 " incomingData:" + incomingData.size() +
                 " recentData:" + recentData.listOfDataPoints.size() +
                 " ("+ currentTemplate.getName() + ")" );
-        println("    points: "+temp);
+        //println("    points: "+temp);
         
         //currentData.size()
         //" received:" + currentDataFeed.lastPointCount +
@@ -319,6 +323,12 @@ public class Observatory extends PApplet {
         else if (key == 'U'){
             copyDataFeedURLtoClipboard();
         }
+        else if (key == '}'){
+            increaseThreshold();
+        }
+        else if (key == '{'){
+            decreaseThreshold();
+        }
         else if (key == '1'){
             if (!systemInit) {
                 useStoredData = false;
@@ -366,6 +376,14 @@ public class Observatory extends PApplet {
     	println("switchToNextTemplate "+currentTemplate.getName());
     }
     
+    public void increaseThreshold(){
+    	recentData.thresholdLarge  = recentData.thresholdLarge +10;
+    	println("increaseThreshold "+recentData.thresholdLarge);    	
+    }
+    public void decreaseThreshold(){
+    	recentData.thresholdLarge  = recentData.thresholdLarge -10;
+    	println("decreaseThreshold "+recentData.thresholdLarge);    	
+    }
     public boolean sketchFullScreen() {
     	println(" ");
         return fullScreenMode;
