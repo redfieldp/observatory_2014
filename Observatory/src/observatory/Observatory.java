@@ -23,7 +23,8 @@ public class Observatory extends PApplet {
     ArrayList<DataPoint> incomingData = new ArrayList<DataPoint>();
     ArrayList<DataPoint> storedDataPoints = new ArrayList<DataPoint>();
     ArrayList<ObservatoryLine> lines = new ArrayList<ObservatoryLine>();
-    Template[] templates = {new RainTemplate(), new ToothpicksTemplate(), new ClusteredRightTemplate(), new ClusteredLeftTemplate()};
+    //Template[] templates = {new RainTemplate(), new ToothpicksTemplate(), new ClusteredRightTemplate(), new ClusteredLeftTemplate()};
+    Template[] templates = {new ClusteredRightTemplate(), new RainTemplate(), new ToothpicksTemplate(), new ClusteredLeftTemplate()};
     Template currentTemplate = templates[0];    
     
     Timer dataGrabber;
@@ -38,7 +39,7 @@ public class Observatory extends PApplet {
     boolean pdfTrigger = false;
     boolean showGraph = false; // if true, we show the currentDataGraph
 
-    int maxNumberOfLines = 120;
+    int maxNumberOfLines = 40;//120;
     boolean rotateTemplate = true; //if true, we rotate templates every X minutes
     int rotateTemplateDurationMs = 120 * 1000; // 2 minutes. in miliseconds
     //int thresholdIncrement = 10;
@@ -94,11 +95,22 @@ public class Observatory extends PApplet {
     }
 
     public void printDebug(String s) {
+    	String temp="";
+    	if (incomingData != null) {
+    		println( incomingData );
+    		for (DataPoint d : incomingData) {
+    			//println( temp+ " " + d.magnitude);
+    			 temp=temp+ " " + d.magnitude;
+          }
+    	}
         println( s +
                 "[lines:" + lines.size() +
+                " threshold:"+recentData.thresholdLarge +
                 " incomingData:" + incomingData.size() +
                 " recentData:" + recentData.listOfDataPoints.size() +
                 " ("+ currentTemplate.getName() + ")" );
+        println("    points: "+temp);
+        
         //currentData.size()
         //" received:" + currentDataFeed.lastPointCount +
         //" when:" + currentDataFeed.lastDataReceived + 

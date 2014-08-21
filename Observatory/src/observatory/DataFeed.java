@@ -100,7 +100,9 @@ public class DataFeed
 		String startSeconds = fixDigits(seconds);
 		
 		// If the service is down, or not returning current data, we can adjust the date to run from historical data.
-		//startMonth = "05"; // Override month 
+		//startYear = "2014"; // Override
+		//startMonth = "02"; // Override
+		//startDate = "01"; // Override
 		
 		tempFeedBaseUrl="http://service.iris.edu/irisws/timeseries/1/query?net=CC&sta=SEP&cha=EHZ&start="+
 					startYear + "-" +
