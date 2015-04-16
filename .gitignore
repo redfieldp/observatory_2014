@@ -18,3 +18,17 @@ Observatory/bin/observatory/ClusteredLeftTemplate.class
 Observatory/bin/observatory/DataEnvelope.class
 
 Observatory/bin/observatory/RainTemplate.class
+
+*.class
+
+*.class
+
+Observatory/bin/observatory/Observatory$GrabDataTask.class
+
+Observatory/bin/observatory/Observatory$TemplateRotationTask.class
+
+Observatory/bin/observatory/DataFeed.class
+
+Observatory/bin/observatory/Observatory.class
+
+Observatory/bin/observatory/RecentData.class

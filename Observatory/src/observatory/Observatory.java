@@ -17,8 +17,26 @@ import java.awt.datatransfer.*;
 
 public class Observatory extends PApplet {
 	
+<<<<<<< HEAD
     //PERFORMANCE VARS
     //Most are adjustable w keyboard
+=======
+    ////////// DECLARATIONS //////////
+
+
+    ArrayList<DataPoint> incomingData = new ArrayList<DataPoint>();
+    ArrayList<DataPoint> storedDataPoints = new ArrayList<DataPoint>();
+    ArrayList<ObservatoryLine> lines = new ArrayList<ObservatoryLine>();
+    //Template[] templates = {new RainTemplate(), new ToothpicksTemplate(), new ClusteredRightTemplate(), new ClusteredLeftTemplate()};
+    Template[] templates = {new ClusteredRightTemplate(), new RainTemplate(), new ToothpicksTemplate(), new ClusteredLeftTemplate()};
+    Template currentTemplate = templates[0];    
+    
+    Timer dataGrabber;
+    Timer templateSwitcher;
+    String currentDataGraphUrl="";
+    PImage currentDataGraph; // used to show debugging graph of recent data
+
+>>>>>>> FETCH_HEAD
     boolean performancePaused = false;
     boolean useStoredData = false; // If true, we run in 'prerecorded mode,' using data from 
     boolean systemInit = true; // EL turned this on for debugging. Usually false; // application initially waits for input before animating
@@ -27,6 +45,7 @@ public class Observatory extends PApplet {
     boolean showGraph = false; // if true, we show the currentDataGraph
     //int thresholdIncrement = 10;
 
+<<<<<<< HEAD
     //DATAFEED
     ArrayList<DataPoint> incomingData = new ArrayList<DataPoint>();
     ArrayList<DataPoint> storedDataPoints = new ArrayList<DataPoint>();
@@ -53,6 +72,9 @@ public class Observatory extends PApplet {
     Timer templateSwitcher;
 
     //TEMPLATES
+=======
+    int maxNumberOfLines = 40;//120;
+>>>>>>> FETCH_HEAD
     boolean rotateTemplate = true; //if true, we rotate templates every X minutes
     Template[] templates = {new RainTemplate(), new ToothpicksTemplate(), new ClusteredRightTemplate(), new ClusteredLeftTemplate()};
     Template currentTemplate = templates[0];    
@@ -98,11 +120,26 @@ public class Observatory extends PApplet {
     }
 
     public void printDebug(String s) {
+    	String temp="";
+//    	if (incomingData != null) {
+ //   		println( "here" + incomingData );
+   // 		for (DataPoint d : incomingData) {
+    //			//println( temp+ " " + d.magnitude);
+    	//		if (d != null) {
+//    			 temp=temp+ " " + d.magnitude;
+    //		}
+  //        }
+//    		println( "there" + incomingData );
+//    	}
+    	
         println( s +
                 "[lines:" + lines.size() +
+                " threshold:"+recentData.thresholdLarge +
                 " incomingData:" + incomingData.size() +
                 " recentData:" + recentData.listOfDataPoints.size() +
                 " ("+ currentTemplate.getName() + ")" );
+        //println("    points: "+temp);
+        
         //currentData.size()
         //" received:" + currentDataFeed.lastPointCount +
         //" when:" + currentDataFeed.lastDataReceived + 
@@ -311,6 +348,12 @@ public class Observatory extends PApplet {
         else if (key == 'U'){
             copyDataFeedURLtoClipboard();
         }
+        else if (key == '}'){
+            increaseThreshold();
+        }
+        else if (key == '{'){
+            decreaseThreshold();
+        }
         else if (key == '1'){
             if (!systemInit) {
                 useStoredData = false;
@@ -358,6 +401,14 @@ public class Observatory extends PApplet {
     	println("switchToNextTemplate "+currentTemplate.getName());
     }
     
+    public void increaseThreshold(){
+    	recentData.thresholdLarge  = recentData.thresholdLarge +10;
+    	println("increaseThreshold "+recentData.thresholdLarge);    	
+    }
+    public void decreaseThreshold(){
+    	recentData.thresholdLarge  = recentData.thresholdLarge -10;
+    	println("decreaseThreshold "+recentData.thresholdLarge);    	
+    }
     public boolean sketchFullScreen() {
     	println(" ");
         return fullScreenMode;
