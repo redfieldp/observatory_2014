@@ -17,57 +17,61 @@ import java.awt.datatransfer.*;
 
 public class Observatory extends PApplet {
 	
-    ////////// DECLARATIONS //////////
-
-
-    ArrayList<DataPoint> incomingData = new ArrayList<DataPoint>();
-    ArrayList<DataPoint> storedDataPoints = new ArrayList<DataPoint>();
-    ArrayList<ObservatoryLine> lines = new ArrayList<ObservatoryLine>();
-    Template[] templates = {new RainTemplate(), new ToothpicksTemplate(), new ClusteredRightTemplate(), new ClusteredLeftTemplate()};
-    Template currentTemplate = templates[0];    
-    
-    Timer dataGrabber;
-    Timer templateSwitcher;
-    String currentDataGraphUrl="";
-    PImage currentDataGraph; // used to show debugging graph of recent data
-
+    //PERFORMANCE VARS
+    //Most are adjustable w keyboard
     boolean performancePaused = false;
     boolean useStoredData = false; // If true, we run in 'prerecorded mode,' using data from 
     boolean systemInit = true; // EL turned this on for debugging. Usually false; // application initially waits for input before animating
     boolean fullScreenMode = false;
     boolean pdfTrigger = false;
     boolean showGraph = false; // if true, we show the currentDataGraph
-
-    int maxNumberOfLines = 120;
-    boolean rotateTemplate = true; //if true, we rotate templates every X minutes
-    int rotateTemplateDurationMs = 120 * 1000; // 2 minutes. in miliseconds
     //int thresholdIncrement = 10;
+
+    //DATAFEED
+    ArrayList<DataPoint> incomingData = new ArrayList<DataPoint>();
+    ArrayList<DataPoint> storedDataPoints = new ArrayList<DataPoint>();
+    RecentData recentData = new RecentData();
+    DataFeed currentDataFeed = new DataFeed(this, recentData.thresholdLarge, recentData.thresholdMedium);
+    int magnitudeFactor = 1000000000; // used to scale datapoint magnitudes to a more legible range. 
+
+    // STORED DATA
+    // Record data to a file, with filename like this: bin/saveData_Fri_May_16_09-35-10_EDT_2014.csv
+    // See DataFeed.saveDataFile
+    // When running from saved data, we use: storedData/data.csv
+    Table dataToLoad;
+    ArrayList<DataPoint> storedData = new ArrayList<DataPoint>();
+    int storedDataCounter = 0;
+
+    //LINES
+    ArrayList<ObservatoryLine> lines = new ArrayList<ObservatoryLine>();
+    int maxNumberOfLines = 120;
+    public int lineCounter=0; // total number of lines created in this session
+    float thicknessUnit = 0.0001f;
+    
+    //TIMERS
+    Timer dataGrabber;
+    Timer templateSwitcher;
+
+    //TEMPLATES
+    boolean rotateTemplate = true; //if true, we rotate templates every X minutes
+    Template[] templates = {new RainTemplate(), new ToothpicksTemplate(), new ClusteredRightTemplate(), new ClusteredLeftTemplate()};
+    Template currentTemplate = templates[0];    
+    int rotateTemplateDurationMs = 120 * 1000; // 2 minutes. in miliseconds
+    int templateRotationCount = 0;
+    
+    //GRAPHICS
     int canvasHeight = 480;
     int canvasWidth = 640;
     int bgColor = 255;
     int dataUpdateFrequency = 10;
-    int templateRotationCount = 0;
-    int magnitudeFactor = 1000000000; // used to scale datapoint magnitudes to a more readible range. 
-    RecentData recentData = new RecentData();
-    DataFeed currentDataFeed = new DataFeed(this, recentData.thresholdLarge, recentData.thresholdMedium);
-
-    public int lineCounter=0; // total number of lines created in this session
-
-    float thicknessUnit = 0.0001f;
-
-    // MIDI Stuff
-    //MidiBus midi;
-    int midiDeviceId = 0;
     
-    // Stored Data Stuff
-
-    // We always record data to a file, with filename like this: bin/saveData_Fri_May_16_09-35-10_EDT_2014.csv
-    // See DataFeed.saveDataFile
-    // When running from saved data, we use: storedData/data.csv
-
-    Table dataToLoad;
-    ArrayList<DataPoint> storedData = new ArrayList<DataPoint>();
-    int storedDataCounter = 0;
+    // MIDI
+    //MidiBus midi;
+    //int midiDeviceId = 0;
+    
+    //DEBUGGING
+    String currentDataGraphUrl="";
+    PImage currentDataGraph; // used to show debugging graph of recent data
 
     
     ////////// SETUP //////////
@@ -211,26 +215,26 @@ public class Observatory extends PApplet {
         }
     }
 
-    private void modifyExistingLine(DataPoint p) {
-        // Only try to find a line to modify if there are lines in existence
-        if (lines.size() > 0) {
-            ObservatoryLine lineToModify = lines.get((int)(p.time % lines.size()));
-            lineToModify.modify(p, recentData, currentTemplate);
-        }
-    }
+//    private void modifyExistingLine(DataPoint p) {
+//        // Only try to find a line to modify if there are lines in existence
+//        if (lines.size() > 0) {
+//            ObservatoryLine lineToModify = lines.get((int)(p.time % lines.size()));
+//            lineToModify.modify(p, recentData, currentTemplate);
+//        }
+//    }
 
-    ////////// PROCESSING DATA POINTS //////////
+    ////////// PROCESS DATA POINTS //////////
 
     private void processDataPoint(ArrayList<DataPoint> currentData) {
         //println("Processing data point from incoming data of size " + currentData.size() + " with magnitude of " + (currentData.get(0).magnitude * magnitudeFactor));
         // Grab the last point in the list
         DataPoint p = currentData.get(0);
-        String tempString="";
 
-        if ( (p.magnitude > recentData.thresholdLarge) && (lines.size() < maxNumberOfLines)) {
+        //if ( (p.magnitude > recentData.thresholdLarge) && (lines.size() < maxNumberOfLines)) {
+         if ( lines.size() < maxNumberOfLines) {
            	// Create new line
             lineCounter++;
-            ObservatoryLine l = new ObservatoryLine(p, currentTemplate, this, lineCounter,  lines.size(), recentData.thresholdLarge);
+            ObservatoryLine l = new ObservatoryLine(p, currentTemplate, this, lineCounter, lines.size(), recentData.thresholdLarge);
             lines.add(l);
         }
         // else if (p.magnitude > recentData.thresholdMedium) {
@@ -358,16 +362,16 @@ public class Observatory extends PApplet {
     	println(" ");
         return fullScreenMode;
     }
-
-    public void sendMidiMessage(DataPoint d) {
-        int channel = 0;
-        int pitch = 0;
-        int velocity = 0;
-
-        // TODO: Figure out values based on the datapoint
-
-        //midi.sendNoteOn(channel, pitch, velocity);
-    }
+//
+//    public void sendMidiMessage(DataPoint d) {
+//        int channel = 0;
+//        int pitch = 0;
+//        int velocity = 0;
+//
+//        // TODO: Figure out values based on the datapoint
+//
+//        //midi.sendNoteOn(channel, pitch, velocity);
+//    }
     
     Clipboard clipboard;
     
@@ -381,7 +385,6 @@ public class Observatory extends PApplet {
         println(dataToLoad.getRowCount() + " total rows of storedData"); 
         currentDataFeed.setStoredData(dataToLoad);
     }
-
 
     public static void main(String args[]) {
         PApplet.main(new String[] { "--present", "observatory.Observatory" });

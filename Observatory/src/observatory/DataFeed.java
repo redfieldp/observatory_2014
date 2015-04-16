@@ -9,7 +9,7 @@ import java.util.Date;
 
 import processing.core.PApplet;
 import processing.data.Table;
-import processing.data.TableRow;
+//import processing.data.TableRow;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
 
@@ -100,6 +100,7 @@ public class DataFeed
 		String startSeconds = fixDigits(seconds);
 		
 		// If the service is down, or not returning current data, we can adjust the date to run from historical data.
+		startYear = "2014"; // Override year
 		//startMonth = "05"; // Override month 
 		
 		tempFeedBaseUrl="http://service.iris.edu/irisws/timeseries/1/query?net=CC&sta=SEP&cha=EHZ&start="+
@@ -271,8 +272,8 @@ public class DataFeed
 	    if (storedData != null && tableTraversalCounter < storedData.getRowCount()) {
 	        int expectedDataCounter = 0;
 	        while (expectedDataCounter < expectedPointsPerQuery && tableTraversalCounter < storedData.getRowCount()) {
-	            TableRow r = storedData.getRow(tableTraversalCounter);
-	            
+	            //TableRow r = storedData.getRow(tableTraversalCounter);
+	            //TODO:
 	            /*
 	            // I COMMENTED THIS OUT WHILE CHANGING DATAPOINT.TIME
 	            // STORED DATA IS BROKEN

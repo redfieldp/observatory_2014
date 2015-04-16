@@ -1,6 +1,6 @@
 package observatory;
 
-import com.ibm.icu.text.DecimalFormat;
+//import com.ibm.icu.text.DecimalFormat;
 
 import processing.core.PApplet;
 
@@ -34,7 +34,7 @@ public class DataEnvelope
         
         if (detailedDebugging) {
 
-        	DecimalFormat df = new DecimalFormat("####.######");
+//        	DecimalFormat df = new DecimalFormat("####.######");
 //        	PApplet.println("Envelope: newPoint.time:" + newPoint.time +
 //        			" oldPoint.time:" + oldPoint.time );
         	
