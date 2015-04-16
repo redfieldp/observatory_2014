@@ -21,13 +21,8 @@ public class RecentData
     int expectedAverageLinesPerSecond = 5; // 
     int thresholdLineLimit = (thresholdCalcScope/1000) * expectedAverageLinesPerSecond;
 
-<<<<<<< HEAD
     int thresholdLarge = 50;// 240; //190 // how large must a datapoint be to be considered 'large'
     int thresholdMedium = 5; // UNUSED // how large must a datapoint be to be considered 'medium'
-=======
-    int thresholdLarge = 190;// 240; //190 // how large must a datapoint be to be considered 'large'
-    int thresholdMedium = 5; // how large must a datapoint be to be considered 'medium'
->>>>>>> FETCH_HEAD
 
     public RecentData() {
         //UNUSED

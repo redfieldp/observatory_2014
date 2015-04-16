@@ -17,26 +17,10 @@ import java.awt.datatransfer.*;
 
 public class Observatory extends PApplet {
 	
-<<<<<<< HEAD
     //PERFORMANCE VARS
     //Most are adjustable w keyboard
-=======
-    ////////// DECLARATIONS //////////
-
-
-    ArrayList<DataPoint> incomingData = new ArrayList<DataPoint>();
-    ArrayList<DataPoint> storedDataPoints = new ArrayList<DataPoint>();
-    ArrayList<ObservatoryLine> lines = new ArrayList<ObservatoryLine>();
-    //Template[] templates = {new RainTemplate(), new ToothpicksTemplate(), new ClusteredRightTemplate(), new ClusteredLeftTemplate()};
-    Template[] templates = {new ClusteredRightTemplate(), new RainTemplate(), new ToothpicksTemplate(), new ClusteredLeftTemplate()};
-    Template currentTemplate = templates[0];    
     
-    Timer dataGrabber;
-    Timer templateSwitcher;
-    String currentDataGraphUrl="";
-    PImage currentDataGraph; // used to show debugging graph of recent data
 
->>>>>>> FETCH_HEAD
     boolean performancePaused = false;
     boolean useStoredData = false; // If true, we run in 'prerecorded mode,' using data from 
     boolean systemInit = true; // EL turned this on for debugging. Usually false; // application initially waits for input before animating
@@ -45,7 +29,6 @@ public class Observatory extends PApplet {
     boolean showGraph = false; // if true, we show the currentDataGraph
     //int thresholdIncrement = 10;
 
-<<<<<<< HEAD
     //DATAFEED
     ArrayList<DataPoint> incomingData = new ArrayList<DataPoint>();
     ArrayList<DataPoint> storedDataPoints = new ArrayList<DataPoint>();
@@ -72,9 +55,6 @@ public class Observatory extends PApplet {
     Timer templateSwitcher;
 
     //TEMPLATES
-=======
-    int maxNumberOfLines = 40;//120;
->>>>>>> FETCH_HEAD
     boolean rotateTemplate = true; //if true, we rotate templates every X minutes
     Template[] templates = {new RainTemplate(), new ToothpicksTemplate(), new ClusteredRightTemplate(), new ClusteredLeftTemplate()};
     Template currentTemplate = templates[0];    
