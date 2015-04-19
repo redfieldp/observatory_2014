@@ -32,3 +32,5 @@ Observatory/bin/observatory/DataFeed.class
 Observatory/bin/observatory/Observatory.class
 
 Observatory/bin/observatory/RecentData.class
+
+*.class
