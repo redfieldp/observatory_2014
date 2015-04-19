@@ -28,7 +28,7 @@ public class DataPoint
         this.originalMagnitude = truncateDecimals(originalMagnitude);
         this.time = time;
         this.randomized1 = truncateDecimals (magnitude % 1); // produces a 'random' number between 0 and 1.
-        this.randomized2 = truncateDecimals (magnitude*100 % 1); // produces a 'random' number between 0 and 1.
+        this.randomized2 = truncateDecimals (magnitude*100 % 1); // produces another, different 'random' number between 0 and 1.
         //this.randomized2 = (float) (time % 10000000)/10000000; // a different 'random' number between 0 and 1.
 
         //PApplet.println("p.mag:"+truncateDecimals(magnitude)+" p.random:"+randomized1+" p.random:"+randomized2);
