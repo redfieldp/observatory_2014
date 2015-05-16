@@ -15,6 +15,7 @@ import java.text.ParseException;
 
 public class DataFeed
 {
+	//Test G
 	PApplet processingInstance;
 	float dataTimeInterval= 10.0f;
 	int bigPointTimeExpiration = 600000; // Time until a big point expires, in ms. 60000 is 10 minutes
