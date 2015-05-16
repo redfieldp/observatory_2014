@@ -100,7 +100,7 @@ public class DataFeed
 		String startSeconds = fixDigits(seconds);
 		
 		// If the service is down, or not returning current data, we can adjust the date to run from historical data.
-		startYear = "2014"; // Override year
+		startYear = "2013"; // Override year
 		startMonth = "05"; // Override
 		//startDate = "01"; // Override
 		
