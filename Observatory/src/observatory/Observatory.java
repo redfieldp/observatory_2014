@@ -19,14 +19,14 @@ public class Observatory extends PApplet {
 	
     //PERFORMANCE VARS
     //Most are adjustable w keyboard
-//EFG
+//EFGH
 
     boolean performancePaused = false;
     boolean useStoredData = false; // If true, we run in 'prerecorded mode,' using data from 
     boolean systemInit = true; // EL turned this on for debugging. Usually false; // application initially waits for input before animating
     boolean fullScreenMode = false;
     boolean pdfTrigger = false;
-    boolean showGraph = false; // if true, we show the currentDataGraph
+    boolean showGraph = true; // if true, we show the currentDataGraph
     //int thresholdIncrement = 10;
 
     //DATAFEED
