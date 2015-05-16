@@ -19,7 +19,7 @@ public class Observatory extends PApplet {
 	
     //PERFORMANCE VARS
     //Most are adjustable w keyboard
-//EFGH
+//EFGHI
 
     boolean performancePaused = false;
     boolean useStoredData = false; // If true, we run in 'prerecorded mode,' using data from 
@@ -48,7 +48,7 @@ public class Observatory extends PApplet {
     ArrayList<ObservatoryLine> lines = new ArrayList<ObservatoryLine>();
     int maxNumberOfLines = 120;
     public int lineCounter=0; // total number of lines created in this session
-    float thicknessUnit = 0.0001f;
+    float thicknessUnit = 0.0009f;
     
     //TIMERS
     Timer dataGrabber;
