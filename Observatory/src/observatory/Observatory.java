@@ -19,7 +19,7 @@ public class Observatory extends PApplet {
 	
     //PERFORMANCE VARS
     //Most are adjustable w keyboard
-    //Another Test from Tsuki A!B!C!
+    //Another Test from Tsuki A!B!C!D
 	//Test from PC
 
     boolean performancePaused = false;
