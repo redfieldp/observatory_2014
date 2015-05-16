@@ -19,8 +19,7 @@ public class Observatory extends PApplet {
 	
     //PERFORMANCE VARS
     //Most are adjustable w keyboard
-    //Another Test from Tsuki A!B!C!D
-	//Test from PC
+//E
 
     boolean performancePaused = false;
     boolean useStoredData = false; // If true, we run in 'prerecorded mode,' using data from 
