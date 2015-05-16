@@ -15,13 +15,11 @@ import java.text.ParseException;
 
 public class DataFeed
 {
-	//Test GH
 	PApplet processingInstance;
 	float dataTimeInterval= 10.0f;
 	int bigPointTimeExpiration = 600000; // Time until a big point expires, in ms. 60000 is 10 minutes
 	String feedTestUrl = "";
 	String feedGraphUrl = "";
-	boolean detailedDebugging=true;
 	
 	// Datafeed saves the most recent dataPoints where the magnitude excedes bigThreshold, or mediumThreshold.
 	// These gets updated while processing new data, so should always be current
@@ -196,7 +194,6 @@ public class DataFeed
         			lastBigPoint = currentDataPoint;
     			}
 				//else if (scaledMagnitude > lastMediumPoint.magnitude || (currentDataPoint.time - lastMediumPoint.time > bigPointTimeExpiration)) {
-				//	if (detailedDebugging) PApplet.println("New medium point detected!");
 				//	lastMediumPoint = currentDataPoint;
 				//}
     			
@@ -287,13 +284,10 @@ public class DataFeed
 	            DataPoint currentDataPoint = new DataPoint(originalMagnitude, scaledMagnitude, lastBigPoint, lastMediumPoint);
 	            
     			// Calculate lastBigPoint, lastMediumPoint
-	            if (detailedDebugging) PApplet.println("Comparing " + scaledMagnitude + " to " + lastBigPoint.magnitude);
 	            if (scaledMagnitude > bigThreshold || (currentDataPoint.time - lastBigPoint.time > timeExpiration)) {
-	                if (detailedDebugging) PApplet.println("New big point detected!");
 	                lastBigPoint = currentDataPoint;
 	            }
 	            else if (scaledMagnitude > lastMediumPoint.magnitude || (currentDataPoint.time - lastMediumPoint.time > timeExpiration)) {
-	                if (detailedDebugging) PApplet.println("New medium point detected!");
 	                lastMediumPoint = currentDataPoint;
 	            }
 	            */

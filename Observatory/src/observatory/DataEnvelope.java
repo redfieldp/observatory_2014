@@ -15,9 +15,7 @@ public class DataEnvelope
     double deltaMagnitude;
     double angle;
     double durationScalar = .05; // highly important for calculating angle.
-    
-	boolean detailedDebugging=true;
-	
+    	
     DataEnvelope (DataPoint newPoint, DataPoint oldPoint) {
         duration = (newPoint.time - oldPoint.time);
         deltaMagnitude = (newPoint.magnitude - oldPoint.magnitude);
@@ -31,18 +29,6 @@ public class DataEnvelope
         	angle = 0;
         }
 
-        
-        if (detailedDebugging) {
-
-//        	DecimalFormat df = new DecimalFormat("####.######");
-//        	PApplet.println("Envelope: newPoint.time:" + newPoint.time +
-//        			" oldPoint.time:" + oldPoint.time );
-        	
-//        	PApplet.println("Envelope: duration:" + duration +
-//        			" deltaMag:" + df.format(deltaMagnitude) +
-//        			" angle:" + df.format(angle) );
-        	
-        }
-        
+                
     }
 }

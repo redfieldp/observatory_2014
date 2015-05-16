@@ -18,9 +18,7 @@ public class DataPoint
 
     // DataPoint lastBigPoint; // we don't need to store these. ust use them to calculate envelopes
     // DataPoint lastMediumPoint; // we don't need to store these. ust use them to calculate envelopes
-    
-    boolean detailedDebugging=false;
-    
+        
     public DataPoint(long time, double originalMagnitude, double magnitude, DataPoint lastBig, DataPoint lastMedium) {
     	
         // Parse Data point
@@ -36,19 +34,13 @@ public class DataPoint
         peakEnvelope = new DataEnvelope(this, lastBig);
         //smoothedEnvelope = new DataEnvelope(this, lastMediumPoint);
         
-        if (detailedDebugging) {
-        	DecimalFormat df = new DecimalFormat("####.##");
-        	PApplet.println("DataPoint: New DataPoint:" + " mag:" + df.format(magnitude) + " time:"+time + " angle:" + df.format(peakEnvelope.angle) ); 
-        }
     }
         
     // This is the null constructor
     public DataPoint(int threshold) {
         magnitude = threshold;
-        if (detailedDebugging) {
-        	DecimalFormat df = new DecimalFormat("####.##");
-        	PApplet.println("DataPoint: New DataPoint:" + " mag:" + df.format(magnitude) + " time:"+time + " angle:" + df.format(peakEnvelope.angle) ); 
-        }
+        	//DecimalFormat df = new DecimalFormat("####.##");
+        	//PApplet.println("DataPoint: New DataPoint:" + " mag:" + df.format(magnitude) + " time:"+time + " angle:" + df.format(peakEnvelope.angle) ); 
     }
 
 	public double truncateDecimals(double f) {
