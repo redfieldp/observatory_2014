@@ -80,7 +80,7 @@ public class Observatory extends PApplet {
     PImage currentDataGraph; // used to show debugging graph of recent data
 
     
-    ////////// SETUP //////////
+    ////////// SETUP ///////////
 
     public void setup() {
         //***** figure out the display environment ****/
