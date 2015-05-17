@@ -17,9 +17,10 @@ import java.awt.datatransfer.*;
 
 public class Observatory extends PApplet {
 	
-    //PERFORMANCE VARS
+    // Test Update #T
+	
+	//PERFORMANCE VARS
     //Most are adjustable w keyboard
-//EFGHIJKIJKLMNOPQRST
 
     boolean performancePaused = false;
     boolean useStoredData = false; // If true, we run in 'prerecorded mode,' using data from 
