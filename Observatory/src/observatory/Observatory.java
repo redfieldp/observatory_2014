@@ -63,6 +63,9 @@ public class Observatory extends PApplet {
     int templateRotationCount = 0;
     
     //GRAPHICS
+    boolean secondDisplayMode=false; // if true, we run in second display
+    int secondDisplayHeight= 480;
+    int secondDisplayWidth = 640;
     int canvasHeight = 480;
     int canvasWidth = 640;
     int bgColor = 255;
@@ -83,13 +86,21 @@ public class Observatory extends PApplet {
         //***** figure out the display environment ****/
         GraphicsEnvironment environment = GraphicsEnvironment.getLocalGraphicsEnvironment();
         GraphicsDevice devices[] = environment.getScreenDevices(); //gets resolution of devices
-
         canvasWidth = devices[0].getDisplayMode().getWidth();
         canvasHeight = devices[0].getDisplayMode().getHeight();
-        println("Adjusting animation size to "+canvasWidth+"x"+canvasHeight+" to fit primary display");
 
-        size(canvasWidth, canvasHeight);
-
+        secondDisplayMode = false; //(devices.length>1);
+        if (secondDisplayMode) {
+        	//second monitor
+        	secondDisplayWidth = devices[1].getDisplayMode().getWidth();
+        	secondDisplayHeight = devices[1].getDisplayMode().getHeight();        	
+	        println("Displaying on secondary display. Size: "+canvasWidth+"x"+canvasHeight+", at "+canvasWidth+"px to right");
+	        frame.setLocation(canvasWidth,0);
+	        size(secondDisplayWidth, secondDisplayHeight);
+        } else {
+	        println("Single display mode. Size: "+canvasWidth+"x"+canvasHeight);
+	        size(canvasWidth, canvasHeight);
+        }
         // Schedule the timers
         dataTimerSetup();
         templateTimerSetup();
