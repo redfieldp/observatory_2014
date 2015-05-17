@@ -49,7 +49,7 @@ public class Observatory extends PApplet {
     ArrayList<ObservatoryLine> lines = new ArrayList<ObservatoryLine>();
     int maxNumberOfLines = 120;
     public int lineCounter=0; // total number of lines created in this session
-    float thicknessUnit = 0.0009f;
+    float thicknessUnit = 0.0001f;
     
     //TIMERS
     Timer dataGrabber;
@@ -68,7 +68,7 @@ public class Observatory extends PApplet {
     int secondDisplayWidth = 640;
     int canvasHeight = 480;
     int canvasWidth = 640;
-    int bgColor = 255;
+    int bgColor = 64;
     int dataUpdateFrequency = 10;
     
     // MIDI
