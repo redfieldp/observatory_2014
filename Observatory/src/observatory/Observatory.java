@@ -17,7 +17,7 @@ import java.awt.datatransfer.*;
 
 public class Observatory extends PApplet {
 	
-    // Test Update #TU
+    // Test Update #TUV
 	
 	//PERFORMANCE VARS
     //Most are adjustable w keyboard
